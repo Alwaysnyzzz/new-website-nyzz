@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isi Saldo - DzzXNzz</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
     <style>
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInUp  { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
         @keyframes coinFloat { 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-8px) rotate(8deg)} }
-        @keyframes shineBar { 0%{background-position:0%} 100%{background-position:200%} }
+        @keyframes shineBar  { 0%{background-position:0%} 100%{background-position:200%} }
+        @keyframes spin      { to{transform:rotate(360deg)} }
 
         .isisaldo-wrapper { max-width: 520px; margin: 0 auto; animation: fadeInUp 0.7s ease; }
 
-        /* Balance info card */
+        /* Balance card */
         .balance-card {
             background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(191,0,255,0.08));
-            border: 1px solid rgba(0,229,255,0.3);
-            border-radius: 20px; padding: 22px 24px;
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 20px;
+            border: 1px solid rgba(0,229,255,0.3); border-radius: 20px;
+            padding: 22px 24px; display: flex; align-items: center;
+            justify-content: space-between; margin-bottom: 20px;
             position: relative; overflow: hidden;
         }
         .balance-card::before {
@@ -28,30 +28,26 @@
             background: linear-gradient(90deg, #00e5ff, #bf00ff, #00ff88);
             background-size: 200% 100%; animation: shineBar 3s linear infinite;
         }
-        .balance-left { display: flex; align-items: center; gap: 14px; }
-        .balance-icon {
+        .balance-left   { display: flex; align-items: center; gap: 14px; }
+        .balance-icon   {
             width: 52px; height: 52px; border-radius: 14px;
             background: rgba(0,229,255,0.1); border: 1.5px solid rgba(0,229,255,0.3);
             display: flex; align-items: center; justify-content: center;
             font-size: 24px; animation: coinFloat 3s ease-in-out infinite;
         }
-        .balance-label { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
-        .balance-amount {
-            font-family: 'Righteous', cursive; font-size: 28px;
-            color: #00e5ff; filter: drop-shadow(0 0 10px rgba(0,229,255,0.5));
-        }
+        .balance-label  { font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 4px; }
+        .balance-amount { font-family: 'Righteous', cursive; font-size: 28px; color: #00e5ff; filter: drop-shadow(0 0 10px rgba(0,229,255,0.5)); }
         .balance-refresh {
             background: rgba(0,229,255,0.1); border: 1px solid rgba(0,229,255,0.25);
             color: #00e5ff; width: 36px; height: 36px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.2s; font-size: 15px;
+            cursor: pointer; transition: 0.3s; font-size: 15px;
         }
         .balance-refresh:hover { background: rgba(0,229,255,0.2); transform: rotate(180deg); }
 
         /* Main form card */
         .saldo-card {
-            background: rgba(13,15,25,0.88);
-            backdrop-filter: blur(16px);
+            background: rgba(13,15,25,0.88); backdrop-filter: blur(16px);
             border-radius: 24px; padding: 32px 28px;
             border: 1px solid rgba(0,229,255,0.2);
             box-shadow: 0 0 30px rgba(0,229,255,0.07), 0 20px 50px rgba(0,0,0,0.5);
@@ -74,130 +70,121 @@
             margin: 0 auto 14px; animation: coinFloat 3s ease-in-out infinite;
         }
         .saldo-header h3 { font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 5px; }
-        .saldo-header p { font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 600; }
+        .saldo-header p  { font-size: 13px; color: rgba(255,255,255,0.45); font-weight: 600; }
 
         /* Quick amounts */
         .quick-label { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; display: block; }
-        .quick-amounts {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; margin-bottom: 20px;
-        }
+        .quick-grid  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 22px; }
         .quick-btn {
-            background: rgba(0,229,255,0.05);
-            border: 1px solid rgba(0,229,255,0.2);
-            color: rgba(255,255,255,0.65); border-radius: 12px;
-            padding: 11px 8px; font-size: 13px; font-weight: 800;
-            cursor: pointer; transition: 0.2s; font-family: 'Nunito', sans-serif;
-            text-align: center;
+            background: rgba(0,229,255,0.06); border: 1.5px solid rgba(0,229,255,0.2);
+            border-radius: 14px; padding: 12px 8px; text-align: center;
+            cursor: pointer; transition: 0.25s; color: #fff; font-family: 'Nunito', sans-serif;
         }
         .quick-btn:hover, .quick-btn.active {
-            background: rgba(0,229,255,0.15);
-            border-color: #00e5ff; color: #00e5ff;
-            box-shadow: 0 0 14px rgba(0,229,255,0.2);
-            transform: translateY(-2px);
+            background: rgba(0,229,255,0.15); border-color: #00e5ff;
+            box-shadow: 0 0 18px rgba(0,229,255,0.2); color: #00e5ff;
         }
+        .quick-btn-amount { font-size: 14px; font-weight: 900; display: block; }
+        .quick-btn-label  { font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 700; margin-top: 2px; display: block; }
+        .quick-btn.active .quick-btn-label { color: rgba(0,229,255,0.7); }
 
-        /* Input */
-        .input-label { font-size: 11px; font-weight: 800; color: #00e5ff; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: block; }
-        .input-wrap { position: relative; margin-bottom: 8px; }
-        .input-wrap .prefix {
-            position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
-            color: rgba(255,255,255,0.4); font-size: 15px; font-weight: 900;
+        /* Input nominal */
+        .input-label { font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .input-wrap  { position: relative; margin-bottom: 22px; }
+        .input-prefix {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            font-size: 15px; font-weight: 900; color: rgba(255,255,255,0.4);
+            pointer-events: none;
         }
-        .saldo-input {
-            width: 100%; background: rgba(0,0,0,0.3);
-            border: 1.5px solid rgba(255,255,255,0.1);
-            border-radius: 14px; padding: 16px 20px 16px 42px;
-            color: #fff; font-size: 20px; font-weight: 900;
-            outline: none; transition: 0.25s; font-family: 'Nunito', sans-serif;
+        #nominalInput {
+            width: 100%; padding: 15px 16px 15px 52px;
+            background: rgba(0,0,0,0.35); border: 1.5px solid rgba(255,255,255,0.12);
+            border-radius: 14px; color: #fff; font-family: 'Nunito', sans-serif;
+            font-size: 18px; font-weight: 900; outline: none; transition: 0.25s;
         }
-        .saldo-input:focus {
-            border-color: #00e5ff;
-            box-shadow: 0 0 20px rgba(0,229,255,0.18);
-            background: rgba(0,0,0,0.45);
+        #nominalInput:focus {
+            border-color: #00e5ff; box-shadow: 0 0 18px rgba(0,229,255,0.15);
+            background: rgba(0,0,0,0.5);
         }
-        .saldo-input::placeholder { color: rgba(255,255,255,0.2); font-size: 16px; }
+        #nominalInput::placeholder { color: rgba(255,255,255,0.18); font-size: 15px; font-weight: 700; }
 
-        .error-msg {
-            color: #ff6666; font-size: 13px; font-weight: 700;
-            margin-bottom: 14px; display: none;
-            background: rgba(255,0,0,0.07); border: 1px solid rgba(255,0,0,0.2);
-            border-radius: 10px; padding: 9px 14px;
+        /* Fee info */
+        .fee-info {
+            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px; padding: 14px 16px; margin-bottom: 22px;
+            display: none;
         }
-        .error-msg.show { display: block; animation: fadeInUp 0.3s ease; }
-
-        /* Info row */
-        .info-row {
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(0,229,255,0.04); border: 1px solid rgba(0,229,255,0.1);
-            border-radius: 12px; padding: 12px 16px; margin-bottom: 18px;
-        }
-        .info-row i { color: #00e5ff; font-size: 15px; }
-        .info-row span { font-size: 13px; color: rgba(255,255,255,0.5); font-weight: 700; }
-        .info-row strong { color: #00e5ff; }
+        .fee-info.show { display: block; }
+        .fee-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: rgba(255,255,255,0.5); }
+        .fee-row:last-child { margin-bottom: 0; color: #fff; font-size: 14px; font-weight: 900; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 8px; margin-top: 4px; }
+        .fee-row span:last-child { color: #00e5ff; }
+        .fee-row.total span:last-child { color: #00ff88; }
 
         /* Submit button */
-        .saldo-btn {
+        .btn-bayar {
             width: 100%; padding: 16px;
             background: linear-gradient(135deg, #00e5ff, #00ff88);
-            border: none; border-radius: 14px; color: #06070f;
-            font-weight: 900; font-size: 16px; cursor: pointer;
-            transition: 0.25s; font-family: 'Nunito', sans-serif;
-            letter-spacing: 0.5px;
-            box-shadow: 0 6px 25px rgba(0,229,255,0.35);
+            border: none; border-radius: 16px; color: #06070f;
+            font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 16px;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            box-shadow: 0 6px 25px rgba(0,229,255,0.3);
             display: flex; align-items: center; justify-content: center; gap: 10px;
             position: relative; overflow: hidden;
         }
-        .saldo-btn::before {
+        .btn-bayar::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: 0.5s;
         }
-        .saldo-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(0,229,255,0.5); }
-        .saldo-btn:hover::before { left: 130%; }
-        .saldo-btn:active { transform: scale(0.97); }
-        .saldo-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-        /* Loading overlay */
-        .loading-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 9999; visibility: hidden; opacity: 0; transition: 0.3s;
+        .btn-bayar:hover { transform: translateY(-2px); box-shadow: 0 10px 35px rgba(0,229,255,0.4); }
+        .btn-bayar:hover::before { left: 130%; }
+        .btn-bayar:active { transform: scale(0.97); }
+        .btn-bayar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-loader {
+            width: 20px; height: 20px; border: 2.5px solid rgba(0,0,0,0.3);
+            border-top-color: #06070f; border-radius: 50%;
+            animation: spin 0.7s linear infinite; display: none;
         }
-        .loading-overlay.active { visibility: visible; opacity: 1; }
-        .loader-rings { position: relative; width: 70px; height: 70px; margin-bottom: 20px; }
-        .ring { position: absolute; border-radius: 50%; border: 3px solid transparent; }
-        .ring-outer { width: 100%; height: 100%; border-top-color: #00e5ff; border-bottom-color: #00e5ff; animation: spin 1.5s linear infinite; }
-        .ring-inner { width: 46px; height: 46px; top: 12px; left: 12px; border-left-color: #bf00ff; border-right-color: #bf00ff; animation: spinR 1.5s linear infinite; }
-        @keyframes spin { to{transform:rotate(360deg)} }
-        @keyframes spinR { to{transform:rotate(-360deg)} }
-        .loading-text { color: #00e5ff; font-size: 15px; font-weight: 800; letter-spacing: 2px; text-shadow: 0 0 10px #00e5ff; }
 
-        /* Warning belum login */
-        .not-login-warn {
-            display: flex; align-items: flex-start; gap: 12px;
-            background: rgba(255,224,0,0.07);
-            border: 1.5px solid rgba(255,224,0,0.35);
-            border-radius: 14px; padding: 14px 16px;
-            margin-bottom: 16px; animation: fadeInUp 0.4s ease;
+        /* Min/max note */
+        .note-text { text-align: center; font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 700; margin-top: 12px; }
+        .note-text span { color: rgba(0,229,255,0.6); }
+
+        /* Error box */
+        .error-box {
+            background: rgba(255,0,0,0.08); border: 1px solid rgba(255,0,0,0.25);
+            border-radius: 10px; padding: 10px 14px; margin-bottom: 16px;
+            font-size: 13px; font-weight: 700; color: #ff6666;
+            display: none; align-items: center; gap: 8px;
         }
-        .not-login-warn i { color: #ffe000; font-size: 18px; margin-top: 2px; flex-shrink: 0; }
-        .warn-title { font-size: 14px; font-weight: 900; color: #ffe000; margin-bottom: 3px; }
-        .warn-sub { font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 600; line-height: 1.5; }
-        .warn-sub a { color: #00e5ff; font-weight: 800; text-decoration: none; }
-        .warn-sub a:hover { color: #00ff88; }
+        .error-box.show { display: flex; }
+
+        /* Login warning */
+        .login-warning {
+            text-align: center; padding: 30px 20px;
+            background: rgba(13,15,25,0.88); border-radius: 20px;
+            border: 1px solid rgba(0,229,255,0.15); margin-bottom: 20px;
+        }
+        .login-warning i    { font-size: 40px; color: rgba(0,229,255,0.4); margin-bottom: 14px; display: block; }
+        .login-warning p    { color: rgba(255,255,255,0.5); font-weight: 700; margin-bottom: 16px; }
+        .login-warning a {
+            display: inline-block; padding: 11px 28px;
+            background: linear-gradient(135deg, #00e5ff, #00ff88);
+            border-radius: 40px; color: #06070f; font-weight: 900;
+            text-decoration: none; font-size: 14px;
+        }
+
+        @media(max-width:480px) {
+            .saldo-card { padding: 24px 18px; }
+            .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
 
     <nav class="navbar">
-        <div class="nav-left">
-            <button id="menu-toggle">☰</button>
-
-        </div>
+        <div class="nav-left"><button id="menu-toggle">☰</button></div>
         <div class="nav-right">
             <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
             <div class="user-menu">
@@ -211,13 +198,13 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="user-name-text">DzzXNzz</span>
-            <div class="sidebar-pfp"><img src="./image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+            <div class="sidebar-pfp"><img src="/image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="home"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="product"><i class="fas fa-shopping-cart"></i> Product</a></li>
-            <li class="active"><a href="isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
-            <li><a href="contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+            <li><a href="/home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li class="active"><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="/contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
         </ul>
         <div class="sidebar-divider"></div>
         <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
@@ -225,17 +212,18 @@
     <div class="overlay" id="overlay"></div>
 
     <main class="main-content">
-        <h1 class="rainbow-title">💰 Isi Saldo</h1>
-        <p class="subtitle">Top up coins untuk mulai berbelanja layanan</p>
+        <h1 class="rainbow-title">Isi Saldo</h1>
+        <p class="subtitle">Top up coins kamu dengan mudah via QRIS 🪙</p>
 
         <div class="isisaldo-wrapper">
-            <!-- Saldo saat ini -->
-            <div class="balance-card">
+
+            <!-- Balance card -->
+            <div class="balance-card" id="balanceCard" style="display:none">
                 <div class="balance-left">
                     <div class="balance-icon">🪙</div>
                     <div>
                         <div class="balance-label">Saldo Coins Kamu</div>
-                        <div class="balance-amount" id="balanceDisplay">0</div>
+                        <div class="balance-amount" id="balanceAmount">0</div>
                     </div>
                 </div>
                 <button class="balance-refresh" id="refreshBalance" title="Refresh saldo">
@@ -243,48 +231,74 @@
                 </button>
             </div>
 
+            <!-- Login warning (kalau belum login) -->
+            <div class="login-warning" id="loginWarning" style="display:none">
+                <i class="fas fa-lock"></i>
+                <p>Kamu harus login dulu untuk bisa isi saldo.</p>
+                <a href="/login">Login Sekarang</a>
+            </div>
+
             <!-- Form isi saldo -->
-            <div class="saldo-card">
+            <div class="saldo-card" id="saldoCard">
                 <div class="saldo-header">
-                    <div class="saldo-icon"><i class="fas fa-coins"></i></div>
+                    <div class="saldo-icon"><i class="fas fa-wallet"></i></div>
                     <h3>Top Up Coins</h3>
-                    <p>Nominal = jumlah coins yang akan ditambahkan</p>
+                    <p>Pilih nominal atau masukkan jumlah sendiri</p>
+                </div>
+
+                <div class="error-box" id="errorBox">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="errorText"></span>
                 </div>
 
                 <span class="quick-label">Pilih nominal cepat</span>
-                <div class="quick-amounts">
-                    <button class="quick-btn" onclick="setAmount(2000)">Rp 2.000</button>
-                    <button class="quick-btn" onclick="setAmount(5000)">Rp 5.000</button>
-                    <button class="quick-btn" onclick="setAmount(10000)">Rp 10.000</button>
-                    <button class="quick-btn" onclick="setAmount(20000)">Rp 20.000</button>
-                    <button class="quick-btn" onclick="setAmount(50000)">Rp 50.000</button>
-                    <button class="quick-btn" onclick="setAmount(100000)">Rp 100.000</button>
+                <div class="quick-grid">
+                    <button class="quick-btn" data-amount="10000">
+                        <span class="quick-btn-amount">10K</span>
+                        <span class="quick-btn-label">Rp 10.000</span>
+                    </button>
+                    <button class="quick-btn" data-amount="25000">
+                        <span class="quick-btn-amount">25K</span>
+                        <span class="quick-btn-label">Rp 25.000</span>
+                    </button>
+                    <button class="quick-btn" data-amount="50000">
+                        <span class="quick-btn-amount">50K</span>
+                        <span class="quick-btn-label">Rp 50.000</span>
+                    </button>
+                    <button class="quick-btn" data-amount="100000">
+                        <span class="quick-btn-amount">100K</span>
+                        <span class="quick-btn-label">Rp 100.000</span>
+                    </button>
+                    <button class="quick-btn" data-amount="250000">
+                        <span class="quick-btn-amount">250K</span>
+                        <span class="quick-btn-label">Rp 250.000</span>
+                    </button>
+                    <button class="quick-btn" data-amount="500000">
+                        <span class="quick-btn-amount">500K</span>
+                        <span class="quick-btn-label">Rp 500.000</span>
+                    </button>
                 </div>
 
-                <label class="input-label">Atau masukkan nominal sendiri</label>
+                <span class="input-label">Atau masukkan nominal sendiri</span>
                 <div class="input-wrap">
-                    <span class="prefix">Rp</span>
-                    <input type="number" class="saldo-input" id="amount" placeholder="0" min="500" step="100">
-                </div>
-                <div class="error-msg" id="errorMsg"></div>
-
-                <!-- Warning belum login -->
-                <div class="not-login-warn" id="notLoginWarn" style="display:none">
-                    <i class="fas fa-lock"></i>
-                    <div>
-                        <div class="warn-title">Kamu belum login nih!</div>
-                        <div class="warn-sub">Login dulu biar coins masuk ke akun kamu ya 😊 <a href="/login">Login sekarang →</a></div>
-                    </div>
+                    <span class="input-prefix">Rp</span>
+                    <input type="number" id="nominalInput" placeholder="Contoh: 75000" min="10000" max="10000000">
                 </div>
 
-                <div class="info-row">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Minimal top up <strong>Rp 500</strong> · Pembayaran via <strong>QRIS</strong></span>
+                <!-- Fee preview -->
+                <div class="fee-info" id="feeInfo">
+                    <div class="fee-row"><span>Nominal top up</span><span id="feeNominal">-</span></div>
+                    <div class="fee-row"><span>Biaya layanan</span><span id="feeBiaya">-</span></div>
+                    <div class="fee-row total"><span>Total bayar</span><span id="feeTotal">-</span></div>
                 </div>
 
-                <button class="saldo-btn" id="topupBtn">
-                    <i class="fas fa-bolt"></i> TOP UP SEKARANG
+                <button class="btn-bayar" id="bayarBtn">
+                    <i class="fas fa-qrcode"></i>
+                    <span id="bayarText">Bayar dengan QRIS</span>
+                    <div class="btn-loader" id="bayarLoader"></div>
                 </button>
+
+                <p class="note-text">Minimal <span>Rp 10.000</span> · Coins langsung masuk setelah pembayaran berhasil</p>
             </div>
         </div>
     </main>
@@ -293,14 +307,16 @@
         <div class="footer-container">
             <div>
                 <div class="footer-logo">DzzXNzz</div>
-                <p class="footer-desc">Provider hosting generasi baru yang fokus pada performa dan kemudahan.</p>
+                <p class="footer-desc">Provider hosting generasi baru yang fokus pada performa, keamanan, dan kemudahan penggunaan.</p>
                 <div class="social-icons">
                     <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
-            <div><h4 class="footer-title">Kontak</h4><ul class="footer-links"><li><a href="contact">WhatsApp</a></li><li><a href="contact">Telegram</a></li></ul></div>
+            <div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+            <div><h4 class="footer-title">Kontak</h4><ul class="footer-links"><li><a href="/contact">WhatsApp</a></li><li><a href="/contact">Telegram</a></li></ul></div>
         </div>
         <div class="footer-bottom">
             <span>© 2026 DzzXNzz Host. All rights reserved.</span>
@@ -308,114 +324,125 @@
         </div>
     </footer>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader-rings">
-            <div class="ring ring-outer"></div>
-            <div class="ring ring-inner"></div>
-        </div>
-        <div class="loading-text" id="loadingText">Memproses...</div>
-    </div>
-
-    <script src="script.js"></script>
+    <script src="/script.js"></script>
     <script>
-        // Set quick amount
-        function setAmount(val) {
-            document.getElementById('amount').value = val;
-            document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+    document.addEventListener('DOMContentLoaded', async function () {
+
+        const balanceCard   = document.getElementById('balanceCard');
+        const balanceAmount = document.getElementById('balanceAmount');
+        const loginWarning  = document.getElementById('loginWarning');
+        const nominalInput  = document.getElementById('nominalInput');
+        const bayarBtn      = document.getElementById('bayarBtn');
+        const bayarText     = document.getElementById('bayarText');
+        const bayarLoader   = document.getElementById('bayarLoader');
+        const errorBox      = document.getElementById('errorBox');
+        const feeInfo       = document.getElementById('feeInfo');
+
+        // ===== Cek login =====
+        if (!Auth.isLoggedIn()) {
+            loginWarning.style.display = 'block';
+            bayarBtn.disabled = true;
+            return;
         }
 
-        // Cek login & tampilkan warning
-        function checkLoginStatus() {
-            const warn = document.getElementById('notLoginWarn');
-            const balanceCard = document.querySelector('.balance-card');
-            if (!Auth.isLoggedIn()) {
-                if (warn) warn.style.display = 'flex';
-                if (balanceCard) balanceCard.style.opacity = '0.4';
-            } else {
-                if (warn) warn.style.display = 'none';
-                if (balanceCard) balanceCard.style.opacity = '1';
-            }
-        }
-
-        // Load balance pakai Auth helper dari script.js
+        // ===== Load saldo =====
         async function loadBalance() {
-            if (!Auth.isLoggedIn()) {
-                checkLoginStatus();
-                return;
+            const profile = await Auth.getProfile(true);
+            if (profile) {
+                balanceCard.style.display = 'flex';
+                balanceAmount.textContent = Number(profile.coins).toLocaleString('id-ID');
+                document.getElementById('coinCount').textContent = Number(profile.coins).toLocaleString('id-ID');
             }
-            try {
-                const profile = await Auth.getProfile(true);
-                if (profile) {
-                    document.getElementById('balanceDisplay').textContent = Number(profile.coins).toLocaleString('id-ID');
-                    document.getElementById('coinCount').textContent = Number(profile.coins).toLocaleString('id-ID');
-                }
-            } catch(e) {}
         }
+        loadBalance();
 
-        document.getElementById('refreshBalance')?.addEventListener('click', function() {
-            this.querySelector('i').style.transition = 'transform 0.5s';
+        document.getElementById('refreshBalance')?.addEventListener('click', function () {
             this.querySelector('i').style.transform = 'rotate(360deg)';
             loadBalance();
-            setTimeout(() => {
-                this.querySelector('i').style.transition = '';
-                this.querySelector('i').style.transform = '';
-            }, 600);
         });
 
-        // Top up button
-        document.getElementById('topupBtn')?.addEventListener('click', async function() {
-            const amount = parseInt(document.getElementById('amount').value);
-            const errorMsg = document.getElementById('errorMsg');
-            errorMsg.classList.remove('show');
+        // ===== Quick select =====
+        let selectedAmount = 0;
+        document.querySelectorAll('.quick-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedAmount = parseInt(this.dataset.amount);
+                nominalInput.value = selectedAmount;
+                updateFeePreview(selectedAmount);
+            });
+        });
 
-            if (!amount || amount < 500) {
-                errorMsg.textContent = '⚠️ Minimal isi saldo Rp 500';
-                errorMsg.classList.add('show');
+        // ===== Input manual =====
+        nominalInput.addEventListener('input', function () {
+            document.querySelectorAll('.quick-btn').forEach(b => b.classList.remove('active'));
+            selectedAmount = parseInt(this.value) || 0;
+            updateFeePreview(selectedAmount);
+            // Tandai quick btn kalau cocok
+            document.querySelectorAll('.quick-btn').forEach(btn => {
+                if (parseInt(btn.dataset.amount) === selectedAmount) btn.classList.add('active');
+            });
+        });
+
+        // ===== Fee preview (estimasi — fee Pakasir ~1%) =====
+        function updateFeePreview(amount) {
+            if (!amount || amount < 10000) { feeInfo.classList.remove('show'); return; }
+            const fee   = Math.ceil(amount * 0.007 + 500); // estimasi fee Pakasir
+            const total = amount + fee;
+            document.getElementById('feeNominal').textContent = 'Rp ' + amount.toLocaleString('id-ID');
+            document.getElementById('feeBiaya').textContent   = '~Rp ' + fee.toLocaleString('id-ID');
+            document.getElementById('feeTotal').textContent   = 'Rp ' + total.toLocaleString('id-ID');
+            feeInfo.classList.add('show');
+        }
+
+        // ===== Tombol Bayar =====
+        bayarBtn.addEventListener('click', async function () {
+            errorBox.classList.remove('show');
+            const amount = parseInt(nominalInput.value) || selectedAmount;
+
+            if (!amount || amount < 10000) {
+                document.getElementById('errorText').textContent = 'Minimal top up Rp 10.000';
+                errorBox.classList.add('show');
+                return;
+            }
+            if (amount > 10000000) {
+                document.getElementById('errorText').textContent = 'Maksimal top up Rp 10.000.000';
+                errorBox.classList.add('show');
                 return;
             }
 
-            if (!Auth.isLoggedIn()) {
-                // Tampilkan warning, scroll ke sana
-                const warn = document.getElementById('notLoginWarn');
-                if (warn) { warn.style.display = 'flex'; warn.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-                return;
-            }
-
-            // Show loading
-            const overlay = document.getElementById('loadingOverlay');
-            const loadingText = document.getElementById('loadingText');
-            overlay.classList.add('active');
-            loadingText.textContent = 'Membuat transaksi...';
+            // Loading state
             this.disabled = true;
+            bayarText.style.display = 'none';
+            bayarLoader.style.display = 'block';
 
             try {
-                const res = await fetch('/api/create-transaction', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + Auth.getToken()
-                    },
-                    body: JSON.stringify({ amount })
+                const res  = await fetch('/api/create-payment', {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + Auth.getToken() },
+                    body:    JSON.stringify({ amount })
                 });
                 const data = await res.json();
 
-                if (!res.ok) throw new Error(data.error || 'Gagal membuat transaksi');
+                if (!res.ok) {
+                    document.getElementById('errorText').textContent = data.error || 'Gagal membuat transaksi';
+                    errorBox.classList.add('show');
+                    return;
+                }
 
-                window.location.href = `/isisaldo/${data.order_id}`;
+                // Redirect ke halaman pembayaran
+                window.location.href = '/isisaldo/' + data.order_id;
 
-            } catch(err) {
-                overlay.classList.remove('active');
+            } catch (e) {
+                document.getElementById('errorText').textContent = 'Gagal terhubung ke server';
+                errorBox.classList.add('show');
+            } finally {
                 this.disabled = false;
-                errorMsg.textContent = '❌ ' + err.message;
-                errorMsg.classList.add('show');
-                setTimeout(() => errorMsg.classList.remove('show'), 5000);
+                bayarText.style.display = 'flex';
+                bayarLoader.style.display = 'none';
             }
         });
-
-        checkLoginStatus();
-        loadBalance();
+    });
     </script>
 </body>
 </html>
