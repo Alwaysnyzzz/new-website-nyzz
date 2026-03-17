@@ -1,0 +1,16 @@
+{
+  "rewrites": [
+    { "source": "/",                    "destination": "/index.html" },
+    { "source": "/home",                "destination": "/index.html" },
+    { "source": "/login",               "destination": "/login.html" },
+    { "source": "/register",            "destination": "/register.html" },
+    { "source": "/product",             "destination": "/product.html" },
+    { "source": "/product/panelptero",  "destination": "/panelptero.html" },
+    { "source": "/contact",             "destination": "/contact.html" },
+    { "source": "/isisaldo",            "destination": "/isisaldo.html" },
+    { "source": "/isisaldo/(.*)",       "destination": "/pay.html" },
+    { "source": "/struk",               "destination": "/struk.html" },
+    { "source": "/profile",             "destination": "/profile.html" },
+    { "source": "/api/(.*)",            "destination": "/api/$1" }
+  ]
+}

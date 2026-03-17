@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DzzXNzz - Home</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="loading.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeInDown { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:.25} }
+        @keyframes bannerShine { to{left:120%;} }
+
+        .hero-section { text-align:center; padding:20px 0 8px; }
+        .hero-badge {
+            display:inline-flex; align-items:center; gap:8px;
+            background:rgba(0,229,255,0.07); border:1px solid rgba(0,229,255,0.28);
+            color:#00e5ff; padding:8px 20px; border-radius:50px;
+            font-size:12px; font-weight:800; letter-spacing:1.5px;
+            text-transform:uppercase; margin-bottom:20px;
+            animation:fadeInDown .6s ease;
+            box-shadow:0 0 18px rgba(0,229,255,0.1);
+        }
+        .hero-badge i { font-size:9px; color:#00ff88; animation:dotPulse 1.5s infinite; }
+
+        .stats-row {
+            display:grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap:12px;
+            margin:28px 0 38px;
+            animation:fadeInUp .8s .25s ease both;
+        }
+        .stat-item {
+            text-align:center; padding:14px 8px;
+            background:rgba(13,15,25,.72); border-radius:16px;
+            border:1px solid rgba(255,255,255,.07);
+            transition:.3s; cursor:default;
+        }
+        .stat-item:hover { transform:translateY(-4px); border-color:rgba(0,229,255,.3); box-shadow:0 8px 25px rgba(0,229,255,.1); }
+        .stat-number {
+            font-family:'Righteous',cursive; font-size:23px;
+            background:linear-gradient(135deg,#00e5ff,#00ff88);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            display:block;
+        }
+        .stat-label { font-size:11px; color:rgba(255,255,255,.42); font-weight:700; letter-spacing:.5px; margin-top:2px; }
+
+        .home-grid { animation:fadeInUp .8s .45s ease both; }
+
+        .promo-banner {
+            background:linear-gradient(135deg,rgba(191,0,255,.12),rgba(0,229,255,.08));
+            border:1px solid rgba(191,0,255,.28); border-radius:18px;
+            padding:16px 22px; display:flex; align-items:center;
+            justify-content:space-between; flex-wrap:wrap; gap:14px;
+            margin-bottom:28px; position:relative; overflow:hidden;
+            animation:fadeInUp .8s .15s ease both;
+        }
+        .promo-banner::before {
+            content:''; position:absolute; top:0; left:-120%; width:60%; height:100%;
+            background:linear-gradient(90deg,transparent,rgba(255,255,255,.04),transparent);
+            animation:bannerShine 3.5s linear infinite;
+        }
+        .promo-text { display:flex; align-items:center; gap:14px; }
+        .promo-emoji { font-size:30px; }
+        .promo-title { font-size:15px; font-weight:900; color:#fff; }
+        .promo-sub { font-size:12px; color:rgba(255,255,255,.5); margin-top:3px; font-weight:600; }
+        .promo-btn {
+            background:linear-gradient(135deg,#bf00ff,#00e5ff); color:#fff;
+            border:none; padding:10px 22px; border-radius:30px;
+            font-weight:900; font-size:13px; cursor:pointer;
+            text-decoration:none; display:inline-block; transition:.25s;
+            box-shadow:0 4px 18px rgba(191,0,255,.35);
+        }
+        .promo-btn:hover { transform:translateY(-2px) scale(1.05); box-shadow:0 6px 28px rgba(191,0,255,.5); }
+
+        .welcome-text { color: rgba(255,255,255,0.6); font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .welcome-text span { color: #00e5ff; font-weight: 900; }
+
+        .product-count-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(0,229,255,0.07);
+            border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 30px; padding: 7px 18px;
+            font-size: 13px; font-weight: 700;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 22px;
+        }
+        .product-count-badge i { color: #00e5ff; font-size: 13px; }
+        .product-count-badge strong { color: #00e5ff; font-weight: 900; }
+
+        @media(max-width:600px){
+            .stats-row{grid-template-columns:repeat(4,1fr);gap:8px;}
+            .stat-item{padding:10px 4px;}
+            .stat-number{font-size:18px;}
+            .stat-label{font-size:10px;}
+            .promo-banner{justify-content:center;text-align:center;}
+            .product-count-badge{font-size:12px;}
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-brand">DzzXNzz</div>
+        <div class="loader-rings">
+            <div class="ring ring-outer"></div>
+            <div class="ring ring-inner"></div>
+            <div class="ring-dot"></div>
+        </div>
+        <div class="loading-text">Memuat...</div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+            <span id="progress-text">0%</span>
+        </div>
+        <div class="loading-dots"><span></span><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <button id="menu-toggle">☰</button>
+        </div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span class="nav-initial">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="./image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active"><a href="home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"><li class="system-item"><a href="#"><i class="fas fa-spinner fa-pulse"></i> Loading...</a></li></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="hero-section">
+            <div class="hero-badge"><i class="fas fa-circle"></i> SEMUA SISTEM ONLINE</div>
+            <h1 class="rainbow-title">DzzXNzz</h1>
+            <p class="subtitle" id="welcomeText">Solusi hosting & bot terbaik — cepat, aman, dan terjangkau ✨</p>
+            <div class="product-count-badge" id="productBadge">
+                <i class="fas fa-shopping-cart"></i>
+                <span><strong id="produkCount">2</strong> Produk Tersedia — Panel Pterodactyl &amp; Layanan PPOB</span>
+            </div>
+            <div class="stats-row">
+                <div class="stat-item"><span class="stat-number" id="totalProduk">2</span><span class="stat-label">Total Produk</span></div>
+                <div class="stat-item"><span class="stat-number">24/7</span><span class="stat-label">Support</span></div>
+                <div class="stat-item"><span class="stat-number">100+</span><span class="stat-label">Pengguna</span></div>
+                <div class="stat-item"><span class="stat-number">4★</span><span class="stat-label">Rating</span></div>
+            </div>
+        </div>
+
+        <div class="promo-banner">
+            <div class="promo-text">
+                <span class="promo-emoji">🎉</span>
+                <div>
+                    <div class="promo-title">Promo Spesial — Diskon 20%!</div>
+                    <div class="promo-sub">Berlaku untuk pembelian Panel Pterodactyl pertama kamu.</div>
+                </div>
+            </div>
+            <a href="product" class="promo-btn">Lihat Produk →</a>
+        </div>
+
+        <div class="home-grid">
+            <div class="home-card cyan">
+                <div class="card-icon"><i class="fas fa-server"></i></div>
+                <h3 class="card-title">Panel Pterodactyl</h3>
+                <p class="card-desc">Hosting panel performa tinggi, anti lag, siap pakai kapan saja.</p>
+                <span class="card-tag">SYSTEM READY</span>
+            </div>
+            <div class="home-card purple">
+                <div class="card-icon"><i class="fas fa-robot"></i></div>
+                <h3 class="card-title">Sewa Bot Jaga</h3>
+                <p class="card-desc">Keamanan grup 24 jam non-stop dengan fitur lengkap dan update rutin.</p>
+                <span class="card-tag">SYSTEM READY</span>
+            </div>
+            <div class="home-card green">
+                <div class="card-icon"><i class="fas fa-cube"></i></div>
+                <h3 class="card-title">Script & Tools</h3>
+                <p class="card-desc">Koleksi script dan tools terbaru, selalu diperbarui untuk kebutuhan kamu.</p>
+                <span class="card-tag">CHECK NEW</span>
+            </div>
+            <div class="home-card red">
+                <div class="card-icon"><i class="fas fa-heart"></i></div>
+                <h3 class="card-title">Donasi</h3>
+                <p class="card-desc">Dukung perkembangan website ini agar terus berkembang lebih baik.</p>
+                <span class="card-tag">SUPPORT US</span>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-logo">DzzXNzz</div>
+                <p class="footer-desc">Provider hosting generasi baru yang fokus pada performa, keamanan, dan kemudahan penggunaan untuk developer dan kreator.</p>
+                <div class="social-icons">
+                    <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Dedicated IP</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
+            <div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">SLA</a></li></ul></div>
+            <div><h4 class="footer-title">Kontak</h4><ul class="footer-links"><li><a href="contact">WhatsApp</a></li><li><a href="contact">Telegram</a></li><li><a href="contact">Email</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 DzzXNzz Host. All rights reserved.</span>
+            <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Welcome text berdasarkan status login
+        document.addEventListener('DOMContentLoaded', async function() {
+            const welcomeEl = document.getElementById('welcomeText');
+            if (!welcomeEl) return;
+
+            if (Auth.isLoggedIn()) {
+                const profile = await Auth.getProfile();
+                if (profile) {
+                    welcomeEl.innerHTML = `Selamat datang kembali, <span style="color:#00e5ff;font-weight:900">${profile.username}</span>! 👋`;
+                }
+            } else {
+                welcomeEl.textContent = 'Solusi hosting & bot terbaik — cepat, aman, dan terjangkau ✨';
+            }
+        });
+    </script>
+</body>
+</html>
