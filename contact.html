@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - DzzXNzz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px; margin-top: 30px;
+        }
+        .contact-card {
+            background: rgba(13,15,25,0.82);
+            backdrop-filter: blur(14px);
+            border-radius: 22px; padding: 36px 28px;
+            text-align: center; border: 1px solid transparent;
+            transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            position: relative; overflow: hidden; cursor: pointer;
+            animation: fadeInUp 0.7s ease both;
+        }
+        .contact-card:nth-child(2){animation-delay:.1s}
+        .contact-card:nth-child(3){animation-delay:.2s}
+        .contact-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            border-radius:22px 22px 0 0;
+        }
+        .contact-card:hover { transform: translateY(-8px) scale(1.02); }
+
+        .card-wa { border-color:rgba(37,211,102,0.3); box-shadow:0 0 20px rgba(37,211,102,0.1),0 8px 28px rgba(0,0,0,.4); }
+        .card-wa::before { background:linear-gradient(90deg,#25D366,#128C7E); }
+        .card-wa:hover { border-color:#25D366; box-shadow:0 0 35px rgba(37,211,102,.3),0 15px 40px rgba(0,0,0,.5); }
+
+        .card-tg { border-color:rgba(0,136,204,0.3); box-shadow:0 0 20px rgba(0,136,204,0.1),0 8px 28px rgba(0,0,0,.4); }
+        .card-tg::before { background:linear-gradient(90deg,#0088cc,#00b4ff); }
+        .card-tg:hover { border-color:#0088cc; box-shadow:0 0 35px rgba(0,136,204,.3),0 15px 40px rgba(0,0,0,.5); }
+
+        .card-bot { border-color:rgba(255,77,228,0.3); box-shadow:0 0 20px rgba(255,77,228,0.1),0 8px 28px rgba(0,0,0,.4); }
+        .card-bot::before { background:linear-gradient(90deg,#ff4de4,#bf00ff); }
+        .card-bot:hover { border-color:#ff4de4; box-shadow:0 0 35px rgba(255,77,228,.3),0 15px 40px rgba(0,0,0,.5); }
+
+        .contact-icon-wrap {
+            width:80px; height:80px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 20px; font-size:36px;
+            animation: floatIcon 3s ease-in-out infinite;
+        }
+        @keyframes floatIcon { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+        .card-wa .contact-icon-wrap { background:rgba(37,211,102,.12); border:2px solid rgba(37,211,102,.4); color:#25D366; box-shadow:0 0 22px rgba(37,211,102,.25); }
+        .card-tg .contact-icon-wrap { background:rgba(0,136,204,.12); border:2px solid rgba(0,136,204,.4); color:#0088cc; box-shadow:0 0 22px rgba(0,136,204,.25); animation-delay:.5s; }
+        .card-bot .contact-icon-wrap { background:rgba(255,77,228,.12); border:2px solid rgba(255,77,228,.4); color:#ff4de4; box-shadow:0 0 22px rgba(255,77,228,.25); animation-delay:1s; }
+
+        .contact-card h3 { font-size:22px; font-weight:900; color:#fff; margin-bottom:8px; }
+        .contact-card p { color:rgba(255,255,255,.5); font-size:14px; margin-bottom:12px; font-weight:600; line-height:1.6; }
+        .contact-meta {
+            font-size:13px; font-weight:800; margin-bottom:22px;
+            display:inline-block; padding:5px 14px; border-radius:20px;
+        }
+        .card-wa .contact-meta { color:#25D366; background:rgba(37,211,102,.1); border:1px solid rgba(37,211,102,.25); }
+        .card-tg .contact-meta { color:#0088cc; background:rgba(0,136,204,.1); border:1px solid rgba(0,136,204,.25); }
+        .card-bot .contact-meta { color:#ff4de4; background:rgba(255,77,228,.1); border:1px solid rgba(255,77,228,.25); }
+
+        .btn-contact {
+            display:inline-block; padding:12px 30px; border-radius:40px;
+            text-decoration:none; font-weight:900; font-size:14px;
+            border:2px solid; background:transparent; transition:0.25s;
+            letter-spacing:.5px; cursor:pointer;
+        }
+        .card-wa .btn-contact { border-color:#25D366; color:#25D366; }
+        .card-wa .btn-contact:hover { background:#25D366; color:#06070f; box-shadow:0 0 25px rgba(37,211,102,.5); transform:translateY(-2px); }
+        .card-tg .btn-contact { border-color:#0088cc; color:#0088cc; }
+        .card-tg .btn-contact:hover { background:#0088cc; color:#fff; box-shadow:0 0 25px rgba(0,136,204,.5); transform:translateY(-2px); }
+        .card-bot .btn-contact { border-color:#ff4de4; color:#ff4de4; }
+        .card-bot .btn-contact:hover { background:#ff4de4; color:#06070f; box-shadow:0 0 25px rgba(255,77,228,.5); transform:translateY(-2px); }
+
+        /* ===== POPUP MODAL ===== */
+        .modal-backdrop {
+            position:fixed; inset:0;
+            background:rgba(0,0,0,.78); backdrop-filter:blur(10px);
+            z-index:9000; display:flex; align-items:center; justify-content:center;
+            opacity:0; visibility:hidden; transition:.3s;
+        }
+        .modal-backdrop.show { opacity:1; visibility:visible; }
+        .modal-box {
+            background:rgba(10,12,22,.98); border-radius:26px;
+            padding:36px 28px; max-width:420px; width:92%;
+            position:relative; overflow:hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            transform:scale(0.85) translateY(20px);
+            transition:.35s cubic-bezier(0.34,1.56,0.64,1);
+            text-align:center;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+        }
+        .modal-backdrop.show .modal-box { transform:scale(1) translateY(0); }
+        .modal-box::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            border-radius:26px 26px 0 0; background-size:200% 100%;
+            animation:shineBar 2s linear infinite;
+        }
+        @keyframes shineBar { 0%{background-position:0% 0} 100%{background-position:200% 0} }
+        .modal-wa::before { background:linear-gradient(90deg,#25D366,#128C7E,#25D366); }
+        .modal-tg::before { background:linear-gradient(90deg,#0088cc,#00b4ff,#0088cc); }
+        .modal-bot::before { background:linear-gradient(90deg,#ff4de4,#bf00ff,#ff4de4); }
+
+        .modal-icon {
+            width:72px; height:72px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:30px; margin:0 auto 16px;
+        }
+        .modal-wa .modal-icon { background:rgba(37,211,102,.15); border:2px solid rgba(37,211,102,.4); color:#25D366; box-shadow:0 0 25px rgba(37,211,102,.25); }
+        .modal-tg .modal-icon { background:rgba(0,136,204,.15); border:2px solid rgba(0,136,204,.4); color:#0088cc; box-shadow:0 0 25px rgba(0,136,204,.25); }
+        .modal-bot .modal-icon { background:rgba(255,77,228,.15); border:2px solid rgba(255,77,228,.4); color:#ff4de4; box-shadow:0 0 25px rgba(255,77,228,.25); }
+
+        .modal-title { font-size:24px; font-weight:900; color:#fff; margin-bottom:6px; }
+        .modal-sub { font-size:14px; color:rgba(255,255,255,.5); font-weight:600; margin-bottom:20px; line-height:1.6; }
+
+        .response-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            background:rgba(0,255,136,.08); border:1px solid rgba(0,255,136,.25); color:#00ff88;
+            padding:5px 14px; border-radius:20px; font-size:12px; font-weight:800; margin-bottom:18px;
+        }
+        .response-badge i { font-size:8px; animation:blink 1.5s infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+        .modal-info-row {
+            display:flex; align-items:center; gap:12px;
+            background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08);
+            border-radius:14px; padding:14px 18px; margin-bottom:10px; text-align:left;
+        }
+        .modal-info-row i { font-size:18px; flex-shrink:0; }
+        .modal-wa .modal-info-row i { color:#25D366; }
+        .modal-tg .modal-info-row i { color:#0088cc; }
+        .modal-bot .modal-info-row i { color:#ff4de4; }
+        .modal-info-label { font-size:11px; color:rgba(255,255,255,.4); font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+        .modal-info-val { font-size:15px; color:#fff; font-weight:900; margin-top:2px; }
+
+        .modal-actions { display:flex; gap:10px; margin-top:22px; }
+        .modal-btn {
+            flex:1; padding:14px 10px; border-radius:40px;
+            font-weight:900; font-size:13px; border:2px solid;
+            background:transparent; cursor:pointer; transition:.25s;
+            text-decoration:none; display:inline-flex;
+            align-items:center; justify-content:center; gap:7px;
+            letter-spacing:.3px; white-space:nowrap;
+        }
+        .modal-wa .modal-btn-primary { border-color:#25D366; color:#25D366; }
+        .modal-wa .modal-btn-primary:hover { background:#25D366; color:#06070f; box-shadow:0 0 20px rgba(37,211,102,.5); }
+        .modal-tg .modal-btn-primary { border-color:#0088cc; color:#0088cc; }
+        .modal-tg .modal-btn-primary:hover { background:#0088cc; color:#fff; box-shadow:0 0 20px rgba(0,136,204,.5); }
+        .modal-bot .modal-btn-primary { border-color:#ff4de4; color:#ff4de4; }
+        .modal-bot .modal-btn-primary:hover { background:#ff4de4; color:#06070f; box-shadow:0 0 20px rgba(255,77,228,.5); }
+        .modal-btn-close { border-color:rgba(255,255,255,.15); color:rgba(255,255,255,.5); }
+        .modal-btn-close:hover { border-color:rgba(255,255,255,.35); color:#fff; }
+        .modal-close-x {
+            position:absolute; top:16px; right:18px;
+            width:30px; height:30px; background:rgba(255,255,255,.07);
+            border:none; border-radius:50%; color:rgba(255,255,255,.5);
+            font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+            transition:.2s;
+        }
+        .modal-close-x:hover { background:rgba(255,255,255,.15); color:#fff; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <button id="menu-toggle">☰</button>
+
+        </div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span class="nav-initial">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="./image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li class="active"><a href="contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <h1 class="rainbow-title">Kontak Kami</h1>
+        <p class="subtitle">Kami siap membantu kamu kapan saja 💬</p>
+        <div class="contact-grid">
+            <div class="contact-card card-wa">
+                <div class="contact-icon-wrap"><i class="fab fa-whatsapp"></i></div>
+                <h3>WhatsApp</h3>
+                <p>Chat langsung dengan admin, respon cepat dan ramah.</p>
+                <div class="contact-meta">+62 877-1347-2756</div><br>
+                <button class="btn-contact" onclick="openModal('wa')">Lihat Detail</button>
+            </div>
+            <div class="contact-card card-tg">
+                <div class="contact-icon-wrap"><i class="fab fa-telegram-plane"></i></div>
+                <h3>Telegram</h3>
+                <p>Hubungi admin via Telegram untuk keperluan teknis.</p>
+                <div class="contact-meta">@DzzXNzz</div><br>
+                <button class="btn-contact" onclick="openModal('tg')">Lihat Detail</button>
+            </div>
+            <div class="contact-card card-bot">
+                <div class="contact-icon-wrap"><i class="fas fa-robot"></i></div>
+                <h3>Bot Otomatis</h3>
+                <p>Bot interaktif 24/7 untuk cek status, order, dan info layanan.</p>
+                <div class="contact-meta">Aktif 24/7</div><br>
+                <button class="btn-contact" onclick="openModal('bot')">Lihat Detail</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal WhatsApp -->
+    <div class="modal-backdrop" id="modal-wa">
+        <div class="modal-box modal-wa">
+            <button class="modal-close-x" onclick="closeModal('wa')">✕</button>
+            <div class="modal-icon"><i class="fab fa-whatsapp"></i></div>
+            <div class="modal-title">WhatsApp</div>
+            <div class="response-badge"><i class="fas fa-circle"></i> Respon ~5 menit</div>
+            <div class="modal-sub">Chat langsung dengan admin kami untuk semua pertanyaan seputar layanan.</div>
+            <div class="modal-info-row"><i class="fas fa-phone"></i><div><div class="modal-info-label">Nomor WhatsApp</div><div class="modal-info-val">+62 877-1347-2756</div></div></div>
+            <div class="modal-info-row"><i class="fas fa-clock"></i><div><div class="modal-info-label">Jam Operasional</div><div class="modal-info-val">08.00 – 23.00 WIB</div></div></div>
+            <div class="modal-actions">
+                <a href="https://wa.me/6287713472756" target="_blank" class="modal-btn modal-btn-primary"><i class="fab fa-whatsapp"></i> Buka WhatsApp</a>
+                <button class="modal-btn modal-btn-close" onclick="closeModal('wa')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Telegram -->
+    <div class="modal-backdrop" id="modal-tg">
+        <div class="modal-box modal-tg">
+            <button class="modal-close-x" onclick="closeModal('tg')">✕</button>
+            <div class="modal-icon"><i class="fab fa-telegram-plane"></i></div>
+            <div class="modal-title">Telegram</div>
+            <div class="response-badge"><i class="fas fa-circle"></i> Aktif setiap hari</div>
+            <div class="modal-sub">Support teknis, pembelian, dan diskusi layanan via Telegram.</div>
+            <div class="modal-info-row"><i class="fab fa-telegram-plane"></i><div><div class="modal-info-label">Username</div><div class="modal-info-val">@DzzXNzz</div></div></div>
+            <div class="modal-info-row"><i class="fas fa-clock"></i><div><div class="modal-info-label">Jam Operasional</div><div class="modal-info-val">09.00 – 22.00 WIB</div></div></div>
+            <div class="modal-actions">
+                <a href="https://t.me/DzzXNzz" target="_blank" class="modal-btn modal-btn-primary"><i class="fab fa-telegram-plane"></i> Buka Telegram</a>
+                <button class="modal-btn modal-btn-close" onclick="closeModal('tg')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Bot -->
+    <div class="modal-backdrop" id="modal-bot">
+        <div class="modal-box modal-bot">
+            <button class="modal-close-x" onclick="closeModal('bot')">✕</button>
+            <div class="modal-icon"><i class="fas fa-robot"></i></div>
+            <div class="modal-title">Bot Otomatis</div>
+            <div class="response-badge"><i class="fas fa-circle"></i> Online 24/7</div>
+            <div class="modal-sub">Bot pintar kami siap melayani cek status, info order, dan notifikasi real-time.</div>
+            <div class="modal-info-row"><i class="fas fa-robot"></i><div><div class="modal-info-label">Platform</div><div class="modal-info-val">Telegram Bot</div></div></div>
+            <div class="modal-info-row"><i class="fas fa-bolt"></i><div><div class="modal-info-label">Fitur</div><div class="modal-info-val">Status, Order, Notifikasi</div></div></div>
+            <div class="modal-actions">
+                <a href="https://t.me/DzzXNzz" target="_blank" class="modal-btn modal-btn-primary"><i class="fab fa-telegram-plane"></i> Buka Bot</a>
+                <button class="modal-btn modal-btn-close" onclick="closeModal('bot')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-logo">DzzXNzz</div>
+                <p class="footer-desc">Provider hosting generasi baru yang fokus pada performa, keamanan, dan kemudahan penggunaan untuk developer dan kreator.</p>
+                <div class="social-icons">
+                    <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Dedicated IP</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
+            <div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">SLA</a></li></ul></div>
+            <div><h4 class="footer-title">Kontak</h4><ul class="footer-links"><li><a href="contact">WhatsApp</a></li><li><a href="contact">Telegram</a></li><li><a href="contact">Email</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 DzzXNzz Host. All rights reserved.</span>
+            <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        function openModal(type) {
+            document.getElementById('modal-'+type).classList.add('show');
+            document.body.style.overflow='hidden';
+        }
+        function closeModal(type) {
+            document.getElementById('modal-'+type).classList.remove('show');
+            document.body.style.overflow='';
+        }
+        document.querySelectorAll('.modal-backdrop').forEach(el=>{
+            el.addEventListener('click',function(e){ if(e.target===this){this.classList.remove('show');document.body.style.overflow='';} });
+        });
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape') document.querySelectorAll('.modal-backdrop.show').forEach(m=>{m.classList.remove('show');document.body.style.overflow='';}); });
+    </script>
+</body>
+</html>

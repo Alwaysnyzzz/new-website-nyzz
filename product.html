@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product - DzzXNzz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shineBar { 0%{background-position:0%} 100%{background-position:200%} }
+
+        .product-intro { animation: fadeInUp 0.7s ease; }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px; margin-top: 30px;
+        }
+        .product-card {
+            background: rgba(13,15,25,.82); backdrop-filter:blur(12px);
+            border-radius:22px; padding:28px 24px;
+            transition:.35s cubic-bezier(0.34,1.56,0.64,1);
+            border:1px solid transparent; position:relative; overflow:hidden;
+            animation:fadeInUp .7s ease both;
+        }
+        .product-card:nth-child(2){animation-delay:.12s}
+        .product-card:nth-child(3){animation-delay:.24s}
+        .product-card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            border-radius:22px 22px 0 0; background-size:200% 100%;
+            animation:shineBar 3s linear infinite;
+        }
+        .product-card:hover { transform:translateY(-8px) scale(1.02); }
+
+        .product-card.popular { border-color:rgba(191,0,255,.3); box-shadow:0 0 20px rgba(191,0,255,.1),0 8px 28px rgba(0,0,0,.45); }
+        .product-card.popular::before { background:linear-gradient(90deg,#bf00ff,#ff4de4,#00e5ff); }
+        .product-card.popular:hover { border-color:#bf00ff; box-shadow:0 0 35px rgba(191,0,255,.3),0 15px 40px rgba(0,0,0,.55); }
+
+        .product-card.ppob { border-color:rgba(0,255,136,.3); box-shadow:0 0 20px rgba(0,255,136,.1),0 8px 28px rgba(0,0,0,.45); }
+        .product-card.ppob::before { background:linear-gradient(90deg,#00ff88,#ffe000,#00e5ff); }
+        .product-card.ppob:hover { border-color:#00ff88; box-shadow:0 0 35px rgba(0,255,136,.3),0 15px 40px rgba(0,0,0,.55); }
+
+        .product-card.coming { border-color:rgba(255,224,0,.22); box-shadow:0 0 18px rgba(255,224,0,.07),0 8px 28px rgba(0,0,0,.4); opacity:.8; }
+        .product-card.coming::before { background:linear-gradient(90deg,#ffe000,#ff7b00,#ff4de4); }
+
+        .card-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            font-size:11px; font-weight:900; padding:5px 14px; border-radius:30px;
+            margin-bottom:18px; letter-spacing:1.2px; text-transform:uppercase;
+        }
+        .popular .card-badge { background:rgba(191,0,255,.15); border:1px solid rgba(191,0,255,.5); color:#df5fff; box-shadow:0 0 12px rgba(191,0,255,.25); }
+        .ppob .card-badge { background:rgba(0,255,136,.12); border:1px solid rgba(0,255,136,.4); color:#00ff88; box-shadow:0 0 12px rgba(0,255,136,.2); }
+        .coming .card-badge { background:rgba(255,224,0,.1); border:1px solid rgba(255,224,0,.35); color:#ffe000; }
+
+        .card-title { font-size:22px; font-weight:900; margin-bottom:10px; color:#fff; }
+        .card-desc { color:rgba(255,255,255,.5); font-size:14px; margin-bottom:20px; line-height:1.65; font-weight:600; }
+
+        .feature-list { margin:15px 0; padding:16px; background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.05); border-radius:14px; }
+        .feature-item { display:flex; align-items:center; gap:10px; margin-bottom:10px; color:rgba(255,255,255,.72); font-size:14px; font-weight:700; }
+        .feature-item:last-child{margin-bottom:0}
+        .popular .feature-item i { color:#df5fff; filter:drop-shadow(0 0 5px #bf00ff); }
+        .ppob .feature-item i { color:#00ff88; filter:drop-shadow(0 0 5px #00ff88); }
+
+        .btn-detail {
+            display:block; width:100%; text-align:center;
+            background:transparent; border:2px solid; padding:13px 0;
+            border-radius:40px; text-decoration:none; font-weight:900;
+            transition:.25s; margin-top:20px; font-size:14px; letter-spacing:.8px;
+        }
+        .popular .btn-detail { border-color:#bf00ff; color:#bf00ff; }
+        .popular .btn-detail:hover { background:#bf00ff; color:#fff; box-shadow:0 0 30px rgba(191,0,255,.5); transform:translateY(-2px); }
+        .ppob .btn-detail { border-color:#00ff88; color:#00ff88; }
+        .ppob .btn-detail:hover { background:#00ff88; color:#06070f; box-shadow:0 0 30px rgba(0,255,136,.5); transform:translateY(-2px); }
+        .coming .btn-detail { border-color:#ffe000; color:#ffe000; cursor:not-allowed; opacity:.5; }
+
+        @media(max-width:600px){ .product-grid{grid-template-columns:1fr;} }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <button id="menu-toggle">☰</button>
+
+        </div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span class="nav-initial">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="./image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="home"><i class="fas fa-home"></i> Home</a></li>
+            <li class="active"><a href="product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="product-intro">
+            <h1 class="rainbow-title">Layanan Kami</h1>
+            <p class="subtitle">Pilih layanan yang sesuai dengan kebutuhanmu 🚀</p>
+        </div>
+        <div class="product-grid">
+            <div class="product-card popular">
+                <div class="card-badge"><i class="fas fa-fire"></i> POPULAR</div>
+                <h3 class="card-title">Panel Pterodactyl</h3>
+                <p class="card-desc">Panel 3GB – 7GB, fast respon, siap untuk hosting dengan performa optimal.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><i class="fas fa-bolt"></i> Fast respon & anti lag</div>
+                    <div class="feature-item"><i class="fas fa-check-circle"></i> Siap pakai langsung</div>
+                    <div class="feature-item"><i class="fas fa-shield-alt"></i> Keamanan terjamin</div>
+                    <div class="feature-item"><i class="fas fa-headset"></i> Support 24/7</div>
+                </div>
+                <a href="/product/panelptero" class="btn-detail">⚡ Lihat Detail</a>
+            </div>
+            <div class="product-card ppob">
+                <div class="card-badge"><i class="fas fa-star"></i> PPOB</div>
+                <h3 class="card-title">Layanan PPOB</h3>
+                <p class="card-desc">Murah meriah, respon cepat, tersedia banyak layanan untuk semua kebutuhan.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><i class="fas fa-coins"></i> Harga paling murah</div>
+                    <div class="feature-item"><i class="fas fa-bolt"></i> Respon super cepat</div>
+                    <div class="feature-item"><i class="fas fa-list"></i> Banyak pilihan layanan</div>
+                    <div class="feature-item"><i class="fas fa-lock"></i> Transaksi aman</div>
+                </div>
+                <a href="#" class="btn-detail">🛒 Lihat Detail</a>
+            </div>
+            <div class="product-card coming">
+                <div class="card-badge"><i class="fas fa-clock"></i> COMING SOON</div>
+                <h3 class="card-title">Bot Jaga Premium</h3>
+                <p class="card-desc">Fitur keamanan grup lengkap dengan AI detection dan auto-moderation.</p>
+                <div class="feature-list">
+                    <div class="feature-item" style="color:rgba(255,255,255,.4)"><i class="fas fa-robot" style="color:#ffe000"></i> AI Auto-moderation</div>
+                    <div class="feature-item" style="color:rgba(255,255,255,.4)"><i class="fas fa-chart-bar" style="color:#ffe000"></i> Analytics lengkap</div>
+                    <div class="feature-item" style="color:rgba(255,255,255,.4)"><i class="fas fa-bell" style="color:#ffe000"></i> Notifikasi real-time</div>
+                </div>
+                <button class="btn-detail" style="pointer-events:none">🔒 Segera Hadir</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <div class="footer-logo">DzzXNzz</div>
+                <p class="footer-desc">Provider hosting generasi baru yang fokus pada performa, keamanan, dan kemudahan penggunaan untuk developer dan kreator.</p>
+                <div class="social-icons">
+                    <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+            <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Dedicated IP</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
+            <div><h4 class="footer-title">Legal</h4><ul class="footer-links"><li><a href="#">Terms of Service</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">SLA</a></li></ul></div>
+            <div><h4 class="footer-title">Kontak</h4><ul class="footer-links"><li><a href="contact">WhatsApp</a></li><li><a href="contact">Telegram</a></li><li><a href="contact">Email</a></li></ul></div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 DzzXNzz Host. All rights reserved.</span>
+            <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
