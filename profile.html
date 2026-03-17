@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil - DzzXNzz</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        @keyframes fadeInUp  { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shineBar  { 0%{background-position:0%} 100%{background-position:200%} }
+        @keyframes spin      { to{transform:rotate(360deg)} }
+        @keyframes spinR     { to{transform:rotate(-360deg)} }
+        @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+
+        .main-content { padding: 88px 20px 50px; max-width: 600px; margin: 0 auto; }
+
+        /* ===== PROFILE HEADER ===== */
+        .profile-header {
+            background: rgba(13,15,25,0.88);
+            backdrop-filter: blur(16px);
+            border-radius: 24px;
+            border: 1px solid rgba(0,229,255,0.2);
+            box-shadow: 0 0 30px rgba(0,229,255,0.07), 0 20px 50px rgba(0,0,0,0.55);
+            overflow: visible; margin-bottom: 16px;
+            animation: fadeInUp 0.5s ease;
+            position: relative;
+        }
+        .profile-header::before {
+            content: ''; position: absolute; top:0; left:0; right:0; height:3px;
+            background: linear-gradient(90deg,#00e5ff,#00ff88,#bf00ff,#00e5ff);
+            background-size: 200% 100%; animation: shineBar 3s linear infinite;
+        }
+        .profile-cover {
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0a0c18 0%, #0d1020 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .profile-cover-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg,
+                rgba(0,229,255,0.12) 0%,
+                rgba(191,0,255,0.10) 50%,
+                rgba(0,255,136,0.08) 100%);
+        }
+        .profile-cover-dots {
+            position:absolute; inset:0;
+            background-image: radial-gradient(rgba(0,229,255,0.12) 1px, transparent 1px);
+            background-size: 22px 22px;
+            opacity: 0.6;
+        }
+        .profile-avatar-wrap {
+            position: absolute;
+            bottom: -42px; left: 50%; transform: translateX(-50%);
+            z-index: 3;
+        }
+        .profile-avatar {
+            width: 84px; height: 84px; border-radius: 50%;
+            border: 3px solid #00e5ff; background: #0a0b14;
+            box-shadow: 0 0 24px rgba(0,229,255,0.5), 0 0 60px rgba(0,229,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .avatar-initial {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px; font-weight: 900;
+            color: #00e5ff;
+            text-shadow: 0 0 20px rgba(0,229,255,0.8);
+            line-height: 1;
+            user-select: none;
+        }
+        .profile-info { padding: 52px 22px 22px; text-align: center; }
+        .profile-username {
+            font-family:'Orbitron',sans-serif; font-size:20px; font-weight:900;
+            color:#fff; margin-bottom:4px; letter-spacing:1px;
+        }
+        .profile-joined { font-size:12px; color:rgba(255,255,255,0.38); font-weight:700; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .profile-joined i { font-size:11px; }
+
+        /* ===== STATS ===== */
+        .profile-stats {
+            display:grid; grid-template-columns:repeat(3,1fr);
+            gap:10px; margin-bottom:14px;
+            animation:fadeInUp 0.5s 0.08s ease both;
+        }
+        .pstat-card {
+            background:rgba(13,15,25,0.82); backdrop-filter:blur(12px);
+            border-radius:16px; padding:15px 10px;
+            border:1px solid rgba(255,255,255,0.07);
+            text-align:center; transition:0.3s;
+        }
+        .pstat-card:hover { transform:translateY(-3px); }
+        .pstat-icon { font-size:18px; margin-bottom:7px; }
+        .pstat-num { font-family:'Orbitron',sans-serif; font-size:18px; font-weight:900; margin-bottom:3px; display:block; }
+        .pstat-label { font-size:10px; color:rgba(255,255,255,0.38); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; }
+        .pstat-card.cyan   { border-color:rgba(0,229,255,0.18); }
+        .pstat-card.cyan   .pstat-icon,.pstat-card.cyan   .pstat-num { color:#00e5ff; filter:drop-shadow(0 0 6px #00e5ff); }
+        .pstat-card.green  { border-color:rgba(0,255,136,0.18); }
+        .pstat-card.green  .pstat-icon,.pstat-card.green  .pstat-num { color:#00ff88; }
+        .pstat-card.purple { border-color:rgba(191,0,255,0.18); }
+        .pstat-card.purple .pstat-icon,.pstat-card.purple .pstat-num { color:#bf00ff; }
+
+        /* ===== INFO AKUN (static, no dropdown) ===== */
+        .section-static {
+            background:rgba(13,15,25,0.82); backdrop-filter:blur(12px);
+            border-radius:20px; padding:20px 18px;
+            border:1px solid rgba(255,255,255,0.07);
+            margin-bottom:10px;
+            animation:fadeInUp 0.5s 0.15s ease both;
+        }
+        .section-label {
+            font-size:12px; font-weight:900; color:rgba(255,255,255,0.45);
+            text-transform:uppercase; letter-spacing:1px;
+            display:flex; align-items:center; gap:8px; margin-bottom:14px;
+        }
+        .section-label i { color:#00e5ff; font-size:12px; }
+        .info-row {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+        }
+        .info-row:last-child { border-bottom:none; padding-bottom:0; }
+        .info-left { display:flex; align-items:center; gap:10px; }
+        .info-left i { width:16px; font-size:13px; color:rgba(255,255,255,0.28); text-align:center; }
+        .info-key { font-size:13px; color:rgba(255,255,255,0.42); font-weight:700; }
+        .info-val { font-size:13px; color:#fff; font-weight:900; }
+        .info-val.cyan  { color:#00e5ff; }
+        .info-val.green { color:#00ff88; }
+
+        /* ===== ACCORDION DROPDOWN ===== */
+        .accordion {
+            background:rgba(13,15,25,0.82); backdrop-filter:blur(12px);
+            border-radius:20px; border:1px solid rgba(255,255,255,0.07);
+            margin-bottom:10px; overflow:hidden;
+            animation:fadeInUp 0.5s ease both;
+        }
+        .accordion:nth-of-type(1) { animation-delay:0.2s; }
+        .accordion:nth-of-type(2) { animation-delay:0.28s; }
+        .accordion:nth-of-type(3) { animation-delay:0.36s; }
+
+        .accordion-header {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:18px 18px; cursor:pointer;
+            user-select:none; transition:0.2s;
+        }
+        .accordion-header:hover { background:rgba(255,255,255,0.03); }
+        .accordion-header.open { border-bottom:1px solid rgba(255,255,255,0.06); }
+
+        .acc-left { display:flex; align-items:center; gap:10px; }
+        .acc-icon { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; }
+        .acc-icon.cyan   { background:rgba(0,229,255,0.1); color:#00e5ff; border:1px solid rgba(0,229,255,0.2); }
+        .acc-icon.purple { background:rgba(191,0,255,0.1); color:#bf00ff; border:1px solid rgba(191,0,255,0.2); }
+        .acc-icon.green  { background:rgba(0,255,136,0.1); color:#00ff88; border:1px solid rgba(0,255,136,0.2); }
+
+        .acc-title { font-size:14px; font-weight:900; color:#fff; }
+        .acc-sub   { font-size:11px; color:rgba(255,255,255,0.35); font-weight:700; margin-top:2px; }
+
+        .acc-chevron {
+            color:rgba(255,255,255,0.3); font-size:13px;
+            transition:transform 0.3s ease;
+        }
+        .accordion-header.open .acc-chevron { transform:rotate(180deg); color:#00e5ff; }
+
+        .accordion-body {
+            max-height:0; overflow:hidden;
+            transition:max-height 0.5s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
+            padding:0 18px;
+        }
+        .accordion-body.open {
+            max-height:2000px;
+            padding:16px 18px 18px;
+            animation:slideDown 0.3s ease;
+            overflow-y:auto;
+        }
+
+        /* ===== PASSWORD FORM ===== */
+        .input-group { margin-bottom:13px; }
+        .input-label { display:block; font-size:11px; font-weight:800; color:#00e5ff; letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+        .input-wrap { position:relative; }
+        .input-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:rgba(255,255,255,0.22); font-size:13px; pointer-events:none; }
+        input[type=password],input[type=text] {
+            width:100%; padding:12px 16px 12px 38px;
+            background:rgba(0,0,0,0.35); border:1.5px solid rgba(255,255,255,0.1);
+            border-radius:12px; color:#fff; font-family:'Nunito',sans-serif;
+            font-size:14px; font-weight:700; outline:none; transition:0.25s;
+        }
+        input:focus { border-color:#00e5ff; box-shadow:0 0 14px rgba(0,229,255,0.12); background:rgba(0,0,0,0.5); }
+        input::placeholder { color:rgba(255,255,255,0.18); }
+        .toggle-pass {
+            position:absolute; right:11px; top:50%; transform:translateY(-50%);
+            background:none; border:none; color:rgba(255,255,255,0.25);
+            cursor:pointer; font-size:13px; padding:4px;
+        }
+        .toggle-pass:hover { color:#00e5ff; }
+
+        .alert-box {
+            border-radius:10px; padding:9px 13px; margin-bottom:11px;
+            font-size:12px; font-weight:700; display:none; align-items:center; gap:8px;
+        }
+        .alert-box.show { display:flex; animation:fadeInUp 0.3s ease; }
+        .alert-error   { background:rgba(255,0,0,0.08); border:1px solid rgba(255,0,0,0.22); color:#ff6666; }
+        .alert-success { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.28); color:#00ff88; }
+
+        .btn-save {
+            width:100%; padding:13px;
+            background:linear-gradient(135deg,#00e5ff,#00ff88);
+            border:none; border-radius:12px; color:#06070f;
+            font-family:'Nunito',sans-serif; font-weight:900; font-size:14px;
+            cursor:pointer; transition:0.25s; letter-spacing:0.5px;
+            box-shadow:0 5px 18px rgba(0,229,255,0.22);
+            display:flex; align-items:center; justify-content:center; gap:8px;
+        }
+        .btn-save:hover { transform:translateY(-2px); box-shadow:0 8px 26px rgba(0,229,255,0.38); }
+        .btn-save:active { transform:scale(0.97); }
+        .btn-save:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+        .btn-loader { width:15px; height:15px; border:2.5px solid rgba(0,0,0,0.3); border-top-color:#06070f; border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+
+        /* ===== RIWAYAT LIST ===== */
+        .riwayat-empty {
+            text-align:center; padding:20px 0;
+            color:rgba(255,255,255,0.3); font-size:13px; font-weight:700;
+        }
+        .riwayat-empty i { font-size:28px; display:block; margin-bottom:8px; opacity:0.4; }
+
+        .riwayat-item {
+            display:flex; align-items:center; justify-content:space-between;
+            padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.05);
+            gap:12px;
+        }
+        .riwayat-item:last-child { border-bottom:none; padding-bottom:0; }
+
+        .riwayat-left { display:flex; align-items:center; gap:11px; flex:1; min-width:0; }
+        .riwayat-dot {
+            width:10px; height:10px; border-radius:50%; flex-shrink:0;
+        }
+        .riwayat-dot.completed { background:#00ff88; box-shadow:0 0 8px #00ff88; }
+        .riwayat-dot.pending   { background:#ffe000; box-shadow:0 0 8px #ffe000; }
+        .riwayat-dot.cancelled { background:#ff0055; box-shadow:0 0 8px #ff0055; }
+
+        .riwayat-info { min-width:0; }
+        .riwayat-id   { font-size:12px; font-weight:800; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:160px; }
+        .riwayat-date { font-size:11px; color:rgba(255,255,255,0.35); font-weight:700; margin-top:2px; }
+
+        .riwayat-right { text-align:right; flex-shrink:0; }
+        .riwayat-amount { font-size:13px; font-weight:900; color:#00e5ff; white-space:nowrap; }
+        .riwayat-status {
+            font-size:10px; font-weight:800; padding:3px 9px; border-radius:20px;
+            text-transform:uppercase; letter-spacing:0.5px; margin-top:3px; display:inline-block;
+        }
+        .riwayat-status.completed { background:rgba(0,255,136,0.12); color:#00ff88; border:1px solid rgba(0,255,136,0.25); }
+        .riwayat-status.pending   { background:rgba(255,224,0,0.1);  color:#ffe000; border:1px solid rgba(255,224,0,0.25); }
+        .riwayat-status.cancelled { background:rgba(255,0,85,0.1);   color:#ff0055; border:1px solid rgba(255,0,85,0.25); }
+
+        .riwayat-loader { text-align:center; padding:16px 0; color:rgba(255,255,255,0.3); font-size:13px; font-weight:700; }
+
+        /* ===== LOGOUT ===== */
+        .btn-logout {
+            width:100%; padding:14px; background:transparent;
+            border:1.5px solid rgba(255,0,85,0.35); border-radius:16px; color:#ff0055;
+            font-family:'Nunito',sans-serif; font-weight:900; font-size:14px;
+            cursor:pointer; transition:0.25s; letter-spacing:0.5px; margin-top:6px;
+            display:flex; align-items:center; justify-content:center; gap:8px;
+            animation:fadeInUp 0.5s 0.4s ease both;
+        }
+        .btn-logout:hover { background:rgba(255,0,85,0.09); box-shadow:0 0 18px rgba(255,0,85,0.2); transform:translateY(-2px); }
+
+        /* ===== PAGE LOADER ===== */
+        .page-loader {
+            position:fixed; inset:0;
+            background:rgba(6,7,15,0.95); backdrop-filter:blur(8px);
+            display:flex; flex-direction:column; justify-content:center; align-items:center;
+            z-index:9999; transition:0.4s;
+        }
+        .page-loader.hidden { opacity:0; visibility:hidden; }
+        .loader-rings { position:relative; width:58px; height:58px; margin-bottom:14px; }
+        .ring { position:absolute; border-radius:50%; border:3px solid transparent; }
+        .ring-outer { width:100%; height:100%; border-top-color:#00e5ff; border-bottom-color:#00e5ff; animation:spin 1.5s linear infinite; }
+        .ring-inner { width:36px; height:36px; top:11px; left:11px; border-left-color:#00ff88; border-right-color:#00ff88; animation:spinR 1.5s linear infinite; }
+        .loading-text { color:#00e5ff; font-size:12px; font-weight:800; letter-spacing:2px; text-shadow:0 0 8px #00e5ff; }
+
+        .riwayat-item.clickable:hover {
+            background:rgba(255,255,255,0.03);
+            border-radius:12px;
+            margin:0 -8px;
+            padding-left:8px;
+            padding-right:8px;
+        }
+        .riwayat-hint {
+            font-size:11px; font-weight:800;
+            margin-top:3px; display:flex; align-items:center; gap:5px;
+        }
+        .riwayat-item .riwayat-dot.pending   ~ .riwayat-info .riwayat-hint { color:#ffe000; }
+        .riwayat-item .riwayat-dot.completed ~ .riwayat-info .riwayat-hint { color:#00e5ff; }
+
+        /* Modal cancelled */
+        @keyframes shakeX {
+            0%,100%{transform:translateX(0)}
+            20%{transform:translateX(-8px)}
+            40%{transform:translateX(8px)}
+            60%{transform:translateX(-5px)}
+            80%{transform:translateX(5px)}
+        }
+        @keyframes popIn {
+            0%{transform:scale(0.7);opacity:0}
+            70%{transform:scale(1.08)}
+            100%{transform:scale(1);opacity:1}
+        }
+        @keyframes ringPulse {
+            0%,100%{box-shadow:0 0 0 0 rgba(255,0,85,0.4)}
+            50%{box-shadow:0 0 0 14px rgba(255,0,85,0)}
+        }
+
+        .modal-cancelled {
+            position:fixed; inset:0;
+            background:rgba(0,0,0,0.8); backdrop-filter:blur(10px);
+            display:flex; align-items:center; justify-content:center;
+            z-index:9000; opacity:0; visibility:hidden; transition:.3s;
+        }
+        .modal-cancelled.show { opacity:1; visibility:visible; }
+        .modal-cancelled-box {
+            background:rgba(10,12,22,.98);
+            border-radius:24px;
+            padding:36px 28px;
+            max-width:300px; width:88%;
+            text-align:center;
+            border:1px solid rgba(255,0,85,0.3);
+            box-shadow:0 0 40px rgba(255,0,85,0.15), 0 25px 60px rgba(0,0,0,0.8);
+            position:relative; overflow:hidden;
+        }
+        .modal-cancelled.show .modal-cancelled-box {
+            animation: popIn 0.4s cubic-bezier(.34,1.56,.64,1) forwards,
+                       shakeX 0.5s 0.4s ease forwards;
+        }
+        .modal-cancelled-box::before {
+            content:'';
+            position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,#ff0055,#ff7b00,#ff0055);
+            background-size:200% 100%;
+            animation:shineBar 2s linear infinite;
+        }
+        .modal-cancelled-icon-wrap {
+            width:72px; height:72px; border-radius:50%;
+            background:rgba(255,0,85,0.1);
+            border:2.5px solid rgba(255,0,85,0.5);
+            display:flex; align-items:center; justify-content:center;
+            margin:0 auto 18px;
+            animation:ringPulse 2s ease infinite;
+        }
+        .modal-cancelled-icon-wrap i {
+            font-size:30px; color:#ff0055;
+            filter:drop-shadow(0 0 10px #ff0055);
+        }
+        .modal-cancelled-title {
+            font-size:20px; font-weight:900;
+            color:#fff; margin-bottom:8px;
+        }
+        .modal-cancelled-sub {
+            font-size:13px; color:rgba(255,255,255,.45);
+            font-weight:700; line-height:1.65; margin-bottom:24px;
+        }
+        .modal-cancelled-sub span { color:#ff6688; font-weight:900; }
+        .modal-cancelled-btn {
+            width:100%; padding:13px;
+            background:rgba(255,0,85,0.08);
+            border:1.5px solid rgba(255,0,85,0.35);
+            border-radius:40px; color:#ff6688;
+            font-family:'Nunito',sans-serif;
+            font-weight:900; font-size:14px;
+            cursor:pointer; transition:.25s;
+        }
+        .modal-cancelled-btn:hover {
+            background:rgba(255,0,85,0.15);
+            border-color:#ff0055; color:#fff;
+            box-shadow:0 0 18px rgba(255,0,85,0.25);
+        }
+
+        /* ===== EDIT BUTTONS ===== */
+
+        .avatar-edit-btn {
+            position:absolute; bottom:0; right:0;
+            width:26px; height:26px; border-radius:50%;
+            background:#00e5ff; border:2px solid #06070f;
+            color:#06070f; font-size:11px;
+            cursor:pointer; display:flex; align-items:center; justify-content:center;
+            transition:0.2s; z-index:2;
+        }
+        .avatar-edit-btn:hover { background:#00ff88; transform:scale(1.1); }
+
+        /* Upload toast notifikasi */
+        .upload-toast {
+            position:fixed; bottom:24px; left:50%;
+            transform:translateX(-50%) translateY(100px);
+            background:rgba(13,15,25,0.96); backdrop-filter:blur(12px);
+            border:1px solid rgba(0,229,255,0.3); border-radius:40px;
+            padding:11px 22px; font-size:13px; font-weight:800;
+            color:#fff; z-index:9999;
+            transition:0.4s cubic-bezier(.34,1.56,.64,1);
+            display:flex; align-items:center; gap:8px;
+            white-space:nowrap; box-shadow:0 8px 30px rgba(0,0,0,0.5);
+        }
+        .upload-toast.show  { transform:translateX(-50%) translateY(0); }
+        .upload-toast.success { border-color:rgba(0,255,136,0.4); }
+        .upload-toast.success i { color:#00ff88; }
+        .upload-toast.error   { border-color:rgba(255,0,85,0.4); }
+        .upload-toast.error i { color:#ff6688; }
+        .upload-toast.loading { border-color:rgba(0,229,255,0.3); }
+        .upload-toast.loading i { color:#00e5ff; }
+
+        /* Disabled state tombol edit saat upload */
+        .avatar-edit-btn:disabled { opacity:0.45; cursor:not-allowed; }
+
+        /* ===== POPUP UPLOAD FOTO ===== */
+        .upload-modal {
+            position:fixed; inset:0;
+            background:rgba(0,0,0,0.82); backdrop-filter:blur(12px);
+            display:flex; align-items:center; justify-content:center;
+            z-index:9000; opacity:0; visibility:hidden; transition:.3s;
+        }
+        .upload-modal.show { opacity:1; visibility:visible; }
+        .upload-modal-box {
+            background:rgba(10,12,22,.97); border-radius:24px;
+            padding:28px 24px; max-width:340px; width:90%;
+            border:1px solid rgba(0,229,255,0.2);
+            box-shadow:0 0 40px rgba(0,229,255,0.08), 0 25px 60px rgba(0,0,0,0.8);
+            position:relative; overflow:hidden;
+            transform:scale(0.9); transition:.3s cubic-bezier(.34,1.56,.64,1);
+        }
+        .upload-modal.show .upload-modal-box { transform:scale(1); }
+        .upload-modal-box::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,#00e5ff,#00ff88,#bf00ff,#00e5ff);
+            background-size:200% 100%; animation:shineBar 3s linear infinite;
+        }
+
+        .upload-modal-title {
+            font-size:16px; font-weight:900; color:#fff;
+            margin-bottom:18px; display:flex; align-items:center; gap:10px;
+        }
+        .upload-modal-title i { color:#00e5ff; }
+
+        /* Area klik pilih foto */
+        .upload-drop-area {
+            border:2px dashed rgba(0,229,255,0.3);
+            border-radius:16px; padding:24px 16px;
+            text-align:center; cursor:pointer;
+            transition:0.25s; margin-bottom:16px;
+            background:rgba(0,229,255,0.03);
+            position:relative; overflow:hidden;
+        }
+        .upload-drop-area:hover {
+            border-color:#00e5ff;
+            background:rgba(0,229,255,0.07);
+        }
+        .upload-drop-area input[type=file] {
+            position:absolute; inset:0;
+            opacity:0; cursor:pointer; width:100%; height:100%;
+        }
+        .upload-drop-icon { font-size:32px; color:rgba(0,229,255,0.5); margin-bottom:8px; }
+        .upload-drop-text { font-size:13px; font-weight:700; color:rgba(255,255,255,0.5); }
+        .upload-drop-text span { color:#00e5ff; font-weight:900; }
+
+        /* Preview setelah pilih foto */
+        .upload-preview-wrap {
+            display:none; margin-bottom:16px;
+            border-radius:14px; overflow:hidden;
+            border:1px solid rgba(0,229,255,0.2);
+            position:relative;
+        }
+        .upload-preview-wrap.show { display:block; }
+        .upload-preview-wrap img {
+            width:100%; height:160px; object-fit:cover; display:block;
+        }
+        .upload-preview-wrap.avatar img {
+            height:120px; object-fit:cover;
+        }
+        .upload-preview-change {
+            position:absolute; bottom:8px; right:8px;
+            background:rgba(0,0,0,0.65); backdrop-filter:blur(4px);
+            border:1px solid rgba(255,255,255,0.2); border-radius:20px;
+            color:rgba(255,255,255,0.8); font-size:11px; font-weight:800;
+            padding:5px 12px; cursor:pointer;
+        }
+
+        .upload-modal-actions { display:flex; gap:8px; }
+        .upload-btn-save {
+            flex:1; padding:13px 10px;
+            background:linear-gradient(135deg,#00e5ff,#00ff88);
+            border:none; border-radius:40px; color:#06070f;
+            font-family:'Nunito',sans-serif; font-weight:900; font-size:13px;
+            cursor:pointer; transition:.25s;
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            white-space:nowrap;
+        }
+        .upload-btn-save:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,229,255,0.35); }
+        .upload-btn-save:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+        .upload-btn-cancel {
+            flex:1; padding:13px 10px; background:transparent;
+            border:1.5px solid rgba(255,255,255,0.15); border-radius:40px;
+            color:rgba(255,255,255,0.5); font-family:'Nunito',sans-serif;
+            font-weight:900; font-size:13px; cursor:pointer; transition:.2s;
+            white-space:nowrap;
+        }
+        .upload-btn-cancel:hover { border-color:rgba(255,255,255,0.3); color:#fff; }
+        /* Tombol hapus di dalam actions (inline) */
+        .upload-modal-actions .upload-btn-delete {
+            flex:1; padding:13px 10px; margin-top:0;
+            font-size:13px; white-space:nowrap;
+        }
+
+        .upload-btn-loader { width:15px; height:15px; border:2.5px solid rgba(0,0,0,0.3); border-top-color:#06070f; border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+
+        .upload-btn-delete {
+            width:100%; padding:11px; margin-top:10px;
+            background:transparent;
+            border:1.5px solid rgba(255,0,85,0.3); border-radius:40px;
+            color:rgba(255,0,85,0.7); font-family:'Nunito',sans-serif;
+            font-weight:800; font-size:13px; cursor:pointer; transition:.2s;
+            display:flex; align-items:center; justify-content:center; gap:8px;
+        }
+        .upload-btn-delete:hover { background:rgba(255,0,85,0.08); border-color:#ff0055; color:#ff6688; }
+
+        @media(max-width:480px) {
+            .pstat-num { font-size:16px; }
+            .riwayat-id { max-width:120px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-rings"><div class="ring ring-outer"></div><div class="ring ring-inner"></div></div>
+        <div class="loading-text">Memuat profil...</div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left"><button id="menu-toggle">☰</button></div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span style="font-family:Orbitron,sans-serif;font-size:15px;font-weight:900;color:#00e5ff;width:100%;height:100%;display:flex;align-items:center;justify-content:center">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="./image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="/contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content" id="mainContent" style="display:none">
+
+        <!-- Profile Header -->
+
+
+        <!-- Toast notifikasi -->
+        <div class="upload-toast" id="uploadToast">
+            <i id="uploadToastIcon" class="fas fa-spinner fa-spin"></i>
+            <span id="uploadToastText">Mengupload...</span>
+        </div>
+
+        <div class="profile-header">
+            <div class="profile-cover" id="profileCover">
+                <div class="profile-cover-bg"></div>
+                <div class="profile-cover-dots"></div>
+                <div class="profile-avatar-wrap">
+                    <div class="profile-avatar" id="profileAvatarEl">
+                        <span class="avatar-initial" id="avatarInitial">?</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="profile-username" id="profileUsername">—</div>
+                <div class="profile-joined"><i class="fas fa-calendar-alt"></i><span id="profileJoined">—</span></div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="profile-stats">
+            <div class="pstat-card cyan">
+                <div class="pstat-icon">🪙</div>
+                <span class="pstat-num" id="statCoins">0</span>
+                <span class="pstat-label">Coins</span>
+            </div>
+            <div class="pstat-card green">
+                <div class="pstat-icon"><i class="fas fa-receipt"></i></div>
+                <span class="pstat-num" id="statTrx">0</span>
+                <span class="pstat-label">Transaksi</span>
+            </div>
+            <div class="pstat-card purple">
+                <div class="pstat-icon"><i class="fas fa-check-circle"></i></div>
+                <span class="pstat-num" id="statDone">0</span>
+                <span class="pstat-label">Selesai</span>
+            </div>
+        </div>
+
+        <!-- Info Akun (static) -->
+        <div class="section-static">
+            <div class="section-label"><i class="fas fa-id-card"></i> Info Akun</div>
+            <div class="info-row">
+                <div class="info-left"><i class="fas fa-user"></i><span class="info-key">Username</span></div>
+                <span class="info-val cyan" id="infoUsername">—</span>
+            </div>
+            <div class="info-row">
+                <div class="info-left"><i class="fas fa-coins"></i><span class="info-key">Saldo Coins</span></div>
+                <span class="info-val green" id="infoCoins">0</span>
+            </div>
+            <div class="info-row">
+                <div class="info-left"><i class="fas fa-calendar"></i><span class="info-key">Bergabung</span></div>
+                <span class="info-val" id="infoJoined">—</span>
+            </div>
+        </div>
+
+        <!-- Accordion: Ganti Password -->
+        <div class="accordion" id="accPass">
+            <div class="accordion-header" onclick="toggleAccordion('accPass')">
+                <div class="acc-left">
+                    <div class="acc-icon cyan"><i class="fas fa-lock"></i></div>
+                    <div>
+                        <div class="acc-title">Ganti Password</div>
+                        <div class="acc-sub">Ubah kata sandi akun kamu</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down acc-chevron"></i>
+            </div>
+            <div class="accordion-body" id="bodyPass">
+                <div class="alert-box alert-error" id="passErrorBox"><i class="fas fa-exclamation-triangle"></i><span id="passErrorText"></span></div>
+                <div class="alert-box alert-success" id="passSuccessBox"><i class="fas fa-check-circle"></i><span id="passSuccessText"></span></div>
+                <div class="input-group">
+                    <label class="input-label">Password Lama</label>
+                    <div class="input-wrap">
+                        <input type="password" id="oldPass" placeholder="••••••••">
+                        <i class="fas fa-lock input-icon"></i>
+                        <button type="button" class="toggle-pass" onclick="togglePass('oldPass',this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Password Baru</label>
+                    <div class="input-wrap">
+                        <input type="password" id="newPass" placeholder="min. 6 karakter">
+                        <i class="fas fa-lock input-icon"></i>
+                        <button type="button" class="toggle-pass" onclick="togglePass('newPass',this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Konfirmasi Password Baru</label>
+                    <div class="input-wrap">
+                        <input type="password" id="confirmPass" placeholder="ulangi password baru">
+                        <i class="fas fa-lock input-icon"></i>
+                        <button type="button" class="toggle-pass" onclick="togglePass('confirmPass',this)"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <button class="btn-save" id="savePassBtn">
+                    <i class="fas fa-save"></i>
+                    <span id="savePassText">Simpan Password</span>
+                    <div class="btn-loader" id="savePassLoader"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Accordion: Riwayat Isi Saldo -->
+        <div class="accordion" id="accSaldo">
+            <div class="accordion-header" onclick="toggleAccordion('accSaldo')">
+                <div class="acc-left">
+                    <div class="acc-icon green"><i class="fas fa-wallet"></i></div>
+                    <div>
+                        <div class="acc-title">Riwayat Isi Saldo</div>
+                        <div class="acc-sub">Histori top up coins kamu</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down acc-chevron"></i>
+            </div>
+            <div class="accordion-body" id="bodySaldo">
+                <div id="riwayatSaldoList">
+                    <div class="riwayat-loader"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordion: Riwayat Order -->
+        <div class="accordion" id="accOrder">
+            <div class="accordion-header" onclick="toggleAccordion('accOrder')">
+                <div class="acc-left">
+                    <div class="acc-icon purple"><i class="fas fa-shopping-cart"></i></div>
+                    <div>
+                        <div class="acc-title">Riwayat Order</div>
+                        <div class="acc-sub">Semua transaksi pembelian</div>
+                    </div>
+                </div>
+                <i class="fas fa-chevron-down acc-chevron"></i>
+            </div>
+            <div class="accordion-body" id="bodyOrder">
+                <div id="riwayatOrderList">
+                    <div class="riwayat-loader"><i class="fas fa-spinner fa-spin"></i> Memuat...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <button class="btn-logout" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Keluar dari Akun
+        </button>
+
+    </main>
+
+    <!-- ===== POPUP UPLOAD AVATAR ===== -->
+    <div class="upload-modal" id="modalUploadAvatar">
+        <div class="upload-modal-box">
+            <div class="upload-modal-title"><i class="fas fa-user-circle"></i> Ganti Foto Profil</div>
+            <div class="upload-drop-area" id="dropAvatar">
+                <input type="file" id="fileInputAvatar" accept="image/jpeg,image/png,image/webp">
+                <div class="upload-drop-icon"><i class="fas fa-image"></i></div>
+                <div class="upload-drop-text">Ketuk untuk pilih foto<br><span>JPG, PNG, WebP</span> · maks 2 MB</div>
+            </div>
+            <div class="upload-preview-wrap avatar" id="previewWrapAvatar">
+                <img id="previewImgAvatar" src="" alt="preview">
+                <div class="upload-preview-change" onclick="document.getElementById('fileInputAvatar').click()">Ganti</div>
+            </div>
+            <div class="upload-modal-actions">
+                <button class="upload-btn-save" id="btnSaveAvatar">
+                    <span id="btnSaveAvatarText"><i class="fas fa-check"></i> Simpan</span>
+                    <div class="upload-btn-loader" id="loaderAvatar"></div>
+                </button>
+                <button class="upload-btn-delete" id="btnDeleteAvatar" onclick="deletePhoto('avatar')" style="display:none">
+                    <i class="fas fa-trash-alt"></i> Hapus
+                </button>
+                <button class="upload-btn-cancel" onclick="closeUploadModal('avatar')">Batal</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal Transaksi Dibatalkan -->
+    <div class="modal-cancelled" id="cancelledModal" onclick="if(event.target===this)this.classList.remove('show')">
+        <div class="modal-cancelled-box">
+            <div class="modal-cancelled-icon-wrap">
+                <i class="fas fa-exclamation"></i>
+            </div>
+            <div class="modal-cancelled-title">Transaksi Usai</div>
+            <div class="modal-cancelled-sub">
+                Transaksi ini telah <span>dibatalkan</span> dan sudah tidak bisa dilanjutkan.
+            </div>
+            <button class="modal-cancelled-btn" onclick="document.getElementById('cancelledModal').classList.remove('show')">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // ===== Toggle accordion =====
+        function toggleAccordion(id) {
+            const acc    = document.getElementById(id);
+            const header = acc.querySelector('.accordion-header');
+            const body   = acc.querySelector('.accordion-body');
+            const isOpen = header.classList.contains('open');
+
+            // Tutup semua
+            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('open'));
+            document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+
+            // Buka yang diklik kalau sebelumnya tertutup
+            if (!isOpen) {
+                header.classList.add('open');
+                body.classList.add('open');
+                // Load data kalau belum
+                if (id === 'accSaldo' && !acc.dataset.loaded) { loadRiwayat('saldo'); acc.dataset.loaded = '1'; }
+                if (id === 'accOrder' && !acc.dataset.loaded) { loadRiwayat('order'); acc.dataset.loaded = '1'; }
+            }
+        }
+
+        // ===== Toggle password visibility =====
+        function togglePass(inputId, btn) {
+            const inp = document.getElementById(inputId);
+            const ico = btn.querySelector('i');
+            inp.type  = inp.type === 'password' ? 'text' : 'password';
+            ico.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        }
+
+        // ===== Format tanggal =====
+        function fmtDate(str) {
+            if (!str) return '—';
+            const d = new Date(str);
+            return d.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}) + ' ' +
+                   d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+        }
+
+        // ===== Cache transaksi (tidak fetch ulang) =====
+        let _allTrx = null;
+
+        // ===== Handle klik item riwayat =====
+        function handleItemClick(status, orderId) {
+            if (status === 'pending')   { window.location.href = '/isisaldo/' + orderId; return; }
+            if (status === 'completed') { window.location.href = '/struk?order_id=' + orderId; return; }
+            if (status === 'cancelled') { showCancelledModal(orderId); return; }
+        }
+
+        // ===== Modal transaksi dibatalkan =====
+        function showCancelledModal(orderId) {
+            const modal = document.getElementById('cancelledModal');
+            document.getElementById('cancelledOrderId').textContent = orderId;
+            modal.classList.add('show');
+        }
+
+        // ===== Render riwayat =====
+        function renderRiwayat(type, data) {
+            const el = document.getElementById(type === 'saldo' ? 'riwayatSaldoList' : 'riwayatOrderList');
+            if (!data || data.length === 0) {
+                el.innerHTML = `<div class="riwayat-empty"><i class="fas fa-inbox"></i>Belum ada riwayat</div>`;
+                return;
+            }
+
+            const statusLabel = { completed: 'Selesai', pending: 'Menunggu', cancelled: 'Dibatalkan' };
+            const statusIcon  = { completed: 'fa-arrow-right', pending: 'fa-qrcode', cancelled: 'fa-times-circle' };
+            const clickHint   = { completed: 'Lihat struk', pending: 'Lanjut bayar', cancelled: '' };
+            const hintColor   = { completed: '#00e5ff', pending: '#ffe000', cancelled: '' };
+
+            el.innerHTML = data.map(t => `
+                <div class="riwayat-item ${t.status !== 'cancelled' ? 'clickable' : ''}"
+                     onclick="handleItemClick('${t.status}','${t.order_id}')"
+                     style="${t.status !== 'cancelled' ? 'cursor:pointer' : ''}">
+                    <div class="riwayat-left">
+                        <div class="riwayat-dot ${t.status}"></div>
+                        <div class="riwayat-info">
+                            <div class="riwayat-id">${t.order_id}</div>
+                            <div class="riwayat-date">${fmtDate(t.created_at)}</div>
+                            ${clickHint[t.status] ? `<div class="riwayat-hint" style="color:${hintColor[t.status]}"><i class="fas ${statusIcon[t.status]}"></i> ${clickHint[t.status]}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="riwayat-right">
+                        <div class="riwayat-amount">Rp ${Number(t.amount).toLocaleString('id-ID')}</div>
+                        <span class="riwayat-status ${t.status}">${statusLabel[t.status] || t.status}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== Load riwayat — pakai cache, tidak fetch ulang =====
+        function loadRiwayat(type) {
+            const elId = type === 'saldo' ? 'riwayatSaldoList' : 'riwayatOrderList';
+            if (!_allTrx) {
+                document.getElementById(elId).innerHTML = `<div class="riwayat-empty"><i class="fas fa-inbox"></i>Belum ada data</div>`;
+                return;
+            }
+            const filtered = type === 'saldo'
+                ? _allTrx.filter(t => t.type === 'isisaldo')
+                : _allTrx.filter(t => t.type !== 'isisaldo');
+            renderRiwayat(type, filtered);
+        }
+
+        // ===== Page load =====
+        document.addEventListener('DOMContentLoaded', async function () {
+            if (!Auth.isLoggedIn()) { window.location.href = '/login'; return; }
+
+            const loader = document.getElementById('pageLoader');
+            const main   = document.getElementById('mainContent');
+
+            try {
+                // forceRefresh=true → selalu fetch dari DB, tidak pakai cache lama
+                // Ini penting biar avatar_url selalu terbaca walaupun cache lama tidak ada field ini
+                const profile = await Auth.getProfile(true);
+                if (!profile) { window.location.href = '/login'; return; }
+
+                document.getElementById('profileUsername').textContent = profile.username;
+                document.getElementById('infoUsername').textContent    = profile.username;
+                // Set inisial avatar dari huruf pertama username
+                const initial = profile.username ? profile.username.charAt(0).toUpperCase() : '?';
+                const initEl  = document.getElementById('avatarInitial');
+                if (initEl) initEl.textContent = initial;
+                document.getElementById('statCoins').textContent       = Number(profile.coins).toLocaleString('id-ID');
+                document.getElementById('infoCoins').textContent       = '🪙 ' + Number(profile.coins).toLocaleString('id-ID');
+
+                if (profile.created_at) {
+                    const tgl = new Date(profile.created_at).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});
+                    document.getElementById('profileJoined').textContent = 'Bergabung ' + tgl;
+                    document.getElementById('infoJoined').textContent    = tgl;
+                }
+
+                // Ambil transaksi SEKALI — simpan ke cache _allTrx, dipakai ulang untuk riwayat
+                try {
+                    const res  = await fetch('/api/transactions', { headers:{'Authorization':'Bearer '+Auth.getToken()} });
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        _allTrx = data; // simpan ke cache global
+                        document.getElementById('statTrx').textContent  = data.length;
+                        document.getElementById('statDone').textContent = data.filter(t=>t.status==='completed').length;
+                    }
+                } catch(e) {}
+
+            } catch(e) { console.error(e); }
+            finally {
+                loader.classList.add('hidden');
+                main.style.display = 'block';
+                loadSavedPhotos(typeof profile !== 'undefined' ? profile : null);
+            }
+        });
+
+        // ===== Ganti Password =====
+        document.getElementById('savePassBtn').addEventListener('click', async function() {
+            const errBox = document.getElementById('passErrorBox');
+            const sucBox = document.getElementById('passSuccessBox');
+            errBox.classList.remove('show'); sucBox.classList.remove('show');
+
+            const oldPass = document.getElementById('oldPass').value;
+            const newPass = document.getElementById('newPass').value;
+            const cfmPass = document.getElementById('confirmPass').value;
+
+            if (!oldPass||!newPass||!cfmPass) { document.getElementById('passErrorText').textContent='Semua field wajib diisi'; errBox.classList.add('show'); return; }
+            if (newPass.length<6) { document.getElementById('passErrorText').textContent='Password baru minimal 6 karakter'; errBox.classList.add('show'); return; }
+            if (newPass!==cfmPass) { document.getElementById('passErrorText').textContent='Konfirmasi password tidak cocok'; errBox.classList.add('show'); return; }
+
+            this.disabled=true;
+            document.getElementById('savePassText').style.display='none';
+            document.getElementById('savePassLoader').style.display='block';
+
+            try {
+                const res  = await fetch('/api/auth/change-password',{
+                    method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+Auth.getToken()},
+                    body:JSON.stringify({old_password:oldPass,new_password:newPass})
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    document.getElementById('passErrorText').textContent=data.error||'Gagal ganti password';
+                    errBox.classList.add('show');
+                } else {
+                    document.getElementById('passSuccessText').textContent='Password berhasil diganti!';
+                    sucBox.classList.add('show');
+                    document.getElementById('oldPass').value='';
+                    document.getElementById('newPass').value='';
+                    document.getElementById('confirmPass').value='';
+                }
+            } catch(e) {
+                document.getElementById('passErrorText').textContent='Gagal terhubung ke server';
+                errBox.classList.add('show');
+            } finally {
+                this.disabled=false;
+                document.getElementById('savePassText').style.display='block';
+                document.getElementById('savePassLoader').style.display='none';
+            }
+        });
+
+        // ===== Logout =====
+        document.getElementById('logoutBtn').addEventListener('click',function(){
+            Auth.logout(); window.location.href='/login';
+        });
+
+        // ===== TOAST HELPER =====
+        let toastTimer;
+        function showToast(msg, type='loading') {
+            const toast    = document.getElementById('uploadToast');
+            const toastTxt = document.getElementById('uploadToastText');
+            const toastIco = document.getElementById('uploadToastIcon');
+            toast.className = 'upload-toast show ' + type;
+            toastTxt.textContent = msg;
+            toastIco.className = type === 'loading'
+                ? 'fas fa-spinner fa-spin'
+                : type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle';
+            clearTimeout(toastTimer);
+            if (type !== 'loading') toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        function hideToast() {
+            document.getElementById('uploadToast').classList.remove('show');
+        }
+
+        // uploadToCatbox sudah diganti dengan savePhoto
+
+        // ===== Terapkan foto ke tampilan =====
+        function applyPhoto(type, url) {
+            if (!url) return;
+            if (type === 'avatar') {
+                // Update src img yang sudah ada — jangan replace innerHTML
+                const img = document.getElementById('profileAvatarImg');
+                if (img) img.src = url;
+                // Update navbar juga
+                document.querySelectorAll('.user-avatar img').forEach(i => i.src = url);
+            }
+            // cover sudah dihapus
+        }
+
+        // savePhotoLocal tidak dipakai — foto disimpan di Supabase DB lewat /api/upload-image
+        function savePhotoLocal(type, url) { /* tidak dipakai, foto di Supabase */ }
+
+        // ===== Load foto dari profile — URL dari Supabase DB =====
+        function loadSavedPhotos(profile) {
+            if (!profile) return;
+            // avatar_url & cover_url sudah ada di profile dari /api/user
+            if (profile.avatar_url) applyPhoto('avatar', profile.avatar_url);
+            if (profile.cover_url)  applyPhoto('cover',  profile.cover_url);
+        }
+
+        // ===== Popup upload helpers =====
+        let selectedFile = { avatar: null, cover: null };
+
+        function openUploadModal(type) {
+            const modal = document.getElementById(type === 'avatar' ? 'modalUploadAvatar' : 'modalUploadCover');
+            // Reset state
+            selectedFile[type] = null;
+            const previewWrap  = document.getElementById(type === 'avatar' ? 'previewWrapAvatar' : 'previewWrapCover');
+            const dropArea     = document.getElementById(type === 'avatar' ? 'dropAvatar' : 'dropCover');
+            const deleteBtn    = document.getElementById(type === 'avatar' ? 'btnDeleteAvatar' : 'btnDeleteCover');
+            previewWrap.classList.remove('show');
+            dropArea.style.display = 'block';
+            // Tampilkan tombol hapus hanya jika sudah ada foto tersimpan
+            try {
+                const profile = JSON.parse(localStorage.getItem('nyzz-profile'));
+                const hasPhoto = type === 'avatar' ? !!profile?.avatar_url : !!profile?.cover_url;
+                if (deleteBtn) deleteBtn.style.display = hasPhoto ? 'flex' : 'none';
+            } catch(e) { if (deleteBtn) deleteBtn.style.display = 'none'; }
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        async function deletePhoto(type) {
+            const deleteBtn = document.getElementById(type === 'avatar' ? 'btnDeleteAvatar' : 'btnDeleteCover');
+            if (deleteBtn) { deleteBtn.disabled = true; deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghapus...'; }
+            showToast('Menghapus foto...', 'loading');
+            try {
+                const res  = await fetch('/api/delete-photo', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + Auth.getToken() },
+                    body: JSON.stringify({ type })
+                });
+                const data = await res.json();
+                if (!res.ok) { showToast(data.error || 'Gagal hapus', 'error'); return; }
+
+                // Hapus dari localStorage foto
+                savePhotoLocal(type, null);
+
+                // Reset tampilan
+                if (type === 'avatar') {
+                    const el = document.getElementById('profileAvatarEl');
+                    if (el) el.innerHTML = '<img src="/image/profile.jpg" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+                    document.querySelectorAll('.user-avatar img').forEach(img => {
+                        img.src = '/image/profile.jpg';
+                    });
+                } else {
+                    const coverEl = document.getElementById('profileCover');
+                    if (coverEl) {
+                        coverEl.style.backgroundImage = '';
+                        coverEl.style.background = 'linear-gradient(135deg,rgba(0,229,255,0.15),rgba(191,0,255,0.12),rgba(0,255,136,0.1))';
+                    }
+                }
+
+                // Hapus cache profile
+                localStorage.removeItem('nyzz-profile');
+                closeUploadModal(type);
+                showToast(type === 'avatar' ? 'Foto profil dihapus ✓' : 'Foto cover dihapus ✓', 'success');
+
+            } catch(err) {
+                showToast('Gagal: ' + err.message, 'error');
+            } finally {
+                if (deleteBtn) {
+                    deleteBtn.disabled = false;
+                    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Hapus';
+                }
+            }
+        }
+
+        function closeUploadModal(type) {
+            const modal = document.getElementById(type === 'avatar' ? 'modalUploadAvatar' : 'modalUploadCover');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            // Reset file input
+            const fileInput = document.getElementById(type === 'avatar' ? 'fileInputAvatar' : 'fileInputCover');
+            if (fileInput) fileInput.value = '';
+        }
+
+        // Klik backdrop tutup modal
+        document.querySelectorAll('.upload-modal').forEach(m => {
+            m.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Preview setelah pilih file
+        function handleFileSelect(file, type) {
+            if (!file) return;
+            const maxSize = type === 'cover' ? 3 : 2;
+            if (file.size > maxSize * 1024 * 1024) {
+                showToast(`Ukuran maksimal ${maxSize} MB`, 'error');
+                return;
+            }
+            selectedFile[type] = file;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const previewImg  = document.getElementById(type === 'avatar' ? 'previewImgAvatar' : 'previewImgCover');
+                const previewWrap = document.getElementById(type === 'avatar' ? 'previewWrapAvatar' : 'previewWrapCover');
+                const dropArea    = document.getElementById(type === 'avatar' ? 'dropAvatar' : 'dropCover');
+                previewImg.src = e.target.result;
+                previewWrap.classList.add('show');
+                dropArea.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        document.getElementById('fileInputAvatar').addEventListener('change', function() {
+            if (this.files[0]) handleFileSelect(this.files[0], 'avatar');
+        });
+        document.getElementById('fileInputCover').addEventListener('change', function() {
+            if (this.files[0]) handleFileSelect(this.files[0], 'cover');
+        });
+
+        // Tombol Simpan
+        document.getElementById('btnSaveAvatar').addEventListener('click', () => savePhoto('avatar'));
+        document.getElementById('btnSaveCover').addEventListener('click',  () => savePhoto('cover'));
+
+        async function savePhoto(type) {
+            const file = selectedFile[type];
+            if (!file) { showToast('Pilih foto dulu ya!', 'error'); return; }
+
+            const btnText   = document.getElementById(type === 'avatar' ? 'btnSaveAvatarText' : 'btnSaveCoverText');
+            const btnLoader = document.getElementById(type === 'avatar' ? 'loaderAvatar' : 'loaderCover');
+            const saveBtn   = document.getElementById(type === 'avatar' ? 'btnSaveAvatar' : 'btnSaveCover');
+
+            saveBtn.disabled = true;
+            btnText.style.display = 'none';
+            btnLoader.style.display = 'block';
+            showToast('Mengupload...', 'loading');
+
+            try {
+                // Baca sebagai base64
+                const base64 = await new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload  = e => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(file);
+                });
+
+                // Preview sementara
+                applyPhoto(type, base64);
+
+                // Upload ke Catbox via API
+                const res  = await fetch('/api/upload-image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + Auth.getToken()
+                    },
+                    body: JSON.stringify({ image: base64, type, filename: file.name })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    showToast(data.error || 'Upload gagal', 'error');
+                    return;
+                }
+
+                // Terapkan URL ke tampilan langsung
+                applyPhoto(type, data.url);
+
+                // Update avatar navbar juga
+                if (type === 'avatar') {
+                    document.querySelectorAll('.user-avatar img').forEach(img => img.src = data.url);
+                }
+
+                // Hapus cache lama → getProfile(true) akan fetch fresh dari DB termasuk avatar_url baru
+                localStorage.removeItem('nyzz-profile');
+                await Auth.getProfile(true); // refresh cache dengan data terbaru
+
+                closeUploadModal(type);
+                showToast(type === 'avatar' ? 'Foto profil diperbarui! ✨' : 'Foto cover diperbarui! ✨', 'success');
+
+            } catch(err) {
+                showToast('Gagal: ' + err.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                btnText.style.display = 'flex';
+                btnLoader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

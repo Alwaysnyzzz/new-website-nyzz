@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Login - DzzXNzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #06070f;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(0,229,255,0.1) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 80%, rgba(191,0,255,0.08) 0%, transparent 55%);
+        }
+
+        canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .card {
+            position: relative; z-index: 1;
+            background: rgba(13,15,25,0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 38px 32px;
+            width: 100%; max-width: 390px;
+            border: 1px solid rgba(0,229,255,0.2);
+            box-shadow: 0 0 40px rgba(0,229,255,0.08), 0 25px 60px rgba(0,0,0,0.7);
+            animation: slideUp 0.55s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #00e5ff, #00ff88, #bf00ff, #00e5ff);
+            background-size: 200% 100%;
+            animation: shine 3s linear infinite;
+            border-radius: 24px 24px 0 0;
+        }
+        @keyframes shine { 0%{background-position:0%} 100%{background-position:200%} }
+
+        /* ===== BRAND — Orbitron + gradient, bukan font kaligrafi ===== */
+        .brand {
+            font-family: 'Orbitron', 'Nunito', sans-serif;
+            font-weight: 900;
+            font-size: 28px;
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 4px;
+            background: linear-gradient(90deg, #00e5ff 0%, #00ff88 50%, #bf00ff 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 16px rgba(0,229,255,0.45));
+            animation: brandShine 4s linear infinite;
+        }
+        @keyframes brandShine {
+            0%   { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .brand-sub {
+            text-align: center;
+            color: rgba(255,255,255,0.38);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        /* ===== INPUTS ===== */
+        .input-group { margin-bottom: 18px; }
+        .input-label {
+            display: block;
+            font-size: 11px; font-weight: 800;
+            color: #00e5ff; letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px; margin-left: 2px;
+        }
+        .input-wrap { position: relative; }
+        .input-icon {
+            position: absolute; left: 15px; top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.25); font-size: 14px;
+            pointer-events: none;
+        }
+        input {
+            width: 100%;
+            padding: 14px 16px 14px 42px;
+            background: rgba(0,0,0,0.35);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px; font-weight: 700;
+            outline: none; transition: 0.25s;
+        }
+        input:focus {
+            border-color: #00e5ff;
+            box-shadow: 0 0 18px rgba(0,229,255,0.15);
+            background: rgba(0,0,0,0.5);
+        }
+        input::placeholder { color: rgba(255,255,255,0.2); }
+
+        .toggle-pass {
+            position: absolute; right: 13px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            color: rgba(255,255,255,0.28);
+            cursor: pointer; font-size: 14px;
+            transition: 0.2s; padding: 4px;
+        }
+        .toggle-pass:hover { color: #00e5ff; }
+
+        /* ===== ERROR ===== */
+        .error-box {
+            background: rgba(255,0,0,0.08);
+            border: 1px solid rgba(255,0,0,0.25);
+            border-radius: 10px; padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px; font-weight: 700; color: #ff6666;
+            display: none; align-items: center; gap: 8px;
+        }
+        .error-box.show { display: flex; animation: slideUp 0.3s ease; }
+
+        /* ===== BUTTON ===== */
+        .btn {
+            width: 100%; padding: 15px;
+            background: linear-gradient(135deg, #00e5ff, #00ff88);
+            border: none; border-radius: 12px;
+            color: #06070f;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 900; font-size: 15px;
+            cursor: pointer; transition: 0.25s;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 25px rgba(0,229,255,0.3);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            position: relative; overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 35px rgba(0,229,255,0.4); }
+        .btn:hover::before { left: 130%; }
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        .loader {
+            width: 18px; height: 18px;
+            border: 2.5px solid rgba(0,0,0,0.3);
+            border-top-color: #06070f;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .foot {
+            text-align: center; margin-top: 20px;
+            font-size: 14px; color: rgba(255,255,255,0.38); font-weight: 700;
+        }
+        .foot a { color: #00e5ff; text-decoration: none; font-weight: 800; }
+        .foot a:hover { color: #00ff88; }
+
+        @media (max-width: 420px) { .card { padding: 28px 20px; } .brand { font-size: 22px; letter-spacing: 2px; } }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div class="card">
+    <div class="brand">DzzXNzz</div>
+    <div class="brand-sub">Masuk ke akun kamu</div>
+
+    <div class="error-box" id="errorBox">
+        <i class="fas fa-exclamation-triangle"></i>
+        <span id="errorText"></span>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Username</label>
+        <div class="input-wrap">
+            <input type="text" id="username" placeholder="username kamu" autocomplete="username" autocapitalize="none">
+            <i class="fas fa-user input-icon"></i>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label class="input-label">Password</label>
+        <div class="input-wrap">
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+            <i class="fas fa-lock input-icon"></i>
+            <button type="button" class="toggle-pass" id="togglePass">
+                <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+        </div>
+    </div>
+
+    <button class="btn" id="loginBtn">
+        <span id="btnText">MASUK</span>
+        <div class="loader" id="loader"></div>
+    </button>
+
+    <div class="foot">Belum punya akun? <a href="/register">Daftar sekarang</a></div>
+</div>
+
+<script src="script.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) window.location.href = '/home';
+    });
+
+    document.getElementById('togglePass').addEventListener('click', function () {
+        const inp = document.getElementById('password');
+        const ico = document.getElementById('eyeIcon');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        ico.className = inp.type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+
+    document.getElementById('password').addEventListener('keydown', e => {
+        if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+
+    function showError(msg) {
+        document.getElementById('errorText').textContent = msg;
+        document.getElementById('errorBox').classList.add('show');
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', async function () {
+        document.getElementById('errorBox').classList.remove('show');
+
+        const username = document.getElementById('username').value.trim().toLowerCase();
+        const password = document.getElementById('password').value;
+
+        if (!username || !password) { showError('Username dan password wajib diisi'); return; }
+
+        this.disabled = true;
+        document.getElementById('btnText').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        try {
+            const res  = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+
+            if (!res.ok) { showError(data.error || 'Login gagal'); return; }
+
+            Auth.setSession(data.session);
+            window.location.href = '/home';
+
+        } catch (err) {
+            showError('Gagal terhubung ke server');
+        } finally {
+            this.disabled = false;
+            document.getElementById('btnText').style.display = 'block';
+            document.getElementById('loader').style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>
