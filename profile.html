@@ -278,7 +278,92 @@
         .upload-toast.error i { color: #ff6688; }
         .upload-toast.loading i { color: #00e5ff; }
 
-        /* ===== UPLOAD MODAL ===== */
+        /* ===== POPUP AVATAR ===== */
+        .avatar-popup-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+            z-index: 8000; opacity: 0; visibility: hidden;
+            transition: 0.25s;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .avatar-popup-overlay.show { opacity: 1; visibility: visible; }
+
+        .avatar-popup {
+            background: rgba(10,12,22,0.98);
+            border-radius: 24px;
+            border: 1px solid rgba(0,229,255,0.2);
+            box-shadow: 0 0 40px rgba(0,229,255,0.08), 0 25px 60px rgba(0,0,0,0.8);
+            width: 100%; max-width: 320px;
+            position: relative; overflow: hidden;
+            transform: scale(0.88) translateY(12px);
+            transition: 0.3s cubic-bezier(0.34,1.4,0.64,1);
+        }
+        .avatar-popup-overlay.show .avatar-popup { transform: scale(1) translateY(0); }
+
+        /* Rainbow bar atas */
+        .avatar-popup::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg,#00e5ff,#00ff88,#bf00ff,#00e5ff);
+            background-size: 200% 100%;
+            animation: shineBar 3s linear infinite;
+        }
+
+        .avatar-popup-head {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 20px 20px 0;
+        }
+        .avatar-popup-title {
+            font-size: 15px; font-weight: 900; color: #fff;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .avatar-popup-title i { color: #00e5ff; font-size: 14px; }
+        .avatar-popup-close {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.5); font-size: 13px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s; flex-shrink: 0;
+        }
+        .avatar-popup-close:hover { background: rgba(255,0,85,0.15); border-color: rgba(255,0,85,0.3); color: #ff6688; }
+
+        .avatar-popup-body { padding: 16px 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+
+        .ap-btn {
+            display: flex; align-items: center; gap: 14px;
+            width: 100%; padding: 14px 16px;
+            border-radius: 14px; cursor: pointer;
+            transition: 0.2s; border: 1.5px solid;
+            font-family: 'Nunito', sans-serif; text-align: left;
+            background: transparent;
+        }
+        .ap-btn:active { transform: scale(0.97); }
+
+        .ap-btn-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; flex-shrink: 0;
+        }
+
+        .ap-btn.ganti {
+            border-color: rgba(0,229,255,0.25);
+            background: rgba(0,229,255,0.05);
+        }
+        .ap-btn.ganti .ap-btn-icon { background: rgba(0,229,255,0.12); color: #00e5ff; }
+        .ap-btn.ganti:hover { background: rgba(0,229,255,0.1); border-color: #00e5ff; box-shadow: 0 0 18px rgba(0,229,255,0.15); }
+
+        .ap-btn.hapus {
+            border-color: rgba(255,0,85,0.22);
+            background: rgba(255,0,85,0.04);
+        }
+        .ap-btn.hapus .ap-btn-icon { background: rgba(255,0,85,0.1); color: #ff0055; }
+        .ap-btn.hapus:hover { background: rgba(255,0,85,0.09); border-color: #ff0055; box-shadow: 0 0 18px rgba(255,0,85,0.12); }
+
+        .ap-btn-label { font-size: 14px; font-weight: 900; display: block; margin-bottom: 2px; }
+        .ap-btn.ganti .ap-btn-label { color: #00e5ff; }
+        .ap-btn.hapus .ap-btn-label { color: #ff6688; }
+        .ap-btn-sub   { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 700; display: block; }
         .upload-modal {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.82); backdrop-filter: blur(12px);
@@ -411,10 +496,9 @@
                 <div class="profile-avatar" id="profileAvatarEl">
                     <span class="avatar-initial" id="avatarInitial">?</span>
                 </div>
-                <button class="avatar-edit-btn" onclick="triggerAvatarPick()" title="Ganti foto profil">
+                <button class="avatar-edit-btn" onclick="openAvatarSheet()" title="Ganti foto profil">
                     <i class="fas fa-camera"></i>
                 </button>
-                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
             </div>
             <div class="profile-username" id="profileUsername">—</div>
             <div class="profile-joined"><i class="fas fa-calendar-alt"></i><span id="profileJoined">—</span></div>
@@ -535,7 +619,36 @@
 
     </main>
 
-    <!-- Modal Upload Avatar -->
+    <!-- Popup Avatar -->
+    <div class="avatar-popup-overlay" id="avatarSheet" onclick="closeAvatarSheet()">
+        <div class="avatar-popup" onclick="event.stopPropagation()">
+            <div class="avatar-popup-head">
+                <div class="avatar-popup-title"><i class="fas fa-user-circle"></i> Foto Profil</div>
+                <button class="avatar-popup-close" onclick="closeAvatarSheet()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="avatar-popup-body">
+                <button class="ap-btn ganti" id="bsGantiBtn">
+                    <div class="ap-btn-icon"><i class="fas fa-sync-alt"></i></div>
+                    <div>
+                        <span class="ap-btn-label">Ganti Foto Profil</span>
+                        <span class="ap-btn-sub">Pilih foto baru dari galeri</span>
+                    </div>
+                </button>
+                <button class="ap-btn hapus" id="bsHapusBtn">
+                    <div class="ap-btn-icon"><i class="fas fa-trash-alt"></i></div>
+                    <div>
+                        <span class="ap-btn-label">Hapus Foto Profil</span>
+                        <span class="ap-btn-sub">Kembali ke inisial nama</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input file tersembunyi -->
+    <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
+
+    <!-- Modal Upload Avatar (tidak dipakai, tapi jangan dihapus) -->
     <div class="upload-modal" id="modalUploadAvatar">
         <div class="upload-modal-box">
             <div class="upload-modal-title"><i class="fas fa-user-circle"></i> Ganti Foto Profil</div>
@@ -727,10 +840,33 @@
             if (type !== 'loading') toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ===== AVATAR PICK → CROP =====
-        function triggerAvatarPick() {
-            document.getElementById('avatarFileInput').click();
+        // ===== BOTTOM SHEET AVATAR =====
+        function openAvatarSheet() {
+            // Tampilkan tombol hapus hanya kalau sudah ada foto
+            const hasPhoto = !!document.querySelector('#profileAvatarEl img');
+            document.getElementById('bsHapusBtn').style.display = hasPhoto ? 'flex' : 'none';
+            document.getElementById('avatarSheet').classList.add('show');
+            document.body.style.overflow = 'hidden';
         }
+        function closeAvatarSheet() {
+            document.getElementById('avatarSheet').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // Tombol Ganti Foto
+        document.getElementById('bsGantiBtn').addEventListener('click', function () {
+            closeAvatarSheet();
+            setTimeout(() => document.getElementById('avatarFileInput').click(), 200);
+        });
+
+        // Tombol Hapus Foto
+        document.getElementById('bsHapusBtn').addEventListener('click', async function () {
+            closeAvatarSheet();
+            await deletePhoto('avatar');
+        });
+
+        // ===== FILE PICKER → CROP =====
+        function triggerAvatarPick() { openAvatarSheet(); }
 
         document.getElementById('avatarFileInput').addEventListener('change', function () {
             const file = this.files[0];
