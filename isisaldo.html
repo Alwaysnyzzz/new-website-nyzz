@@ -109,27 +109,18 @@
         #nominalInput::placeholder { color: rgba(255,255,255,0.18); font-size: 15px; font-weight: 700; }
 
         /* Fee info */
-        .fee-info {
-            background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 14px; padding: 14px 16px; margin-bottom: 22px;
-            display: none;
-        }
-        .fee-info.show { display: block; }
-        .fee-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: rgba(255,255,255,0.5); }
-        .fee-row:last-child { margin-bottom: 0; color: #fff; font-size: 14px; font-weight: 900; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 8px; margin-top: 4px; }
-        .fee-row span:last-child { color: #00e5ff; }
-        .fee-row.total span:last-child { color: #00ff88; }
 
         /* Submit button */
         .btn-bayar {
-            width: 100%; padding: 16px;
+            width: 100%; padding: 18px;
             background: linear-gradient(135deg, #00e5ff, #00ff88);
             border: none; border-radius: 16px; color: #06070f;
-            font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 16px;
+            font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 17px;
             cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
-            box-shadow: 0 6px 25px rgba(0,229,255,0.3);
+            box-shadow: 0 8px 30px rgba(0,229,255,0.4);
             display: flex; align-items: center; justify-content: center; gap: 10px;
             position: relative; overflow: hidden;
+            margin-top: 16px;
         }
         .btn-bayar::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
@@ -173,6 +164,24 @@
             border-radius: 40px; color: #06070f; font-weight: 900;
             text-decoration: none; font-size: 14px;
         }
+
+        /* ===== LOADING OVERLAY ===== */
+        @keyframes spin  { to{transform:rotate(360deg)} }
+        @keyframes spinR { to{transform:rotate(-360deg)} }
+        .loading-overlay {
+            position: fixed; inset: 0;
+            background: rgba(6,7,15,0.92); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 9999; opacity: 0; visibility: hidden;
+            transition: 0.3s;
+        }
+        .loading-overlay.active { opacity: 1; visibility: visible; }
+        .loader-rings  { position: relative; width: 70px; height: 70px; margin-bottom: 20px; }
+        .ring          { position: absolute; border-radius: 50%; border: 3px solid transparent; }
+        .ring-outer    { width:100%; height:100%; border-top-color:#00e5ff; border-bottom-color:#00e5ff; animation:spin 1.5s linear infinite; }
+        .ring-inner    { width:44px; height:44px; top:13px; left:13px; border-left-color:#00ff88; border-right-color:#00ff88; animation:spinR 1.5s linear infinite; }
+        .loading-text  { color:#00e5ff; font-size:14px; font-weight:800; letter-spacing:2px; text-shadow:0 0 10px #00e5ff; }
 
         @media(max-width:480px) {
             .saldo-card { padding: 24px 18px; }
@@ -284,19 +293,18 @@
                     <span class="input-prefix">Rp</span>
                     <input type="number" id="nominalInput" placeholder="Contoh: 5000" min="500" max="10000000">
                 </div>
-                    <div class="fee-row"><span>Biaya layanan</span><span id="feeBiaya">-</span></div>
-                    <div class="fee-row total"><span>Total bayar</span><span id="feeTotal">-</span></div>
                 </div>
 
-                <button class="btn-bayar" id="bayarBtn">
-                    <i class="fas fa-qrcode"></i>
-                    <span id="bayarText">Bayar dengan QRIS</span>
-                    <div class="btn-loader" id="bayarLoader"></div>
-                </button>
-
-                <p class="note-text">Minimal <span>Rp 500</span> · Coins langsung masuk setelah pembayaran berhasil</p>
             </div>
         </div>
+
+        <!-- Button di luar card -->
+        <button class="btn-bayar" id="bayarBtn">
+            <i class="fas fa-qrcode"></i>
+            <span id="bayarText">Bayar dengan QRIS</span>
+            <div class="btn-loader" id="bayarLoader"></div>
+        </button>
+        <p class="note-text">Minimal <span>Rp 500</span> · Coins langsung masuk setelah pembayaran berhasil</p>
     </main>
 
     <footer class="footer">
@@ -319,6 +327,15 @@
             <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
         </div>
     </footer>
+
+    <!-- Loading Overlay Fullscreen -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader-rings">
+            <div class="ring ring-outer"></div>
+            <div class="ring ring-inner"></div>
+        </div>
+        <div class="loading-text" id="loadingText">Membuat QRIS...</div>
+    </div>
 
     <script src="/script.js"></script>
     <script>
@@ -394,7 +411,9 @@
                 return;
             }
 
-            // Loading state
+            // Tampilkan loading overlay fullscreen
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('active');
             this.disabled = true;
             bayarText.style.display = 'none';
             bayarLoader.style.display = 'block';
@@ -408,15 +427,19 @@
                 const data = await res.json();
 
                 if (!res.ok) {
+                    overlay.classList.remove('active');
                     document.getElementById('errorText').textContent = data.error || 'Gagal membuat transaksi';
                     errorBox.classList.add('show');
                     return;
                 }
 
-                // Redirect ke halaman pembayaran
+                // Muter sebentar (~1.2 detik) lalu redirect
+                document.getElementById('loadingText').textContent = 'Membuat QRIS...';
+                await new Promise(r => setTimeout(r, 1200));
                 window.location.href = '/pay?order_id=' + data.order_id;
 
             } catch (e) {
+                overlay.classList.remove('active');
                 document.getElementById('errorText').textContent = 'Gagal terhubung ke server';
                 errorBox.classList.add('show');
             } finally {
