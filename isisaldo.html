@@ -414,7 +414,7 @@
                 }
 
                 // Redirect ke halaman pembayaran
-                window.location.href = '/isisaldo/' + data.order_id;
+                window.location.href = '/pay?order_id=' + data.order_id;
 
             } catch (e) {
                 document.getElementById('errorText').textContent = 'Gagal terhubung ke server';
