@@ -411,9 +411,10 @@
                 <div class="profile-avatar" id="profileAvatarEl">
                     <span class="avatar-initial" id="avatarInitial">?</span>
                 </div>
-                <button class="avatar-edit-btn" onclick="openUploadModal('avatar')" title="Ganti foto profil">
+                <button class="avatar-edit-btn" onclick="triggerAvatarPick()" title="Ganti foto profil">
                     <i class="fas fa-camera"></i>
                 </button>
+                <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/webp" style="display:none">
             </div>
             <div class="profile-username" id="profileUsername">—</div>
             <div class="profile-joined"><i class="fas fa-calendar-alt"></i><span id="profileJoined">—</span></div>
@@ -713,92 +714,77 @@
 
         document.getElementById('logoutBtn').addEventListener('click', function() { Auth.logout(); window.location.href='/login'; });
 
-        // Toast
+        // ===== TOAST =====
         let toastTimer;
-        function showToast(msg, type='loading') {
-            const toast=document.getElementById('uploadToast'), txt=document.getElementById('uploadToastText'), ico=document.getElementById('uploadToastIcon');
-            toast.className='upload-toast show '+type;
-            txt.textContent=msg;
-            ico.className=type==='loading'?'fas fa-spinner fa-spin':type==='success'?'fas fa-check-circle':'fas fa-times-circle';
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('uploadToast');
+            const txt   = document.getElementById('uploadToastText');
+            const ico   = document.getElementById('uploadToastIcon');
+            toast.className = 'upload-toast show ' + type;
+            txt.textContent = msg;
+            ico.className   = type === 'loading' ? 'fas fa-spinner fa-spin' : type === 'success' ? 'fas fa-check-circle' : 'fas fa-times-circle';
             clearTimeout(toastTimer);
-            if (type!=='loading') toastTimer=setTimeout(()=>toast.classList.remove('show'),3000);
+            if (type !== 'loading') toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Upload modal
-        let selectedFile = { avatar: null };
-
-        function openUploadModal(type) {
-            const modal = document.getElementById('modalUploadAvatar');
-            selectedFile.avatar = null;
-            document.getElementById('previewWrapAvatar').classList.remove('show');
-            document.getElementById('dropAvatar').style.display = 'block';
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
+        // ===== AVATAR PICK → CROP =====
+        function triggerAvatarPick() {
+            document.getElementById('avatarFileInput').click();
         }
 
-        function closeUploadModal(type) {
-            document.getElementById('modalUploadAvatar').classList.remove('show');
-            document.body.style.overflow = '';
-            document.getElementById('fileInputAvatar').value = '';
-        }
-
-        document.getElementById('modalUploadAvatar').addEventListener('click', function(e) {
-            if (e.target === this) closeUploadModal('avatar');
-        });
-
-        document.getElementById('fileInputAvatar').addEventListener('change', function() {
-            if (!this.files[0]) return;
+        document.getElementById('avatarFileInput').addEventListener('change', function () {
             const file = this.files[0];
-            if (file.size > 2*1024*1024) { showToast('Ukuran maksimal 2 MB','error'); return; }
-            selectedFile.avatar = file;
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) { showToast('Ukuran maksimal 10 MB', 'error'); return; }
             const reader = new FileReader();
             reader.onload = e => {
-                document.getElementById('previewImgAvatar').src = e.target.result;
-                document.getElementById('previewWrapAvatar').classList.add('show');
-                document.getElementById('dropAvatar').style.display = 'none';
+                // Simpan ke sessionStorage → buka crop.html
+                sessionStorage.setItem('crop_image', e.target.result);
+                sessionStorage.setItem('crop_return', '/profile');
+                window.location.href = '/crop';
             };
             reader.readAsDataURL(file);
+            this.value = ''; // reset input
         });
 
-        document.getElementById('btnSaveAvatar').addEventListener('click', async function() {
-            if (!selectedFile.avatar) { showToast('Pilih foto dulu ya!','error'); return; }
-            const btnText=document.getElementById('btnSaveAvatarText'), btnLoader=document.getElementById('loaderAvatar');
-            this.disabled=true; btnText.style.display='none'; btnLoader.style.display='block';
-            showToast('Mengupload...','loading');
-            try {
-                const base64 = await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(selectedFile.avatar); });
-                const resp = await fetch('/api/upload-image',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+Auth.getToken()},body:JSON.stringify({image:base64,type:'avatar',filename:selectedFile.avatar.name})});
-                const data = await resp.json();
-                if (!resp.ok) { showToast(data.error||'Upload gagal','error'); return; }
-                // Update avatar tampilan
-                document.getElementById('profileAvatarEl').innerHTML = `<img src="${data.url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
-                document.querySelectorAll('.user-avatar').forEach(w=>{ w.innerHTML=`<img src="${data.url}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`; });
-                document.getElementById('btnDeleteAvatar').style.display='flex';
-                localStorage.removeItem('nyzz-profile');
-                await Auth.getProfile(true);
-                closeUploadModal('avatar');
-                showToast('Foto profil diperbarui! ✨','success');
-            } catch(e) { showToast('Gagal: '+e.message,'error'); }
-            finally { this.disabled=false; btnText.style.display='flex'; btnLoader.style.display='none'; }
-        });
+        // ===== CEK BALIK DARI CROP =====
+        // Kalau ada new_avatar_url di sessionStorage, update avatar langsung
+        (function checkCropResult() {
+            const newUrl = sessionStorage.getItem('new_avatar_url');
+            if (!newUrl) return;
+            sessionStorage.removeItem('new_avatar_url');
+            // Update avatar di halaman
+            const avatarEl = document.getElementById('profileAvatarEl');
+            if (avatarEl) {
+                avatarEl.innerHTML = `<img src="${newUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+            }
+            document.querySelectorAll('.user-avatar').forEach(w => {
+                w.innerHTML = `<img src="${newUrl}" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+            });
+            document.getElementById('btnDeleteAvatar').style.display = 'flex';
+            showToast('Foto profil diperbarui! ✨', 'success');
+        })();
+
+        // Upload modal tidak dipakai lagi — diganti sistem crop
+        function openUploadModal() {} // stub biar tidak error
+        function closeUploadModal() {}
 
         async function deletePhoto(type) {
             const btn = document.getElementById('btnDeleteAvatar');
-            btn.disabled=true; btn.innerHTML='<i class="fas fa-spinner fa-spin"></i>';
-            showToast('Menghapus foto...','loading');
+            btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            showToast('Menghapus foto...', 'loading');
             try {
-                const res  = await fetch('/api/delete-photo',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+Auth.getToken()},body:JSON.stringify({type})});
+                const res  = await fetch('/api/delete-photo', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + Auth.getToken() }, body: JSON.stringify({ type }) });
                 const data = await res.json();
-                if (!res.ok) { showToast(data.error||'Gagal hapus','error'); return; }
+                if (!res.ok) { showToast(data.error || 'Gagal hapus', 'error'); return; }
                 const initial = document.getElementById('profileUsername').textContent.charAt(0).toUpperCase();
                 document.getElementById('profileAvatarEl').innerHTML = `<span class="avatar-initial">${initial}</span>`;
-                document.querySelectorAll('.user-avatar').forEach(w=>{ w.innerHTML=`<span class="nav-initial">${initial}</span>`; });
-                btn.style.display='none';
+                document.querySelectorAll('.user-avatar').forEach(w => { w.innerHTML = `<span class="nav-initial">${initial}</span>`; });
+                btn.style.display = 'none';
                 localStorage.removeItem('nyzz-profile');
-                closeUploadModal('avatar');
-                showToast('Foto profil dihapus ✓','success');
-            } catch(e) { showToast('Gagal: '+e.message,'error'); }
-            finally { btn.disabled=false; btn.innerHTML='<i class="fas fa-trash-alt"></i> Hapus'; }
+                showToast('Foto profil dihapus ✓', 'success');
+            } catch(e) { showToast('Gagal: ' + e.message, 'error'); }
+            finally { btn.disabled = false; btn.innerHTML = '<i class="fas fa-trash-alt"></i> Hapus'; }
         }
     </script>
 </body>

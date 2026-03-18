@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Crop Foto - DzzXNzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #06070f; color: #fff;
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        .crop-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 14px 18px;
+            background: rgba(6,7,15,0.95);
+            border-bottom: 1px solid rgba(0,229,255,0.15);
+            backdrop-filter: blur(12px);
+            flex-shrink: 0; z-index: 10;
+        }
+        .crop-header-title {
+            font-family: 'Righteous', cursive; font-size: 16px;
+            background: linear-gradient(90deg,#00e5ff,#00ff88);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .crop-btn {
+            padding: 9px 20px; border-radius: 30px;
+            font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 13px;
+            border: none; cursor: pointer; transition: 0.2s;
+        }
+        .crop-btn-cancel {
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.6);
+        }
+        .crop-btn-cancel:hover { background: rgba(255,255,255,0.12); color: #fff; }
+        .crop-btn-done {
+            background: linear-gradient(135deg,#00e5ff,#00ff88);
+            color: #06070f;
+            box-shadow: 0 4px 16px rgba(0,229,255,0.35);
+        }
+        .crop-btn-done:hover { transform: scale(1.04); }
+        .crop-btn-done:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        /* ===== CROP AREA ===== */
+        .crop-area {
+            flex: 1; position: relative; overflow: hidden;
+            background: #000;
+            display: flex; align-items: center; justify-content: center;
+            touch-action: none;
+        }
+
+        /* Overlay gelap kecuali lingkaran tengah */
+        .crop-overlay {
+            position: absolute; inset: 0; pointer-events: none; z-index: 2;
+        }
+
+        #cropCanvas {
+            position: absolute; top: 0; left: 0;
+            touch-action: none;
+        }
+
+        /* Lingkaran guide */
+        .crop-circle-guide {
+            position: absolute; z-index: 3; pointer-events: none;
+            border: 2.5px solid rgba(0,229,255,0.8);
+            border-radius: 50%;
+            box-shadow: 0 0 0 9999px rgba(0,0,0,0.55),
+                        0 0 20px rgba(0,229,255,0.3);
+        }
+
+        /* Grid lines dalam lingkaran */
+        .crop-grid {
+            position: absolute; z-index: 4; pointer-events: none;
+            border-radius: 50%; overflow: hidden;
+        }
+        .crop-grid::before, .crop-grid::after {
+            content: ''; position: absolute;
+            background: rgba(255,255,255,0.15);
+        }
+        .crop-grid::before { width: 1px; height: 100%; left: 33.33%; }
+        .crop-grid::after  { width: 100%; height: 1px; top: 33.33%; }
+
+        /* ===== CONTROLS BAWAH ===== */
+        .crop-controls {
+            flex-shrink: 0; padding: 18px 20px 28px;
+            background: rgba(6,7,15,0.95);
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .zoom-label {
+            font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4);
+            letter-spacing: 1px; text-transform: uppercase;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .zoom-label span:last-child { color: #00e5ff; }
+        .zoom-slider {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 4px; border-radius: 4px; outline: none;
+            background: linear-gradient(90deg, #00e5ff var(--val, 30%), rgba(255,255,255,0.1) var(--val, 30%));
+            cursor: pointer;
+        }
+        .zoom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 22px; height: 22px; border-radius: 50%;
+            background: linear-gradient(135deg,#00e5ff,#00ff88);
+            box-shadow: 0 0 10px rgba(0,229,255,0.5);
+            cursor: pointer; transition: 0.15s;
+        }
+        .zoom-slider::-webkit-slider-thumb:active { transform: scale(1.2); }
+
+        .hint-text {
+            text-align: center; font-size: 12px; color: rgba(255,255,255,0.28);
+            font-weight: 700; margin-top: 12px;
+        }
+        .hint-text i { color: rgba(0,229,255,0.5); margin-right: 4px; }
+
+        /* ===== LOADING OVERLAY ===== */
+        .upload-overlay {
+            position: fixed; inset: 0;
+            background: rgba(6,7,15,0.92); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 9999; opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .upload-overlay.show { opacity: 1; visibility: visible; }
+        @keyframes spin  { to{transform:rotate(360deg)} }
+        @keyframes spinR { to{transform:rotate(-360deg)} }
+        .loader-rings  { position: relative; width: 60px; height: 60px; margin-bottom: 18px; }
+        .ring          { position: absolute; border-radius: 50%; border: 3px solid transparent; }
+        .ring-outer    { width:100%; height:100%; border-top-color:#00e5ff; border-bottom-color:#00e5ff; animation:spin 1.5s linear infinite; }
+        .ring-inner    { width:38px; height:38px; top:11px; left:11px; border-left-color:#00ff88; border-right-color:#00ff88; animation:spinR 1.5s linear infinite; }
+        .upload-status { color:#00e5ff; font-size:14px; font-weight:800; letter-spacing:1.5px; text-shadow:0 0 10px #00e5ff; }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(13,15,25,0.96); backdrop-filter: blur(12px);
+            border: 1px solid rgba(0,229,255,0.3); border-radius: 40px;
+            padding: 11px 22px; font-size: 13px; font-weight: 800; color: #fff;
+            z-index: 9999; transition: 0.4s cubic-bezier(.34,1.56,.64,1);
+            display: flex; align-items: center; gap: 8px; white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.error   { border-color: rgba(255,0,85,0.4); }
+        .toast.error i { color: #ff6688; }
+        .toast.success { border-color: rgba(0,255,136,0.4); }
+        .toast.success i { color: #00ff88; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="crop-header">
+        <button class="crop-btn crop-btn-cancel" id="cancelBtn">
+            <i class="fas fa-times"></i> Batal
+        </button>
+        <div class="crop-header-title">✂ Potong Foto</div>
+        <button class="crop-btn crop-btn-done" id="doneBtn">
+            Simpan <i class="fas fa-check"></i>
+        </button>
+    </div>
+
+    <!-- Crop Area -->
+    <div class="crop-area" id="cropArea">
+        <canvas id="cropCanvas"></canvas>
+        <div class="crop-circle-guide" id="circleGuide"></div>
+        <div class="crop-grid" id="cropGrid"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="crop-controls">
+        <div class="zoom-label">
+            <span><i class="fas fa-search-minus" style="margin-right:6px"></i>Zoom</span>
+            <span id="zoomVal">1.0x</span>
+        </div>
+        <input type="range" class="zoom-slider" id="zoomSlider" min="1" max="4" step="0.01" value="1">
+        <div class="hint-text"><i class="fas fa-hand-paper"></i>Geser foto untuk mengatur posisi</div>
+    </div>
+
+    <!-- Upload Overlay -->
+    <div class="upload-overlay" id="uploadOverlay">
+        <div class="loader-rings">
+            <div class="ring ring-outer"></div>
+            <div class="ring ring-inner"></div>
+        </div>
+        <div class="upload-status" id="uploadStatus">Mengupload...</div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><i id="toastIcon" class="fas fa-check-circle"></i><span id="toastText"></span></div>
+
+    <script src="/script.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        // Ambil data gambar dari sessionStorage (dikirim dari profile.html)
+        const imgDataUrl = sessionStorage.getItem('crop_image');
+        const returnTo   = sessionStorage.getItem('crop_return') || '/profile';
+
+        if (!imgDataUrl) { window.location.href = returnTo; return; }
+        if (!Auth.isLoggedIn()) { window.location.href = '/login'; return; }
+
+        // ===== Setup canvas & variabel =====
+        const cropArea    = document.getElementById('cropArea');
+        const canvas      = document.getElementById('cropCanvas');
+        const ctx         = canvas.getContext('2d');
+        const guide       = document.getElementById('circleGuide');
+        const grid        = document.getElementById('cropGrid');
+        const zoomSlider  = document.getElementById('zoomSlider');
+        const zoomVal     = document.getElementById('zoomVal');
+
+        let img       = new Image();
+        let scale     = 1;       // zoom level
+        let offsetX   = 0;       // posisi gambar
+        let offsetY   = 0;
+        let circleR   = 0;       // radius lingkaran crop
+        let circleCX  = 0;
+        let circleCY  = 0;
+        let isDragging= false;
+        let lastX     = 0;
+        let lastY     = 0;
+        let lastDist  = 0;       // untuk pinch zoom
+        let imgW      = 0;
+        let imgH      = 0;
+
+        // ===== Load gambar =====
+        img.onload = function () {
+            imgW = img.naturalWidth;
+            imgH = img.naturalHeight;
+            setupCanvas();
+        };
+        img.src = imgDataUrl;
+
+        function setupCanvas() {
+            const areaW = cropArea.offsetWidth;
+            const areaH = cropArea.offsetHeight;
+
+            canvas.width  = areaW;
+            canvas.height = areaH;
+
+            // Lingkaran crop = 85% dari sisi terkecil area
+            circleR  = Math.min(areaW, areaH) * 0.425;
+            circleCX = areaW / 2;
+            circleCY = areaH / 2;
+
+            // Posisi & ukuran guide lingkaran
+            const guideSize = circleR * 2;
+            guide.style.width  = guideSize + 'px';
+            guide.style.height = guideSize + 'px';
+            guide.style.left   = (circleCX - circleR) + 'px';
+            guide.style.top    = (circleCY - circleR) + 'px';
+            grid.style.width   = guideSize + 'px';
+            grid.style.height  = guideSize + 'px';
+            grid.style.left    = (circleCX - circleR) + 'px';
+            grid.style.top     = (circleCY - circleR) + 'px';
+
+            // Scale awal: gambar memenuhi lingkaran
+            const minFit = (circleR * 2) / Math.min(imgW, imgH);
+            scale = minFit;
+            zoomSlider.min   = minFit.toFixed(3);
+            zoomSlider.value = minFit.toFixed(3);
+
+            // Tengahkan gambar
+            offsetX = circleCX - (imgW * scale) / 2;
+            offsetY = circleCY - (imgH * scale) / 2;
+
+            draw();
+        }
+
+        // ===== Draw =====
+        function draw() {
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            // Gambar foto
+            ctx.save();
+            ctx.drawImage(img, offsetX, offsetY, imgW * scale, imgH * scale);
+            ctx.restore();
+
+            // Update zoom label & slider gradient
+            zoomVal.textContent = (scale / parseFloat(zoomSlider.min)).toFixed(1) + 'x';
+            const pct = ((scale - parseFloat(zoomSlider.min)) / (parseFloat(zoomSlider.max) - parseFloat(zoomSlider.min)) * 100).toFixed(1);
+            zoomSlider.style.setProperty('--val', pct + '%');
+        }
+
+        // ===== Clamp offset agar foto tidak keluar lingkaran =====
+        function clampOffset() {
+            const scaledW = imgW * scale;
+            const scaledH = imgH * scale;
+            // Batas kiri: foto tidak boleh lebih kanan dari tepi kiri lingkaran
+            const minX = circleCX + circleR - scaledW;
+            const maxX = circleCX - circleR;
+            const minY = circleCY + circleR - scaledH;
+            const maxY = circleCY - circleR;
+            offsetX = Math.min(maxX, Math.max(minX, offsetX));
+            offsetY = Math.min(maxY, Math.max(minY, offsetY));
+        }
+
+        // ===== Zoom slider =====
+        zoomSlider.addEventListener('input', function () {
+            const newScale   = parseFloat(this.value);
+            const scaleDiff  = newScale / scale;
+            // Zoom ke tengah lingkaran
+            offsetX = circleCX - (circleCX - offsetX) * scaleDiff;
+            offsetY = circleCY - (circleCY - offsetY) * scaleDiff;
+            scale   = newScale;
+            clampOffset();
+            draw();
+        });
+
+        // ===== Touch / Mouse drag =====
+        function getPos(e) {
+            if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function onStart(e) {
+            if (e.touches && e.touches.length === 2) {
+                lastDist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                return;
+            }
+            isDragging = true;
+            const pos  = getPos(e);
+            lastX = pos.x; lastY = pos.y;
+        }
+
+        function onMove(e) {
+            e.preventDefault();
+            // Pinch zoom
+            if (e.touches && e.touches.length === 2) {
+                const dist = Math.hypot(
+                    e.touches[0].clientX - e.touches[1].clientX,
+                    e.touches[0].clientY - e.touches[1].clientY
+                );
+                if (lastDist > 0) {
+                    const ratio    = dist / lastDist;
+                    const newScale = Math.min(parseFloat(zoomSlider.max), Math.max(parseFloat(zoomSlider.min), scale * ratio));
+                    const scaleDiff= newScale / scale;
+                    offsetX = circleCX - (circleCX - offsetX) * scaleDiff;
+                    offsetY = circleCY - (circleCY - offsetY) * scaleDiff;
+                    scale   = newScale;
+                    zoomSlider.value = scale;
+                    clampOffset();
+                    draw();
+                }
+                lastDist = dist;
+                return;
+            }
+            if (!isDragging) return;
+            const pos  = getPos(e);
+            offsetX   += pos.x - lastX;
+            offsetY   += pos.y - lastY;
+            lastX = pos.x; lastY = pos.y;
+            clampOffset();
+            draw();
+        }
+
+        function onEnd() { isDragging = false; lastDist = 0; }
+
+        canvas.addEventListener('mousedown',  onStart);
+        canvas.addEventListener('mousemove',  onMove);
+        canvas.addEventListener('mouseup',    onEnd);
+        canvas.addEventListener('touchstart', onStart, { passive: false });
+        canvas.addEventListener('touchmove',  onMove,  { passive: false });
+        canvas.addEventListener('touchend',   onEnd);
+
+        // ===== Tombol Batal =====
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            sessionStorage.removeItem('crop_image');
+            window.location.href = returnTo;
+        });
+
+        // ===== Tombol Simpan — crop & upload =====
+        document.getElementById('doneBtn').addEventListener('click', async function () {
+            this.disabled = true;
+            showUpload('Memproses foto...');
+
+            // Crop lingkaran ke canvas 400x400
+            const size      = 400;
+            const offscreen = document.createElement('canvas');
+            offscreen.width = offscreen.height = size;
+            const octx      = offscreen.getContext('2d');
+
+            // Clip lingkaran
+            octx.beginPath();
+            octx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
+            octx.clip();
+
+            // Hitung posisi gambar relatif terhadap lingkaran crop
+            const srcX = (circleCX - circleR - offsetX) / scale;
+            const srcY = (circleCY - circleR - offsetY) / scale;
+            const srcS = (circleR * 2) / scale;
+
+            octx.drawImage(img, srcX, srcY, srcS, srcS, 0, 0, size, size);
+
+            // Convert ke base64 JPEG
+            const croppedBase64 = offscreen.toDataURL('image/jpeg', 0.88);
+
+            // Upload ke server
+            try {
+                showUpload('Mengupload ke server...');
+                const res  = await fetch('/api/upload-image', {
+                    method:  'POST',
+                    headers: {
+                        'Content-Type':  'application/json',
+                        'Authorization': 'Bearer ' + Auth.getToken()
+                    },
+                    body: JSON.stringify({ image: croppedBase64, type: 'avatar' })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    hideUpload();
+                    showToast(data.error || 'Upload gagal', 'error');
+                    this.disabled = false;
+                    return;
+                }
+
+                // Simpan URL ke sessionStorage biar profile.html langsung update
+                sessionStorage.setItem('new_avatar_url', data.url);
+                sessionStorage.removeItem('crop_image');
+
+                showUpload('Berhasil! Kembali ke profil...');
+                setTimeout(() => { window.location.href = returnTo; }, 800);
+
+            } catch (e) {
+                hideUpload();
+                showToast('Gagal terhubung ke server', 'error');
+                this.disabled = false;
+            }
+        });
+
+        // ===== Upload overlay helpers =====
+        function showUpload(text) {
+            document.getElementById('uploadStatus').textContent = text;
+            document.getElementById('uploadOverlay').classList.add('show');
+        }
+        function hideUpload() {
+            document.getElementById('uploadOverlay').classList.remove('show');
+        }
+
+        // ===== Toast =====
+        let toastTimer;
+        function showToast(msg, type = 'success') {
+            const t   = document.getElementById('toast');
+            const ico = document.getElementById('toastIcon');
+            const txt = document.getElementById('toastText');
+            t.className   = 'toast show ' + type;
+            ico.className = type === 'error' ? 'fas fa-times-circle' : 'fas fa-check-circle';
+            txt.textContent = msg;
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // Resize handler
+        window.addEventListener('resize', setupCanvas);
+
+    })();
+    </script>
+</body>
+</html>

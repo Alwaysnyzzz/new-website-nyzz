@@ -11,6 +11,7 @@
     { "source": "/isisaldo/(.*)",          "destination": "/pay.html" },
     { "source": "/struk",                  "destination": "/struk.html" },
     { "source": "/profile",               "destination": "/profile.html" },
+    { "source": "/crop",                   "destination": "/crop.html" },
     { "source": "/api/(.*)",               "destination": "/api/$1" }
   ]
 }
