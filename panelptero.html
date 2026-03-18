@@ -525,42 +525,62 @@
             <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
         </div>
     </footer>
-
     <script src="../script.js"></script>
     <script>
         (function() {
             const durasiButtons = document.querySelectorAll('.duration-btn');
+            const cards10 = document.getElementById('cards10');
             const cards20 = document.getElementById('cards20');
             const cards30 = document.getElementById('cards30');
-            const cards10 = document.getElementById('cards10');
+
             function setActiveDuration(durasi) {
-                durasiButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi));
+                durasiButtons.forEach(btn => {
+                    btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi);
+                });
                 cards10.style.display = durasi === '10' ? 'grid' : 'none';
                 cards20.style.display = durasi === '20' ? 'grid' : 'none';
                 cards30.style.display = durasi === '30' ? 'grid' : 'none';
             }
-            durasiButtons.forEach(btn => btn.addEventListener('click', function() { setActiveDuration(this.getAttribute('data-durasi')); }));
+
+            durasiButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setActiveDuration(this.getAttribute('data-durasi'));
+                });
+            });
+
+            // Default 20 hari
             setActiveDuration('20');
 
+            // Pesan 10 Hari
             document.querySelectorAll('#cards10 .btn-pesan-low').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const card = this.closest('.low-card');
+                    const card  = this.closest('.low-card');
                     const panel = card.getAttribute('data-panel');
                     const price = card.querySelector('.price').getAttribute('data-harga');
-                    window.location.href = `/pay?panel=${panel}&durasi=10&amount=${price}`;
+                    window.location.href = '/pay?panel=' + panel + '&durasi=10&amount=' + price;
                 });
             });
+
+            // Pesan 20 Hari
             document.querySelectorAll('#cards20 .btn-pesan').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const card = this.closest('.panel-card');
+                    const card  = this.closest('.panel-card');
                     const panel = card.getAttribute('data-panel');
                     const price = card.querySelector('.price').getAttribute('data-harga');
-                    window.location.href = `/pay?panel=${panel}&durasi=20&amount=${price}`;
+                    window.location.href = '/pay?panel=' + panel + '&durasi=20&amount=' + price;
                 });
             });
+
+            // Pesan 30 Hari VIP
             document.querySelectorAll('#cards30 .btn-order').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const card = this.closest('.vip-card');
-                    const title = card.querySelector('.card-title').textContent;
-                    const amount = card.querySelector('.amount').textContent.replace('.','');
-                    w
+                    const card  = this.closest('.vip-card');
+                    const panel = card.getAttribute('data-panel');
+                    const amount = card.querySelector('.amount').textContent.replace(/\./g, '');
+                    window.location.href = '/pay?panel=' + panel + '&durasi=30&amount=' + amount;
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
