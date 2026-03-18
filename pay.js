@@ -1,7 +1,6 @@
-// pay.js — Logika halaman pembayaran QRIS
+// pay.js
 
-(function init() {
-  // Tunggu DOM ready tanpa DOMContentLoaded (karena script dipanggil di akhir body)
+(function () {
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', run);
   } else {
@@ -10,29 +9,16 @@
 })();
 
 function run() {
-  'use strict';
+  const parts   = window.location.pathname.split('/').filter(Boolean);
+  const orderId = parts[parts.length - 1];
 
-  // ===== Ambil order_id dari URL =====
-  const pathParts = window.location.pathname.split('/');
-  const orderId   = pathParts[pathParts.length - 1];
+  if (!orderId || orderId === 'isisaldo') { window.location.href = '/isisaldo'; return; }
+  if (typeof Auth === 'undefined' || !Auth.isLoggedIn()) { window.location.href = '/login'; return; }
 
-  if (!orderId || orderId === 'isisaldo') {
-    window.location.href = '/isisaldo';
-    return;
-  }
-
-  if (typeof Auth === 'undefined' || !Auth.isLoggedIn()) {
-    window.location.href = '/login';
-    return;
-  }
-
-  // ===== Elemen UI =====
-  const payAmountEl    = document.getElementById('payAmount');
-  const payOrderEl     = document.getElementById('payOrder');
-  const timerEl        = document.getElementById('timer');
-  const timerTextEl    = document.getElementById('timerText');
   const loadingOverlay = document.getElementById('loadingOverlay');
   const loadingText    = document.getElementById('loadingText');
+  const timerEl        = document.getElementById('timer');
+  const timerTextEl    = document.getElementById('timerText');
   const cekStatusBtn   = document.getElementById('cekStatusBtn');
   const batalkanBtn    = document.getElementById('batalkanBtn');
   const downloadBtn    = document.getElementById('downloadBtn');
@@ -41,99 +27,102 @@ function run() {
   let autoCheckInt  = null;
   let isChecking    = false;
 
-  // ===== Loading helpers =====
-  function showLoading(text = 'Memproses...') {
-    if (loadingText)    loadingText.textContent = text;
-    if (loadingOverlay) loadingOverlay.classList.add('active');
+  function showLoading(t) {
+    if (loadingText) loadingText.textContent = t;
+    loadingOverlay?.classList.add('active');
   }
-  function hideLoading() {
-    if (loadingOverlay) loadingOverlay.classList.remove('active');
-  }
-
-  // ===== Modal helpers =====
+  function hideLoading() { loadingOverlay?.classList.remove('active'); }
   function showModal(id)  { document.getElementById(id)?.classList.add('show'); }
   function closeModal(id) { document.getElementById(id)?.classList.remove('show'); }
 
-  document.getElementById('pendingOk')?.addEventListener('click',   () => closeModal('pendingModal'));
-  document.getElementById('confirmTidak')?.addEventListener('click', () => closeModal('confirmModal'));
+  document.getElementById('pendingOk')?.addEventListener('click',    () => closeModal('pendingModal'));
+  document.getElementById('confirmTidak')?.addEventListener('click',  () => closeModal('confirmModal'));
 
-  // ===== Timer hitung mundur =====
-  function startTimer(expiredAtStr) {
-    if (!expiredAtStr) return;
-    const expiredAt = new Date(expiredAtStr).getTime();
+  // ===== Timer =====
+  function startTimer(str) {
+    if (!str) return;
+    const exp = new Date(str).getTime();
     clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-      const diff = expiredAt - Date.now();
+      const diff = exp - Date.now();
       if (diff <= 0) {
-        clearInterval(timerInterval);
-        clearInterval(autoCheckInt);
+        clearInterval(timerInterval); clearInterval(autoCheckInt);
         timerEl?.classList.add('expired');
         if (timerTextEl) timerTextEl.textContent = 'EXPIRED';
-        if (cekStatusBtn) cekStatusBtn.disabled = true;
+        if (cekStatusBtn) cekStatusBtn.disabled  = true;
         return;
       }
       const m = Math.floor(diff / 60000);
       const s = Math.floor((diff % 60000) / 1000);
-      if (timerTextEl) timerTextEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      if (timerTextEl) timerTextEl.textContent =
+        `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
     }, 1000);
   }
 
-  // ===== Generate QR Code =====
+  // ===== Generate QR — tunggu library siap =====
   function generateQR(qrString) {
-    const qrEl = document.getElementById('qrcode');
-    if (!qrEl || !qrString) return;
-    qrEl.innerHTML = '';
-    if (typeof QRCode !== 'undefined') {
-      new QRCode(qrEl, {
-        text:         qrString,
-        width:        190,
-        height:       190,
-        colorDark:    '#000000',
-        colorLight:   '#ffffff',
-        correctLevel: QRCode.CorrectLevel.M
-      });
+    if (!qrString) return;
+    const el = document.getElementById('qrcode');
+    if (!el) return;
+    el.innerHTML = '';
+
+    // Kalau QRCode belum load, tunggu sampai siap
+    function tryRender(attempt) {
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(el, {
+          text:         qrString,
+          width:        190,
+          height:       190,
+          colorDark:    '#000000',
+          colorLight:   '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } else if (attempt < 20) {
+        // Coba lagi tiap 200ms, max 4 detik
+        setTimeout(() => tryRender(attempt + 1), 200);
+      } else {
+        // Fallback: tampilkan teks QR string kalau library gagal load
+        el.innerHTML = `<div style="color:#ff5555;font-size:11px;word-break:break-all;padding:10px">QR gagal load library. String: ${qrString.substring(0,40)}...</div>`;
+      }
     }
+    tryRender(0);
   }
 
   // ===== Download QR =====
-  downloadBtn?.addEventListener('click', function () {
+  downloadBtn?.addEventListener('click', () => {
     const canvas = document.querySelector('#qrcode canvas');
     if (!canvas) return;
-    const link    = document.createElement('a');
-    link.download = `qr-${orderId}.png`;
-    link.href     = canvas.toDataURL();
-    link.click();
+    const a = document.createElement('a');
+    a.download = `qr-${orderId}.png`;
+    a.href     = canvas.toDataURL();
+    a.click();
   });
 
-  // ===== Cek status pembayaran =====
-  async function checkStatus(isManual = false) {
+  // ===== Cek status =====
+  async function checkStatus(manual = false) {
     if (isChecking) return;
     isChecking = true;
-    if (isManual) showLoading('Mengecek pembayaran...');
-
+    if (manual) showLoading('Mengecek pembayaran...');
     try {
-      const res  = await fetch(`/api/check-payment?order_id=${orderId}`, {
+      const r = await fetch(`/api/check-payment?order_id=${orderId}`, {
         headers: { Authorization: 'Bearer ' + Auth.getToken() }
       });
-      const data = await res.json();
-
-      if (data.status === 'completed') {
-        clearInterval(timerInterval);
-        clearInterval(autoCheckInt);
+      const d = await r.json();
+      if (d.status === 'completed') {
+        clearInterval(timerInterval); clearInterval(autoCheckInt);
         hideLoading();
         window.location.href = `/struk?order_id=${orderId}`;
         return;
       }
-      if (data.status === 'cancelled') {
-        clearInterval(timerInterval);
-        clearInterval(autoCheckInt);
+      if (d.status === 'cancelled') {
+        clearInterval(timerInterval); clearInterval(autoCheckInt);
         hideLoading();
         window.location.href = '/isisaldo';
         return;
       }
-      if (isManual) { hideLoading(); showModal('pendingModal'); }
+      if (manual) { hideLoading(); showModal('pendingModal'); }
     } catch (e) {
-      if (isManual) hideLoading();
+      if (manual) hideLoading();
     } finally {
       isChecking = false;
     }
@@ -153,36 +142,50 @@ function run() {
         body:    JSON.stringify({ order_id: orderId })
       });
     } catch (e) {}
-    clearInterval(timerInterval);
-    clearInterval(autoCheckInt);
+    clearInterval(timerInterval); clearInterval(autoCheckInt);
     hideLoading();
     window.location.href = '/isisaldo';
   });
 
-  // ===== Load data transaksi =====
+  // ===== Load transaksi =====
   async function loadTransaction() {
     showLoading('Memuat halaman pembayaran...');
     try {
-      const res  = await fetch(`/api/get-transaction?order_id=${orderId}`);
-      const data = await res.json();
+      const r = await fetch(`/api/get-transaction?order_id=${orderId}`);
 
-      if (data.error || !data.order_id) { window.location.href = '/isisaldo'; return; }
-      if (data.status === 'completed')  { window.location.href = `/struk?order_id=${orderId}`; return; }
-      if (data.status === 'cancelled')  { window.location.href = '/isisaldo'; return; }
+      if (!r.ok) {
+        console.error('get-transaction HTTP error:', r.status);
+        window.location.href = '/isisaldo';
+        return;
+      }
+
+      const d = await r.json();
+      console.log('[pay.js] transaction data:', d);
+
+      if (!d || !d.order_id)          { window.location.href = '/isisaldo'; return; }
+      if (d.status === 'completed')   { window.location.href = `/struk?order_id=${orderId}`; return; }
+      if (d.status === 'cancelled')   { window.location.href = '/isisaldo'; return; }
 
       // Isi UI
-      if (payAmountEl) payAmountEl.textContent = 'Rp ' + Number(data.total_payment || data.amount).toLocaleString('id-ID');
-      if (payOrderEl)  payOrderEl.textContent  = 'Order ID: ' + orderId;
+      const amountEl = document.getElementById('payAmount');
+      const orderEl  = document.getElementById('payOrder');
+      if (amountEl) amountEl.textContent = 'Rp ' + Number(d.total_payment || d.amount).toLocaleString('id-ID');
+      if (orderEl)  orderEl.textContent  = 'Order ID: ' + orderId;
 
-      generateQR(data.qr_string);
-      if (data.expired_at) startTimer(data.expired_at);
+      // Generate QR
+      console.log('[pay.js] qr_string:', d.qr_string ? d.qr_string.substring(0,30)+'...' : 'KOSONG');
+      generateQR(d.qr_string);
 
-      // Auto-check setiap 5 detik
+      // Timer
+      if (d.expired_at) startTimer(d.expired_at);
+
+      // Auto-check tiap 5 detik
       autoCheckInt = setInterval(() => checkStatus(false), 5000);
 
       hideLoading();
+
     } catch (e) {
-      console.error('loadTransaction error:', e);
+      console.error('[pay.js] loadTransaction error:', e.message);
       hideLoading();
       window.location.href = '/isisaldo';
     }
