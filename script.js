@@ -1,12 +1,9 @@
-// script.js — Global: auth helper, sidebar, coins, canvas stars
+// script.js — Global: auth helper, sidebar, coins, avatar, canvas stars
 
-// ===== AUTH HELPERS (global) =====
 const Auth = {
-  getSession() {
-    try { return JSON.parse(localStorage.getItem('nyzz-session')); } catch { return null; }
-  },
-  getToken() { return this.getSession()?.access_token || null; },
-  getUser()  { return this.getSession()?.user || null; },
+  getSession() { try { return JSON.parse(localStorage.getItem('nyzz-session')); } catch { return null; } },
+  getToken()   { return this.getSession()?.access_token || null; },
+  getUser()    { return this.getSession()?.user || null; },
   isLoggedIn() {
     const s = this.getSession();
     if (!s) return false;
@@ -15,28 +12,18 @@ const Auth = {
   },
   setSession(session) { localStorage.setItem('nyzz-session', JSON.stringify(session)); },
   logout() {
-    // Hapus session & profile cache
     localStorage.removeItem('nyzz-session');
     localStorage.removeItem('nyzz-profile');
-    // Foto TIDAK dihapus dari localStorage — biar tetap ada kalau login lagi
-    // (foto per userId, tidak bocor ke akun lain)
   },
   async getProfile(forceRefresh = false) {
     if (!this.isLoggedIn()) return null;
-
-    // Cek cache — tapi validasi dulu, cache lama mungkin tidak punya avatar_url/cover_url
     if (!forceRefresh) {
       try {
         const c = JSON.parse(localStorage.getItem('nyzz-profile'));
-        // Kalau cache ada DAN sudah punya field avatar_url (walau null) → pakai cache
-        // 'avatar_url' in c memastikan field memang ada, bukan cuma undefined
         if (c && 'avatar_url' in c) return c;
-        // Cache lama tidak punya avatar_url → hapus, fetch ulang
         localStorage.removeItem('nyzz-profile');
       } catch {}
     }
-
-    // Fetch fresh dari DB
     try {
       const res = await fetch('/api/user', { headers: { Authorization: 'Bearer ' + this.getToken() } });
       if (res.status === 401) { this.logout(); window.location.href = '/login'; return null; }
@@ -67,10 +54,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <li class="system-item"><a href="/profile"><i class="fas fa-user-circle"></i> Akun</a></li>
         <li class="system-item"><a href="#" id="sidebarLogout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>`;
       document.getElementById('sidebarLogout')?.addEventListener('click', e => {
-        e.preventDefault();
-        Auth.logout();
-        document.querySelectorAll('.user-avatar img').forEach(img => img.src = '/image/profile.jpg');
-        window.location.href = '/login';
+        e.preventDefault(); Auth.logout(); window.location.href = '/login';
       });
     } else {
       systemMenu.innerHTML = `
@@ -88,10 +72,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <a href="/profile" class="dropdown-item"><i class="fas fa-user"></i> Akun</a>
         <a href="#" id="dropdownLogout" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Logout</a>`;
       document.getElementById('dropdownLogout')?.addEventListener('click', e => {
-        e.preventDefault();
-        Auth.logout();
-        document.querySelectorAll('.user-avatar img').forEach(img => img.src = '/image/profile.jpg');
-        window.location.href = '/login';
+        e.preventDefault(); Auth.logout(); window.location.href = '/login';
       });
     } else {
       dropdownMenu.innerHTML = `
@@ -102,50 +83,51 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.addEventListener('click', e => { if (!menuTrigger.contains(e.target)) dropdownMenu.classList.remove('show'); });
   }
 
-  // ===== LOAD COINS =====
-  const coinCountEl = document.getElementById('coinCount');
-
-  // PAKSA nama sidebar = DzzXNzz, tidak bisa diubah
+  // ===== LOCK SIDEBAR NAME =====
   function lockSidebarName() {
     document.querySelectorAll('.user-name-text').forEach(el => {
       if (el.textContent !== 'DzzXNzz') el.textContent = 'DzzXNzz';
     });
   }
   lockSidebarName();
-  // Observer: kalau ada yang coba ubah, langsung kembalikan
   const nameObserver = new MutationObserver(lockSidebarName);
   document.querySelectorAll('.user-name-text').forEach(el => {
     nameObserver.observe(el, { childList: true, characterData: true, subtree: true });
   });
 
+  // ===== LOAD PROFILE (coins + avatar) =====
+  const coinCountEl = document.getElementById('coinCount');
+
   if (Auth.isLoggedIn()) {
-    // getProfile() pakai cache nyzz-profile yang sudah divalidasi punya avatar_url
-    // Kalau cache lama tidak punya avatar_url → otomatis fetch fresh dari DB
     const profile = await Auth.getProfile();
     if (profile) {
-      // Update coins di navbar
+      // Update coins
       if (coinCountEl) coinCountEl.textContent = Number(profile.coins).toLocaleString('id-ID');
 
-      // Tampilkan avatar — kalau ada foto pakai foto, kalau tidak pakai inisial
-      const initial = profile.username ? profile.username.charAt(0).toUpperCase() : '?';
-      document.querySelectorAll('.user-avatar').forEach(wrap => {
-        if (profile.avatar_url) {
-          // Pakai foto profil — hapus cache buster lama lalu tambah yang baru
-          const baseUrl = profile.avatar_url.split('?')[0];
-          const url     = baseUrl + '?v=' + (Date.now());
-          wrap.innerHTML = `<img src="${url}" alt="avatar"
-            style="width:100%;height:100%;object-fit:cover;border-radius:50%"
-            onerror="this.parentElement.innerHTML='<span style=\\'font-family:Orbitron,sans-serif;font-size:15px;font-weight:900;color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,0.8);width:100%;height:100%;display:flex;align-items:center;justify-content:center;user-select:none;\\'>${initial}</span>'"
-          >`;
+      // Update avatar navbar — foto kalau ada, inisial kalau tidak
+      const initial = (profile.username || '?').charAt(0).toUpperCase();
+
+      function setNavbarAvatar(wrap, url, fallbackInitial) {
+        if (url) {
+          const img = document.createElement('img');
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%';
+          img.alt = fallbackInitial;
+          img.onload = () => {
+            wrap.innerHTML = '';
+            wrap.appendChild(img);
+          };
+          img.onerror = () => {
+            wrap.innerHTML = `<span class="nav-initial" style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,0.8);width:100%;height:100%;display:flex;align-items:center;justify-content:center;user-select:none">${fallbackInitial}</span>`;
+          };
+          // Paksa bypass cache
+          img.src = url.split('?')[0] + '?v=' + Date.now();
         } else {
-          // Tidak ada foto — pakai inisial
-          wrap.innerHTML = `<span style="
-            font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;
-            color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,0.8);
-            width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-            user-select:none;
-          ">${initial}</span>`;
+          wrap.innerHTML = `<span class="nav-initial" style="font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;color:#00e5ff;text-shadow:0 0 10px rgba(0,229,255,0.8);width:100%;height:100%;display:flex;align-items:center;justify-content:center;user-select:none">${fallbackInitial}</span>`;
         }
+      }
+
+      document.querySelectorAll('.user-avatar').forEach(wrap => {
+        setNavbarAvatar(wrap, profile.avatar_url, initial);
       });
     }
   } else {
@@ -162,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       setTimeout(() => loadingScreen.style.display = 'none', 600);
     } else {
       let progress = 0, stepIndex = 0;
-      const steps = [20, 40, 60, 80, 100];
+      const steps  = [20, 40, 60, 80, 100];
       function nextStep() {
         if (stepIndex >= steps.length) {
           sessionStorage.setItem('homeLoaded', 'true');
@@ -173,8 +155,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         const iv = setInterval(() => {
           if (progress < target) {
             progress++;
-            if (bar) bar.style.width = progress + '%';
-            if (text) text.textContent = progress + '%';
+            if (bar)  bar.style.width    = progress + '%';
+            if (text) text.textContent   = progress + '%';
           } else {
             clearInterval(iv); stepIndex++;
             if (stepIndex < steps.length) setTimeout(nextStep, 400); else nextStep();
@@ -188,8 +170,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   // ===== CANVAS STARS =====
   const canvas = document.getElementById('canvas');
   if (canvas) {
-    const ctx = canvas.getContext('2d');
-    let stars = [];
+    const ctx    = canvas.getContext('2d');
+    let stars    = [];
     const colors = ['#00e5ff','#00ff88','#bf00ff'];
     function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
     function createStars() {
@@ -216,4 +198,5 @@ document.addEventListener('DOMContentLoaded', async function () {
     window.addEventListener('resize', () => { resize(); createStars(); });
     resize(); createStars(); draw();
   }
+
 });
