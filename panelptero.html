@@ -62,67 +62,119 @@
         .cards-container.vip-container { display: none; }
 
         /* Standard panel card */
+        @keyframes cardGlow { 0%,100%{box-shadow:0 8px 30px rgba(0,0,0,0.5),0 0 20px rgba(0,229,255,0.08)} 50%{box-shadow:0 8px 30px rgba(0,0,0,0.5),0 0 35px rgba(0,229,255,0.18)} }
+        @keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
         .panel-card {
-            position: relative; background: rgba(10,12,20,0.88);
-            backdrop-filter: blur(12px); border-radius: 20px; padding: 24px;
-            border: 1px solid rgba(255,255,255,0.06);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
-            overflow: hidden; transition: 0.3s cubic-bezier(0.34,1.56,0.64,1);
-            animation: fadeInUp 0.6s ease both;
+            position: relative; background: rgba(10,12,22,0.92);
+            backdrop-filter: blur(16px); border-radius: 22px; padding: 24px;
+            border: 1px solid rgba(0,229,255,0.15);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0,229,255,0.08);
+            overflow: hidden; transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            animation: fadeInUp 0.6s ease both, cardGlow 3s ease-in-out infinite;
         }
         .panel-card:nth-child(2){animation-delay:.08s}
         .panel-card:nth-child(3){animation-delay:.16s}
         .panel-card:nth-child(4){animation-delay:.24s}
+        /* Rainbow bar atas lebih tebal */
         .panel-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #f368e0, #ff6b6b);
-            background-size: 200% 100%; animation: topRainbow 4s linear infinite;
-            border-radius: 20px 20px 0 0;
+            background-size: 200% 100%; animation: topRainbow 3s linear infinite;
+            border-radius: 22px 22px 0 0;
         }
-        .panel-card:hover { transform: translateY(-6px); border-color: rgba(0,229,255,0.25); box-shadow: 0 15px 40px rgba(0,229,255,0.12); }
+        /* Efek cahaya pojok kiri bawah */
+        .panel-card::after {
+            content: ''; position: absolute; bottom: -40px; left: -40px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .panel-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(0,229,255,0.4);
+            box-shadow: 0 20px 50px rgba(0,229,255,0.2), 0 0 40px rgba(0,229,255,0.1);
+        }
 
-        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-        .card-badge { font-family: 'Righteous', cursive; font-size: 28px; color: #fff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.5)); }
+        /* Badge populer / best seller */
+        .card-popular-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,255,136,0.1));
+            border: 1px solid rgba(0,229,255,0.3);
+            color: #00e5ff; font-size: 10px; font-weight: 900;
+            padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+            letter-spacing: 0.8px; text-transform: uppercase;
+            animation: floatBadge 2.5s ease-in-out infinite;
+        }
+        .card-popular-badge.best { background: linear-gradient(135deg,rgba(255,77,228,0.15),rgba(191,0,255,0.1)); border-color: rgba(255,77,228,0.3); color: #ff4de4; }
+        .card-popular-badge.hot  { background: linear-gradient(135deg,rgba(255,224,0,0.15),rgba(255,170,0,0.1)); border-color: rgba(255,224,0,0.3); color: #ffe000; }
+
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .card-badge {
+            font-family: 'Righteous', cursive; font-size: 30px; color: #fff;
+            filter: drop-shadow(0 0 12px rgba(0,229,255,0.6));
+        }
         .card-tier {
-            font-size: 11px; color: #aaa; background: rgba(255,255,255,0.05);
-            padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px; color: #00e5ff; background: rgba(0,229,255,0.08);
+            padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(0,229,255,0.25);
             font-weight: 800; letter-spacing: 0.5px;
         }
         .card-tier.tier-high { color: #ff4de4; border-color: rgba(255,77,228,0.3); background: rgba(255,77,228,0.08); }
-        .card-tier.tier-mid { color: #ffe000; border-color: rgba(255,224,0,0.3); background: rgba(255,224,0,0.08); }
+        .card-tier.tier-mid  { color: #ffe000; border-color: rgba(255,224,0,0.3); background: rgba(255,224,0,0.08); }
 
         .spec-list {
-            margin: 14px 0; padding: 12px 0;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            margin: 12px 0; padding: 10px 0;
+            border-top: 1px solid rgba(0,229,255,0.08);
+            border-bottom: 1px solid rgba(0,229,255,0.08);
         }
         .spec-item {
             display: flex; justify-content: space-between; align-items: center;
-            font-size: 14px; padding: 6px 0;
+            font-size: 14px; padding: 7px 0;
         }
-        .spec-label { color: rgba(255,255,255,0.45); font-weight: 700; }
+        .spec-label { color: rgba(255,255,255,0.4); font-weight: 700; display: flex; align-items: center; gap: 7px; }
+        .spec-label::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #00e5ff; display: inline-block; opacity: 0.5; }
         .spec-value { color: #fff; font-weight: 900; }
 
-        .price {
-            font-family: 'Righteous', cursive; font-size: 28px; color: #00e5ff;
-            text-align: center; margin: 14px 0 12px;
-            filter: drop-shadow(0 0 10px rgba(0,229,255,0.4));
+        /* Highlight RAM value */
+        .spec-item.ram-row .spec-value { color: #00e5ff; filter: drop-shadow(0 0 6px rgba(0,229,255,0.4)); }
+        .spec-item.tier-high .spec-value { color: #ff4de4; }
+        .spec-item.tier-mid  .spec-value { color: #ffe000; }
+
+        .price-wrap { text-align: center; margin: 14px 0 14px; }
+        .price-tag {
+            font-family: 'Righteous', cursive; font-size: 30px;
+            background: linear-gradient(135deg, #00e5ff, #00ff88);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(0,229,255,0.35));
+            display: block;
         }
-        .price span { font-size: 13px; color: rgba(255,255,255,0.4); font-family: 'Nunito', sans-serif; font-weight: 700; }
+        .price-tag.mid-price {
+            background: linear-gradient(135deg, #ffe000, #ff8800);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(255,224,0,0.35));
+        }
+        .price-tag.high-price {
+            background: linear-gradient(135deg, #ff4de4, #bf00ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(255,77,228,0.35));
+        }
+        .price-sub { font-size: 12px; color: rgba(255,255,255,0.35); font-family: 'Nunito', sans-serif; font-weight: 700; display: block; margin-top: 2px; }
 
         .btn-pesan {
-            width: 100%; padding: 13px;
-            background: transparent;
-            border: 1.5px solid rgba(0,229,255,0.4);
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,255,136,0.08));
+            border: 1.5px solid rgba(0,229,255,0.5);
             border-radius: 40px; color: #00e5ff;
             font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
             cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 18px rgba(0,229,255,0.15);
         }
-        .btn-pesan:hover {
-            background: #00e5ff; color: #06070f;
-            box-shadow: 0 0 25px rgba(0,229,255,0.5);
-            transform: translateY(-2px);
-        }
+        .btn-pesan.btn-mid  { border-color: rgba(255,224,0,0.5); color: #ffe000; background: linear-gradient(135deg,rgba(255,224,0,0.12),rgba(255,136,0,0.08)); box-shadow: 0 4px 18px rgba(255,224,0,0.15); }
+        .btn-pesan.btn-high { border-color: rgba(255,77,228,0.5); color: #ff4de4; background: linear-gradient(135deg,rgba(255,77,228,0.12),rgba(191,0,255,0.08)); box-shadow: 0 4px 18px rgba(255,77,228,0.15); }
+        .btn-pesan:hover { background: linear-gradient(135deg,#00e5ff,#00ff88); color: #06070f; border-color: #00e5ff; box-shadow: 0 6px 28px rgba(0,229,255,0.5); transform: translateY(-2px); }
+        .btn-pesan.btn-mid:hover  { background: linear-gradient(135deg,#ffe000,#ff8800); color: #06070f; border-color: #ffe000; box-shadow: 0 6px 28px rgba(255,224,0,0.5); }
+        .btn-pesan.btn-high:hover { background: linear-gradient(135deg,#ff4de4,#bf00ff); color: #fff; border-color: #ff4de4; box-shadow: 0 6px 28px rgba(255,77,228,0.5); }
 
         /* ===== VIP CARDS ===== */
         .vip-card {
@@ -452,48 +504,64 @@
         <!-- 20 Hari -->
         <div id="cards20" class="cards-container">
             <div class="panel-card" data-panel="3">
+                <div class="card-popular-badge"><i class="fas fa-star"></i> PALING LARIS</div>
                 <div class="card-header"><span class="card-badge">3 GB</span><span class="card-tier">LOW</span></div>
                 <div class="spec-list">
                     <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">100%</span></div>
-                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item ram-row"><span class="spec-label">MEMORI</span><span class="spec-value">3.027 MB</span></div>
                     <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">3.027 MB</span></div>
                     <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
                 </div>
-                <div class="price" data-harga="4000">Rp 4.000 <span>/20 hari</span></div>
-                <button class="btn-pesan">⚡ Pesan Sekarang</button>
+                <div class="price-wrap">
+                    <span class="price-tag">Rp 4.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan" data-harga="4000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
             </div>
             <div class="panel-card" data-panel="5">
+                <div class="card-popular-badge"><i class="fas fa-fire"></i> POPULER</div>
                 <div class="card-header"><span class="card-badge">5 GB</span><span class="card-tier">LOW</span></div>
                 <div class="spec-list">
                     <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">250%</span></div>
-                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item ram-row"><span class="spec-label">MEMORI</span><span class="spec-value">5.021 MB</span></div>
                     <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">5.021 MB</span></div>
                     <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
                 </div>
-                <div class="price" data-harga="6000">Rp 6.000 <span>/20 hari</span></div>
-                <button class="btn-pesan">⚡ Pesan Sekarang</button>
+                <div class="price-wrap">
+                    <span class="price-tag">Rp 6.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan" data-harga="6000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
             </div>
             <div class="panel-card" data-panel="6">
+                <div class="card-popular-badge hot"><i class="fas fa-crown"></i> TERBAIK</div>
                 <div class="card-header"><span class="card-badge">6 GB</span><span class="card-tier tier-mid">MID</span></div>
                 <div class="spec-list">
                     <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">300%</span></div>
-                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item ram-row tier-mid"><span class="spec-label">MEMORI</span><span class="spec-value">6.065 MB</span></div>
                     <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">6.065 MB</span></div>
                     <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
                 </div>
-                <div class="price" data-harga="8000">Rp 8.000 <span>/20 hari</span></div>
-                <button class="btn-pesan">⚡ Pesan Sekarang</button>
+                <div class="price-wrap">
+                    <span class="price-tag mid-price">Rp 8.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan btn-mid" data-harga="8000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
             </div>
             <div class="panel-card" data-panel="7">
+                <div class="card-popular-badge best"><i class="fas fa-gem"></i> PREMIUM</div>
                 <div class="card-header"><span class="card-badge">7 GB</span><span class="card-tier tier-high">HIGH</span></div>
                 <div class="spec-list">
                     <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">350%</span></div>
-                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item ram-row tier-high"><span class="spec-label">MEMORI</span><span class="spec-value">7.065 MB</span></div>
                     <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">7.065 MB</span></div>
                     <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
                 </div>
-                <div class="price" data-harga="11000">Rp 11.000 <span>/20 hari</span></div>
-                <button class="btn-pesan">⚡ Pesan Sekarang</button>
+                <div class="price-wrap">
+                    <span class="price-tag high-price">Rp 11.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan btn-high" data-harga="11000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
             </div>
         </div>
 
@@ -631,7 +699,7 @@
                 btn.addEventListener('click', function() {
                     const card  = this.closest('.panel-card');
                     const panel = card.getAttribute('data-panel');
-                    const price = card.querySelector('.price').getAttribute('data-harga');
+                    const price = this.getAttribute('data-harga');
                     window.location.href = '/pay?panel=' + panel + '&durasi=20&amount=' + price;
                 });
             });
