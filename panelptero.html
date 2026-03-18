@@ -206,6 +206,74 @@
             transform: translateY(-2px);
         }
 
+
+        /* ===== 10 HARI LOW QUALITY CARDS ===== */
+        .cards-container.low-container { display: none; }
+
+        .low-card {
+            position: relative; background: rgba(8,9,14,0.75);
+            backdrop-filter: blur(6px); border-radius: 16px; padding: 22px;
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+            overflow: hidden; transition: 0.3s;
+            animation: fadeInUp 0.6s ease both;
+            opacity: 0.88;
+        }
+        .low-card:nth-child(2){animation-delay:.08s}
+        .low-card:nth-child(3){animation-delay:.16s}
+        .low-card:nth-child(4){animation-delay:.24s}
+        .low-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #444, #666, #888, #555, #444);
+            background-size: 200% 100%; animation: topRainbow 8s linear infinite;
+            border-radius: 16px 16px 0 0; opacity: 0.6;
+        }
+        .low-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.08); box-shadow: 0 8px 20px rgba(0,0,0,0.5); opacity: 1; }
+
+        .low-card .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .low-card .card-badge { font-family: 'Righteous', cursive; font-size: 26px; color: rgba(255,255,255,0.65); }
+        .low-card .card-tier {
+            font-size: 10px; color: #666; background: rgba(255,255,255,0.03);
+            padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.07);
+            font-weight: 800; letter-spacing: 0.5px;
+        }
+        .low-card .spec-list {
+            margin: 12px 0; padding: 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .low-card .spec-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 5px 0; }
+        .low-card .spec-label { color: rgba(255,255,255,0.28); font-weight: 700; }
+        .low-card .spec-value { color: rgba(255,255,255,0.6); font-weight: 900; }
+
+        .low-card .price {
+            font-family: 'Righteous', cursive; font-size: 24px;
+            color: rgba(255,255,255,0.5); text-align: center; margin: 12px 0 10px;
+        }
+        .low-card .price span { font-size: 12px; color: rgba(255,255,255,0.25); font-family: 'Nunito', sans-serif; font-weight: 700; }
+
+        .low-card .low-badge {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.3); font-size: 10px; font-weight: 800;
+            padding: 3px 10px; border-radius: 20px; margin-bottom: 12px;
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+
+        .btn-pesan-low {
+            width: 100%; padding: 12px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 40px; color: rgba(255,255,255,0.4);
+            font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+        }
+        .btn-pesan-low:hover {
+            background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7);
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 500px) {
             .rainbow-text { font-size: 30px; }
             .cards-container { grid-template-columns: 1fr; }
@@ -255,12 +323,66 @@
 
         <div class="duration-wrapper">
             <div class="duration-group">
+                <button class="duration-btn" data-durasi="10">10 Hari</button>
                 <button class="duration-btn active" data-durasi="20">20 Hari</button>
                 <button class="duration-btn" data-durasi="30">30 Hari VIP</button>
             </div>
         </div>
 
         <div class="divider"></div>
+
+
+        <!-- 10 Hari LOW -->
+        <div id="cards10" class="cards-container low-container">
+            <div class="low-card" data-panel="3">
+                <div class="low-badge"><i class="fas fa-exclamation-circle"></i> LOW TIER</div>
+                <div class="card-header"><span class="card-badge">3 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">100%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price" data-harga="3000">Rp 3.000 <span>/10 hari</span></div>
+                <button class="btn-pesan-low">Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="5">
+                <div class="low-badge"><i class="fas fa-exclamation-circle"></i> LOW TIER</div>
+                <div class="card-header"><span class="card-badge">5 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">250%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price" data-harga="5000">Rp 5.000 <span>/10 hari</span></div>
+                <button class="btn-pesan-low">Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="6">
+                <div class="low-badge"><i class="fas fa-exclamation-circle"></i> LOW TIER</div>
+                <div class="card-header"><span class="card-badge">6 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">300%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price" data-harga="6000">Rp 6.000 <span>/10 hari</span></div>
+                <button class="btn-pesan-low">Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="7">
+                <div class="low-badge"><i class="fas fa-exclamation-circle"></i> LOW TIER</div>
+                <div class="card-header"><span class="card-badge">7 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">350%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price" data-harga="7000">Rp 7.000 <span>/10 hari</span></div>
+                <button class="btn-pesan-low">Pesan Sekarang</button>
+            </div>
+        </div>
 
         <!-- 20 Hari -->
         <div id="cards20" class="cards-container">
@@ -391,7 +513,7 @@
                 <div class="social-icons">
                     <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
+                    <a href="/cdn-cgi/l/email-protection#fe8d8b8e8e918c8abe9a848486908484d09387d0979a" class="social-icon email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
@@ -404,21 +526,31 @@
         </div>
     </footer>
 
-    <script src="../script.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../script.js"></script>
     <script src="../panelptero.js"></script>
     <script>
         (function() {
             const durasiButtons = document.querySelectorAll('.duration-btn');
             const cards20 = document.getElementById('cards20');
             const cards30 = document.getElementById('cards30');
+            const cards10 = document.getElementById('cards10');
             function setActiveDuration(durasi) {
                 durasiButtons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi));
+                cards10.style.display = durasi === '10' ? 'grid' : 'none';
                 cards20.style.display = durasi === '20' ? 'grid' : 'none';
                 cards30.style.display = durasi === '30' ? 'grid' : 'none';
             }
             durasiButtons.forEach(btn => btn.addEventListener('click', function() { setActiveDuration(this.getAttribute('data-durasi')); }));
             setActiveDuration('20');
 
+            document.querySelectorAll('#cards10 .btn-pesan-low').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.low-card');
+                    const panel = card.getAttribute('data-panel');
+                    const price = card.querySelector('.price').getAttribute('data-harga');
+                    window.location.href = `/pay?panel=${panel}&durasi=10&amount=${price}`;
+                });
+            });
             document.querySelectorAll('#cards20 .btn-pesan').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const card = this.closest('.panel-card');
@@ -432,10 +564,4 @@
                     const card = this.closest('.vip-card');
                     const title = card.querySelector('.card-title').textContent;
                     const amount = card.querySelector('.amount').textContent.replace('.','');
-                    window.location.href = `/pay?panel=${title}&durasi=30&amount=${amount}`;
-                });
-            });
-        })();
-    </script>
-</body>
-</html>
+                    w
