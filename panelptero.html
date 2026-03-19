@@ -81,8 +81,57 @@
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 20px;
         }
+        /* ===== UJI COBA TAB ===== */
+        .ujicoba-row {
+            width: 100%; background: rgba(13,15,25,0.8);
+            border: 1px solid rgba(0,255,136,0.2); border-radius: 14px; padding: 4px;
+        }
+        .ujicoba-tab {
+            width: 100%; background: transparent; border: none;
+            color: rgba(255,255,255,0.4); font-family: 'Nunito', sans-serif;
+            font-size: 14px; font-weight: 800; padding: 10px 0;
+            border-radius: 10px; cursor: pointer; transition: 0.25s;
+            letter-spacing: 1px; text-align: center; display: block;
+        }
+        .ujicoba-tab:hover { color: #00ff88; background: rgba(0,255,136,0.08); }
+        .ujicoba-tab.active {
+            background: linear-gradient(135deg, #00ff88, #00e5ff);
+            color: #06070f; font-weight: 900;
+            box-shadow: 0 4px 22px rgba(0,255,136,0.4);
+        }
+
+        /* ===== UJI COBA CARD ===== */
+        .ujicoba-card {
+            position: relative; background: rgba(0,12,8,0.92);
+            border-radius: 22px; padding: 24px; max-width: 360px; margin: 0 auto;
+            border: 1px solid rgba(0,255,136,0.25);
+            box-shadow: 0 0 30px rgba(0,255,136,0.1), 0 8px 30px rgba(0,0,0,0.5);
+            overflow: hidden; transition: 0.3s; animation: fadeInUp 0.6s ease both;
+        }
+        .ujicoba-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #00ff88, #00e5ff, #00ff88);
+            background-size: 200% 100%; animation: shineBar 2s linear infinite;
+        }
+        .ujicoba-card:hover { transform: translateY(-6px); border-color: rgba(0,255,136,0.5); box-shadow: 0 0 40px rgba(0,255,136,0.2); }
+        .ujicoba-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3);
+            color: #00ff88; font-size: 11px; font-weight: 900;
+            padding: 4px 14px; border-radius: 20px; margin-bottom: 14px;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .btn-ujicoba {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, rgba(0,255,136,0.15), rgba(0,229,255,0.08));
+            border: 1.5px solid rgba(0,255,136,0.5); border-radius: 40px; color: #00ff88;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 18px rgba(0,255,136,0.15);
+        }
+        .btn-ujicoba:hover { background: linear-gradient(135deg,#00ff88,#00e5ff); color: #06070f; border-color: #00ff88; box-shadow: 0 6px 28px rgba(0,255,136,0.5); transform: translateY(-2px); }
+
         .cards-container.hidden  { display: none; }
-        .unlimited-container     { display: none; flex-direction: column; gap: 24px; }
 
         /* ===== 10 HARI — LOW QUALITY CARDS ===== */
         @keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
@@ -346,6 +395,11 @@
 
         <!-- TABS -->
         <div class="duration-wrapper">
+            <!-- Baris 0: UJI COBA -->
+            <div class="ujicoba-row">
+                <button class="ujicoba-tab" data-tab="ujicoba">🧪&nbsp; UJI COBA &nbsp;🧪</button>
+            </div>
+            <!-- Baris 1: 10 / 20 / 30 Hari -->
             <div class="duration-group">
                 <button class="duration-btn" data-tab="10">10 Hari</button>
                 <button class="duration-btn active" data-tab="20">20 Hari</button>
@@ -357,6 +411,29 @@
         </div>
 
         <div class="divider"></div>
+
+        <!-- UJI COBA -->
+        <div id="tabUjicoba" class="cards-container hidden">
+            <div class="ujicoba-card" data-panel="1">
+                <div class="ujicoba-badge"><i class="fas fa-flask"></i> UJI COBA</div>
+                <div class="card-header">
+                    <span class="card-badge" style="color:#00ff88;filter:drop-shadow(0 0 8px rgba(0,255,136,0.5))">1 GB</span>
+                    <span class="card-tier" style="color:#00ff88;border-color:rgba(0,255,136,0.3);background:rgba(0,255,136,0.08)">FREE TRIAL</span>
+                </div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">10%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">100 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">100 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DURASI</span><span class="spec-value" style="color:#00ff88">5 Hari</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price-wrap">
+                    <span class="price-tag" style="background:linear-gradient(135deg,#00ff88,#00e5ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Rp 1.000</span>
+                    <span class="price-sub">/5 hari · hanya 1 GB</span>
+                </div>
+                <button class="btn-ujicoba" data-harga="1000"><i class="fas fa-flask"></i> Coba Sekarang</button>
+            </div>
+        </div>
 
         <!-- 10 HARI -->
         <div id="tab10" class="cards-container hidden">
@@ -653,6 +730,7 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         // ===== SEMBUNYIKAN SEMUA TAB DULU =====
+        document.getElementById('tabUjicoba').style.display = 'none';
         document.getElementById('tab10').style.display  = 'none';
         document.getElementById('tab20').style.display  = 'none';
         document.getElementById('tab30').style.display  = 'none';
@@ -662,8 +740,22 @@
         document.getElementById('tab20').style.display = 'grid';
         document.querySelector('[data-tab="20"]').classList.add('active');
 
+        // ===== TAB UJI COBA =====
+        document.querySelector('.ujicoba-tab').onclick = function() {
+            document.getElementById('tabUjicoba').style.display = 'grid';
+            document.getElementById('tab10').style.display  = 'none';
+            document.getElementById('tab20').style.display  = 'none';
+            document.getElementById('tab30').style.display  = 'none';
+            document.getElementById('tabUnlimited').style.display = 'none';
+            document.querySelectorAll('.duration-btn').forEach(function(b){ b.classList.remove('active'); });
+            document.querySelector('.unlimited-tab').classList.remove('active');
+            document.querySelector('.ujicoba-tab').classList.add('active');
+        };
+
         // ===== TAB 10 HARI =====
         document.querySelector('[data-tab="10"]').onclick = function() {
+            document.getElementById('tabUjicoba').style.display = 'none';
+            document.querySelector('.ujicoba-tab').classList.remove('active');
             document.getElementById('tab10').style.display  = 'grid';
             document.getElementById('tab20').style.display  = 'none';
             document.getElementById('tab30').style.display  = 'none';
@@ -677,6 +769,8 @@
         // ===== TAB 20 HARI =====
         document.querySelector('[data-tab="20"]').onclick = function() {
             document.getElementById('tab10').style.display  = 'none';
+            document.getElementById('tabUjicoba').style.display = 'none';
+            document.querySelector('.ujicoba-tab').classList.remove('active');
             document.getElementById('tab20').style.display  = 'grid';
             document.getElementById('tab30').style.display  = 'none';
             document.getElementById('tabUnlimited').style.display = 'none';
@@ -690,6 +784,8 @@
         document.querySelector('[data-tab="30"]').onclick = function() {
             document.getElementById('tab10').style.display  = 'none';
             document.getElementById('tab20').style.display  = 'none';
+            document.getElementById('tabUjicoba').style.display = 'none';
+            document.querySelector('.ujicoba-tab').classList.remove('active');
             document.getElementById('tab30').style.display  = 'grid';
             document.getElementById('tabUnlimited').style.display = 'none';
             document.querySelector('[data-tab="10"]').classList.remove('active');
@@ -742,6 +838,13 @@
             };
         });
 
+        // Uji coba pesan
+        document.querySelectorAll('#tabUjicoba .btn-ujicoba').forEach(function(btn) {
+            btn.onclick = function() {
+                var panel = btn.closest('[data-panel]').getAttribute('data-panel');
+                window.location.href = '/pay?panel='+panel+'&durasi=5&amount='+btn.getAttribute('data-harga');
+            };
+        });
     });
     </script>
 </body>
