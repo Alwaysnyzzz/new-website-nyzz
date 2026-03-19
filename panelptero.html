@@ -28,7 +28,11 @@
         .header-subtitle { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 600; }
 
         /* Duration toggle */
-        .duration-wrapper { display: flex; justify-content: center; margin-bottom: 28px; animation: fadeInUp 0.6s 0.1s ease both; }
+        .duration-wrapper {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 10px;
+            margin-bottom: 28px; animation: fadeInUp 0.6s 0.1s ease both;
+        }
         .duration-group {
             display: flex; gap: 0; background: rgba(13,15,25,0.8);
             border: 1px solid rgba(0,229,255,0.2); border-radius: 14px; overflow: hidden;
@@ -37,7 +41,7 @@
         .duration-btn {
             background: transparent; border: none; color: rgba(255,255,255,0.5);
             font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
-            padding: 10px 28px; border-radius: 10px; cursor: pointer;
+            padding: 10px 24px; border-radius: 10px; cursor: pointer;
             transition: 0.25s; letter-spacing: 0.5px;
         }
         .duration-btn:hover { color: #00e5ff; background: rgba(0,229,255,0.08); }
@@ -45,6 +49,36 @@
             background: linear-gradient(135deg, #00e5ff, #00ff88);
             color: #06070f; font-weight: 900;
             box-shadow: 0 4px 18px rgba(0,229,255,0.35);
+        }
+        /* Unlimited tab sendiri di bawah */
+        .unlimited-tab-wrap {
+            width: 100%; display: flex; justify-content: center;
+        }
+        .unlimited-tab {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #0a0015, #15002a) !important;
+            border: 1.5px solid rgba(180,0,255,0.5) !important;
+            color: #fff !important; font-weight: 900 !important;
+            font-size: 14px !important;
+            padding: 12px 40px !important; border-radius: 14px !important;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1) !important;
+            animation: unlimitedPulse 2s ease-in-out infinite !important;
+        }
+        .unlimited-tab::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, #7b00ff, #ff00cc, #00e5ff, #ff00cc, #7b00ff);
+            background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
+        }
+        .unlimited-tab.active {
+            background: linear-gradient(135deg, #7b00ff, #cc00ff, #ff00aa) !important;
+            border-color: #ff00cc !important;
+            box-shadow: 0 0 40px rgba(180,0,255,0.6), 0 8px 30px rgba(255,0,170,0.3) !important;
+            animation: none !important;
+        }
+        @keyframes unlimitedPulse {
+            0%,100% { box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1); }
+            50%      { box-shadow: 0 0 40px rgba(255,0,170,0.5), 0 0 70px rgba(180,0,255,0.2); }
         }
 
         .divider {
@@ -379,272 +413,107 @@
 
         .cards-container.unlimited-container { display: none; flex-direction: column; gap: 24px; }
 
-        /* ===== CARD 1 — GALAXY DARK (10 Hari) ===== */
-        @keyframes galaxySpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-        @keyframes starTwinkle { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.5)} }
-        @keyframes neonFlicker { 0%,100%{filter:drop-shadow(0 0 15px #7b00ff) drop-shadow(0 0 30px #7b00ff)} 45%{filter:drop-shadow(0 0 5px #7b00ff)} 55%{filter:drop-shadow(0 0 20px #7b00ff)} }
+        /* ===== UNLIMITED CARDS ===== */
+        @keyframes holoBg    { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        @keyframes borderRGB { 0%{border-color:rgba(255,0,128,0.7)} 25%{border-color:rgba(123,0,255,0.7)} 50%{border-color:rgba(0,229,255,0.7)} 75%{border-color:rgba(0,255,136,0.7)} 100%{border-color:rgba(255,0,128,0.7)} }
+        @keyframes scanDown  { 0%{top:-10%} 100%{top:110%} }
+        @keyframes iconSpin  { 0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.2)} 100%{transform:rotate(360deg) scale(1)} }
+        @keyframes priceGlow { 0%,100%{filter:drop-shadow(0 0 10px currentColor)} 50%{filter:drop-shadow(0 0 30px currentColor) drop-shadow(0 0 60px currentColor)} }
+        @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 
-        .unli-card-galaxy {
-            position: relative; border-radius: 24px; padding: 28px;
-            background: radial-gradient(ellipse at 20% 20%, rgba(123,0,255,0.25) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 80%, rgba(255,0,170,0.15) 0%, transparent 60%),
-                        rgba(6,4,14,0.96);
-            border: 1px solid rgba(123,0,255,0.4);
-            box-shadow: 0 0 40px rgba(123,0,255,0.2), 0 20px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
-            overflow: hidden;
-            animation: fadeInUp 0.6s ease both;
+        /* Shared unlimited card base */
+        .unli-card {
+            position: relative; border-radius: 26px; padding: 30px 26px;
+            overflow: hidden; animation: fadeInUp 0.6s ease both;
         }
-        .unli-card-galaxy::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%; border-radius: 50%;
-            background: conic-gradient(transparent 270deg, rgba(123,0,255,0.15) 360deg);
-            animation: galaxySpin 8s linear infinite;
-        }
-        .unli-card-galaxy::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, #7b00ff, #ff00aa, #00e5ff, #7b00ff);
-            background-size: 200% 100%; animation: shineBar 2s linear infinite;
-        }
+        .unli-card .scan { position:absolute; left:0; right:0; height:60px; pointer-events:none; z-index:1; background: linear-gradient(transparent, rgba(255,255,255,0.03), transparent); animation: scanDown 3s linear infinite; }
+        .unli-card-inner { position: relative; z-index: 2; }
 
-        .galaxy-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, rgba(123,0,255,0.2), rgba(255,0,170,0.15));
-            border: 1px solid rgba(123,0,255,0.5);
-            color: #bf7fff; font-size: 11px; font-weight: 900;
-            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
-            letter-spacing: 1px; text-transform: uppercase;
+        /* ——— CARD 1: HOLOGRAPHIC (10 Hari) ——— */
+        .unli-holo {
+            background: linear-gradient(135deg, #0d001a, #001a0d, #00001a, #1a0010);
+            background-size: 400% 400%; animation: fadeInUp 0.6s ease both, holoBg 6s ease infinite, floatCard 4s ease-in-out infinite;
+            border: 2px solid rgba(255,0,128,0.6);
+            box-shadow: 0 0 60px rgba(255,0,128,0.25), 0 0 120px rgba(123,0,255,0.1), 0 25px 60px rgba(0,0,0,0.8);
+            animation: fadeInUp 0.6s ease both, borderRGB 4s linear infinite, floatCard 5s ease-in-out infinite;
         }
-        .galaxy-stars {
-            position: absolute; top: 20px; right: 20px;
-            display: flex; gap: 4px;
-        }
-        .galaxy-stars i { font-size: 8px; color: #bf7fff; animation: starTwinkle 1.5s ease-in-out infinite; }
-        .galaxy-stars i:nth-child(2){animation-delay:.3s}
-        .galaxy-stars i:nth-child(3){animation-delay:.6s}
+        .holo-top-bar { position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(90deg,#ff0080,#7b00ff,#00e5ff,#00ff88,#ffe000,#ff0080); background-size:200% 100%; animation:shineBar 1s linear infinite; border-radius:26px 26px 0 0; }
+        .holo-icon-wrap { width:72px; height:72px; border-radius:50%; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:30px; background: conic-gradient(#ff0080,#7b00ff,#00e5ff,#00ff88,#ffe000,#ff0080); padding:2px; }
+        .holo-icon-inner { width:100%; height:100%; border-radius:50%; background:#0d001a; display:flex; align-items:center; justify-content:center; animation: iconSpin 4s linear infinite; }
+        .holo-title { font-family:'Righteous',cursive; font-size:28px; text-align:center; display:block; margin-bottom:4px; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff,#00ff88); background-size:300% 300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:holoBg 3s ease infinite; }
+        .holo-sub { text-align:center; font-size:12px; color:rgba(255,255,255,0.4); font-weight:700; display:block; margin-bottom:20px; }
+        .holo-specs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:18px; }
+        .holo-spec { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:10px 6px; text-align:center; transition:0.2s; }
+        .holo-spec:hover { background:rgba(255,0,128,0.08); border-color:rgba(255,0,128,0.3); }
+        .holo-spec-label { font-size:9px; color:rgba(255,255,255,0.35); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; display:block; }
+        .holo-spec-val   { font-size:16px; font-family:'Righteous',cursive; color:#fff; }
+        .holo-spec-val.inf { background:linear-gradient(135deg,#ff0080,#7b00ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:20px; }
+        .holo-price { text-align:center; font-family:'Righteous',cursive; font-size:38px; margin:14px 0; display:block; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:holoBg 3s ease infinite; }
+        .holo-price span { font-size:12px; color:rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; }
+        .btn-holo { width:100%; padding:15px; border:none; border-radius:40px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff,#00ff88); background-size:300% 300%; animation:holoBg 3s ease infinite; color:#fff; box-shadow:0 6px 30px rgba(255,0,128,0.5); letter-spacing:0.5px; }
+        .btn-holo:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 45px rgba(123,0,255,0.6); }
 
-        .galaxy-title {
-            font-family: 'Righteous', cursive; font-size: 32px;
-            background: linear-gradient(135deg, #bf7fff, #ff66cc, #7b00ff);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: neonFlicker 4s ease-in-out infinite;
-            margin-bottom: 6px; display: block;
+        /* ——— CARD 2: FIRE STORM (20 Hari) ——— */
+        @keyframes firePulse { 0%,100%{box-shadow:0 0 40px rgba(255,80,0,0.3),0 0 80px rgba(255,150,0,0.1),0 25px 60px rgba(0,0,0,0.8)} 50%{box-shadow:0 0 70px rgba(255,80,0,0.5),0 0 120px rgba(255,150,0,0.2),0 25px 60px rgba(0,0,0,0.8)} }
+        @keyframes ember { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-60px) scale(0);opacity:0} }
+        .unli-fire {
+            background: radial-gradient(ellipse at 50% 100%, rgba(255,80,0,0.2) 0%, rgba(20,5,0,0.98) 60%);
+            border: 2px solid rgba(255,100,0,0.5);
+            animation: fadeInUp 0.6s 0.1s ease both, firePulse 2s ease-in-out infinite;
         }
-        .galaxy-subtitle { font-size: 12px; color: rgba(255,255,255,0.35); font-weight: 700; margin-bottom: 18px; display: block; }
+        .fire-embers { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        .ember { position:absolute; bottom:0; width:4px; height:4px; border-radius:50%; background:#ff6600; animation:ember 2s ease-out infinite; }
+        .ember:nth-child(1){left:15%;animation-delay:0s;background:#ff4400}
+        .ember:nth-child(2){left:30%;animation-delay:0.4s;background:#ff8800}
+        .ember:nth-child(3){left:50%;animation-delay:0.8s;background:#ffaa00}
+        .ember:nth-child(4){left:70%;animation-delay:1.2s;background:#ff6600}
+        .ember:nth-child(5){left:85%;animation-delay:1.6s;background:#ff4400}
+        .fire-top { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#ff4400,#ff8800,#ffcc00,#ff8800,#ff4400); background-size:200% 100%; animation:shineBar 1.5s linear infinite; border-radius:26px 26px 0 0; }
+        .fire-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,80,0,0.12); border:1px solid rgba(255,80,0,0.4); color:#ff8833; font-size:11px; font-weight:900; padding:5px 16px; border-radius:20px; margin-bottom:16px; letter-spacing:1px; text-transform:uppercase; }
+        .fire-title { font-family:'Righteous',cursive; font-size:30px; display:block; margin-bottom:4px; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(255,100,0,0.5)); }
+        .fire-sub { font-size:12px; color:rgba(255,150,0,0.5); font-weight:700; display:block; margin-bottom:18px; }
+        .fire-rows { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; padding:14px; background:rgba(255,80,0,0.05); border-radius:16px; border:1px solid rgba(255,80,0,0.12); }
+        .fire-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+        .fire-row-label { color:rgba(255,255,255,0.4); font-weight:700; display:flex; align-items:center; gap:8px; }
+        .fire-row-label i { color:#ff8833; font-size:11px; }
+        .fire-row-val { font-weight:900; color:#ffaa55; }
+        .fire-row-val.fire-inf { color:#ff6600; font-size:15px; filter:drop-shadow(0 0 8px #ff6600); }
+        .fire-price { text-align:center; font-family:'Righteous',cursive; font-size:40px; display:block; margin:14px 0; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 20px rgba(255,100,0,0.5)); }
+        .fire-price span { font-size:12px; color:rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; }
+        .btn-fire { width:100%; padding:15px; border:none; border-radius:40px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); color:#06070f; box-shadow:0 6px 30px rgba(255,80,0,0.5); letter-spacing:0.5px; }
+        .btn-fire:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 45px rgba(255,100,0,0.7); }
 
-        .unli-spec-grid {
-            display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 16px 0;
-        }
-        .unli-spec-item {
-            background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 10px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.06); transition: 0.2s;
-        }
-        .unli-spec-item:hover { border-color: rgba(123,0,255,0.3); }
-        .unli-spec-item.full { grid-column: span 2; }
-        .unli-spec-label { font-size: 10px; color: rgba(255,255,255,0.35); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .unli-spec-value { font-family: 'Righteous', cursive; font-size: 17px; color: #fff; }
-        .unli-spec-value.infinity { font-size: 22px; color: #bf7fff; filter: drop-shadow(0 0 8px #7b00ff); }
-
-        .galaxy-price {
-            text-align: center; margin: 16px 0;
-            font-family: 'Righteous', cursive; font-size: 36px;
-            background: linear-gradient(135deg, #bf7fff, #ff66cc);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(123,0,255,0.5));
-        }
-        .galaxy-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
-
-        .btn-galaxy {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #7b00ff, #ff00aa);
-            border: none; border-radius: 40px; color: #fff;
-            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
-            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 6px 25px rgba(123,0,255,0.5);
-        }
-        .btn-galaxy:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 35px rgba(123,0,255,0.7); }
-
-        /* ===== CARD 2 — CYBER GOLD (20 Hari) ===== */
-        @keyframes goldShimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
-        @keyframes circuitMove { from{background-position:0 0} to{background-position:50px 50px} }
-
-        .unli-card-gold {
-            position: relative; border-radius: 24px; padding: 28px;
-            background: rgba(8,7,2,0.96);
-            border: 1px solid rgba(255,200,0,0.35);
-            box-shadow: 0 0 50px rgba(255,200,0,0.15), 0 20px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,200,0,0.1);
-            overflow: hidden; animation: fadeInUp 0.6s 0.1s ease both;
-        }
-        .unli-card-gold::before {
-            content: ''; position: absolute; inset: 0;
-            background-image:
-                linear-gradient(rgba(255,200,0,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,200,0,0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
-            animation: circuitMove 4s linear infinite;
-        }
-        .unli-card-gold::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700, #ffec6e, #ffd700);
-            background-size: 300% 100%; animation: goldShimmer 2s linear infinite;
-        }
-
-        .gold-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,140,0,0.1));
-            border: 1px solid rgba(255,200,0,0.4);
-            color: #ffd700; font-size: 11px; font-weight: 900;
-            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
-            letter-spacing: 1px; text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(255,200,0,0.2);
-        }
-
-        .gold-crown-wrap {
-            position: absolute; top: 22px; right: 22px;
-            width: 48px; height: 48px; border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,140,0,0.1));
-            border: 1px solid rgba(255,200,0,0.3);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 0 20px rgba(255,200,0,0.3);
-        }
-
-        .gold-title {
-            font-family: 'Righteous', cursive; font-size: 32px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00, #ffec6e);
-            background-size: 200% 200%;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: goldShimmer 3s ease infinite;
-            margin-bottom: 6px; display: block;
-        }
-        .gold-subtitle { font-size: 12px; color: rgba(255,200,0,0.4); font-weight: 700; margin-bottom: 18px; display: block; }
-
-        .gold-features {
-            display: flex; flex-direction: column; gap: 8px; margin: 16px 0;
-            padding: 14px; background: rgba(255,200,0,0.04); border-radius: 14px;
-            border: 1px solid rgba(255,200,0,0.1);
-        }
-        .gold-feature-item {
-            display: flex; align-items: center; gap: 10px;
-            font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 700;
-        }
-        .gold-feature-item i { color: #ffd700; font-size: 12px; width: 16px; text-align: center; filter: drop-shadow(0 0 4px #ffd700); }
-        .gold-feature-item .feat-val { color: #ffd700; font-weight: 900; margin-left: auto; }
-
-        .gold-price {
-            text-align: center; margin: 16px 0;
-            font-family: 'Righteous', cursive; font-size: 36px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(255,200,0,0.5));
-        }
-        .gold-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
-
-        .btn-gold {
-            width: 100%; padding: 14px;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            border: none; border-radius: 40px; color: #06070f;
-            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
-            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 6px 25px rgba(255,200,0,0.4);
-        }
-        .btn-gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 35px rgba(255,200,0,0.6); }
-
-        /* ===== CARD 3 — NEON ULTRA (30 Hari) ===== */
-        @keyframes rgbBorder { 0%{border-color:rgba(0,255,136,0.6)} 33%{border-color:rgba(0,229,255,0.6)} 66%{border-color:rgba(255,77,228,0.6)} 100%{border-color:rgba(0,255,136,0.6)} }
-        @keyframes neonScan { 0%{top:-100%} 100%{top:200%} }
-        @keyframes ultraGlow { 0%,100%{box-shadow:0 0 50px rgba(0,255,136,0.2),0 20px 50px rgba(0,0,0,0.7)} 33%{box-shadow:0 0 50px rgba(0,229,255,0.2),0 20px 50px rgba(0,0,0,0.7)} 66%{box-shadow:0 0 50px rgba(255,77,228,0.2),0 20px 50px rgba(0,0,0,0.7)} }
-
-        .unli-card-ultra {
-            position: relative; border-radius: 24px; padding: 28px;
-            background: rgba(4,10,8,0.97);
+        /* ——— CARD 3: CYBER MATRIX (30 Hari) ——— */
+        @keyframes matrixRain { 0%{background-position:0 0} 100%{background-position:0 100px} }
+        @keyframes cyberBlink { 0%,90%,100%{opacity:1} 95%{opacity:0.3} }
+        @keyframes borderCyber { 0%,100%{border-color:rgba(0,255,136,0.6)} 50%{border-color:rgba(0,229,255,0.8)} }
+        .unli-cyber {
+            background: rgba(0,8,4,0.98);
             border: 2px solid rgba(0,255,136,0.6);
-            box-shadow: 0 0 50px rgba(0,255,136,0.2), 0 20px 50px rgba(0,0,0,0.7);
-            overflow: hidden; animation: fadeInUp 0.6s 0.2s ease both, rgbBorder 3s linear infinite, ultraGlow 3s linear infinite;
+            animation: fadeInUp 0.6s 0.2s ease both, borderCyber 2s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(0,255,136,0.2), inset 0 0 60px rgba(0,255,136,0.03), 0 25px 60px rgba(0,0,0,0.9);
         }
-        /* Scan line effect */
-        .unli-card-ultra .scan-line {
-            position: absolute; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.4), transparent);
-            animation: neonScan 3s linear infinite;
-            pointer-events: none; z-index: 1;
-        }
-        .unli-card-ultra::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-            background: linear-gradient(90deg, #00ff88, #00e5ff, #ff4de4, #ffe000, #00ff88);
-            background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
-        }
-
-        .ultra-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,229,255,0.08));
-            border: 1px solid rgba(0,255,136,0.4);
-            color: #00ff88; font-size: 11px; font-weight: 900;
-            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
-            letter-spacing: 1px; text-transform: uppercase;
-            box-shadow: 0 0 15px rgba(0,255,136,0.2);
-        }
-
-        .ultra-title {
-            font-family: 'Righteous', cursive; font-size: 32px;
-            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
-            background-size: 200% 200%;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: goldShimmer 2s ease infinite;
-            margin-bottom: 6px; display: block;
-        }
-        .ultra-subtitle { font-size: 12px; color: rgba(0,255,136,0.4); font-weight: 700; margin-bottom: 18px; display: block; }
-
-        .ultra-spec-list {
-            margin: 16px 0; padding: 14px;
-            background: rgba(0,255,136,0.03); border-radius: 14px;
-            border: 1px solid rgba(0,255,136,0.08);
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .ultra-spec-row {
-            display: flex; justify-content: space-between; align-items: center;
-            font-size: 13px;
-        }
-        .ultra-spec-row .u-label { color: rgba(255,255,255,0.4); font-weight: 700; display: flex; align-items: center; gap: 7px; }
-        .ultra-spec-row .u-label i { color: #00ff88; font-size: 10px; }
-        .ultra-spec-row .u-val   { color: #fff; font-weight: 900; }
-        .ultra-spec-row .u-val.unli { color: #00ff88; font-size: 15px; filter: drop-shadow(0 0 6px #00ff88); }
-
-        .ultra-price {
-            text-align: center; margin: 16px 0;
-            font-family: 'Righteous', cursive; font-size: 40px;
-            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
-            background-size: 200% 200%;
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: goldShimmer 2s ease infinite;
-            filter: drop-shadow(0 0 20px rgba(0,255,136,0.4));
-        }
-        .ultra-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
-
-        .btn-ultra {
-            width: 100%; padding: 15px;
-            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
-            background-size: 200% 200%; animation: goldShimmer 2s ease infinite;
-            border: none; border-radius: 40px; color: #06070f;
-            font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900;
-            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 6px 30px rgba(0,255,136,0.4);
-            position: relative; z-index: 2;
-        }
-        .btn-ultra:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 40px rgba(0,229,255,0.5); }
-
-        /* Best value badge untuk card ultra */
-        .ultra-best-value {
-            position: absolute; top: 18px; right: -8px;
-            background: linear-gradient(135deg, #00ff88, #00e5ff);
-            color: #06070f; font-size: 9px; font-weight: 900;
-            padding: 4px 20px 4px 12px; letter-spacing: 1px;
-            clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
-            text-transform: uppercase; z-index: 2;
-            box-shadow: -3px 0 10px rgba(0,255,136,0.3);
-        }
+        .cyber-matrix-bg { position:absolute; inset:0; opacity:0.04; background-image:repeating-linear-gradient(0deg,rgba(0,255,136,0.8) 0px,rgba(0,255,136,0.8) 1px,transparent 1px,transparent 12px); animation:matrixRain 1s linear infinite; pointer-events:none; }
+        .cyber-top { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#00ff88,#00e5ff,#00ff88); background-size:200% 100%; animation:shineBar 1s linear infinite; border-radius:26px 26px 0 0; }
+        .cyber-corner { position:absolute; width:20px; height:20px; border-color:rgba(0,255,136,0.6); border-style:solid; }
+        .cyber-corner.tl { top:12px; left:12px; border-width:2px 0 0 2px; }
+        .cyber-corner.tr { top:12px; right:12px; border-width:2px 2px 0 0; }
+        .cyber-corner.bl { bottom:12px; left:12px; border-width:0 0 2px 2px; }
+        .cyber-corner.br { bottom:12px; right:12px; border-width:0 2px 2px 0; }
+        .cyber-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); color:#00ff88; font-size:11px; font-weight:900; padding:5px 16px; border-radius:4px; margin-bottom:16px; letter-spacing:2px; text-transform:uppercase; font-family:'Nunito',sans-serif; animation:cyberBlink 3s ease-in-out infinite; }
+        .cyber-title { font-family:'Righteous',cursive; font-size:30px; display:block; margin-bottom:4px; color:#00ff88; text-shadow:0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.5); animation:cyberBlink 4s ease-in-out infinite; }
+        .cyber-sub { font-size:12px; color:rgba(0,255,136,0.4); font-weight:700; display:block; margin-bottom:18px; letter-spacing:1px; }
+        .cyber-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:18px; }
+        .cyber-grid-item { background:rgba(0,255,136,0.04); border:1px solid rgba(0,255,136,0.15); border-radius:8px; padding:12px 8px; text-align:center; transition:0.2s; }
+        .cyber-grid-item:hover { background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.4); box-shadow:0 0 12px rgba(0,255,136,0.15); }
+        .cyber-grid-item.wide { grid-column:span 2; }
+        .cyber-grid-label { font-size:9px; color:rgba(0,255,136,0.5); font-weight:800; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px; }
+        .cyber-grid-val { font-family:'Righteous',cursive; font-size:16px; color:#00ff88; }
+        .cyber-grid-val.big-inf { font-size:24px; text-shadow:0 0 15px #00ff88; }
+        .cyber-price { text-align:center; font-family:'Righteous',cursive; font-size:42px; display:block; margin:14px 0; color:#00ff88; text-shadow:0 0 20px #00ff88, 0 0 50px rgba(0,255,136,0.4); animation:priceGlow 2s ease-in-out infinite; }
+        .cyber-price span { font-size:12px; color:rgba(0,255,136,0.4); font-family:'Nunito',sans-serif; letter-spacing:1px; }
+        .btn-cyber { width:100%; padding:15px; border:2px solid #00ff88; border-radius:6px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(0,255,136,0.1); color:#00ff88; box-shadow:0 0 25px rgba(0,255,136,0.3), inset 0 0 25px rgba(0,255,136,0.05); letter-spacing:1.5px; text-transform:uppercase; }
+        .btn-cyber:hover { background:rgba(0,255,136,0.2); box-shadow:0 0 40px rgba(0,255,136,0.5), inset 0 0 40px rgba(0,255,136,0.1); transform:translateY(-3px); color:#fff; }
         @media (max-width: 500px) {
             .rainbow-text { font-size: 30px; }
             .cards-container { grid-template-columns: 1fr; }
@@ -696,8 +565,10 @@
             <div class="duration-group">
                 <button class="duration-btn" data-durasi="10">10 Hari</button>
                 <button class="duration-btn active" data-durasi="20">20 Hari</button>
-                <button class="duration-btn" data-durasi="30">30 Hari VIP</button>
-                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾ UNLIMITED</button>
+                <button class="duration-btn" data-durasi="30">30 Hari</button>
+            </div>
+            <div class="unlimited-tab-wrap">
+                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾&nbsp;&nbsp;UNLIMITED&nbsp;&nbsp;♾</button>
             </div>
         </div>
 
@@ -848,7 +719,871 @@
             </div>
         </div>
 
-        <!-- 30 Hari VIP -->
+        <!-- 30 Hari -->
+        <div id="cards30" class="cards-container vip-container">
+            <div class="vip-card" data-panel="3">
+                <div class="badge-vip"><i class="fas fa-crown"></i> VIP EXCLUSIVE</div>
+                <div class="card-header">
+                    <h2 class="card-title">Private 3GB</h2>
+                    <span class="dedicated-badge"><i class="fas fa-check-circle"></i> DEDICATED</span>
+                </div>
+                <div class="spec-grid">
+                    <div class="grid-item"><span class="grid-label">CPU</span><span class="grid-value">110%</span></div>
+                    <div class="grid-item"><span class="grid-label">RAM</span><span class="grid-value">3.127 MB</span></div>
+                    <div class="grid-item disk-full"><span class="grid-label">DISK</span><span class="grid-value">3.127 MB</span></div>
+                </div>
+                <div class="price-section">
+                    <span class="price-label">Harga Spesial</span>
+                    <div class="price-vip"><span class="currency">Rp</span><span class="amount">5.000</span></div>
+                </div>
+                <button class="btn-order"><i class="fas fa-crown"></i> Order Premium</button>
+            </div>
+            <div class="vip-card" data-panel="5">
+                <div class="badge-vip"><i class="fas fa-crown"></i> VIP EXCLUSIVE</div>
+                <div class="card-header">
+                    <h2 class="card-title">Private 5GB</h2>
+                    <span class="dedicated-badge"><i class="fas fa-check-circle"></i> DEDICATED</span>
+                </div>
+                <div class="spec-grid">
+                    <div class="grid-item"><span class="grid-label">CPU</span><span class="grid-value">260%</span></div>
+                    <div class="grid-item"><span class="grid-label">RAM</span><span class="grid-value">5.121 MB</span></div>
+                    <div class="grid-item disk-full"><span class="grid-label">DISK</span><span class="grid-value">5.121 MB</span></div>
+                </div>
+                <div class="price-section">
+                    <span class="price-label">Harga Spesial</span>
+                    <div class="price-vip"><span class="currency">Rp</span><span class="amount">7.000</span></div>
+                </div>
+                <button class="btn-order"><i class="fas fa-crown"></i> Order Premium</button>
+            </div>
+            <div class="vip-card" data-panel="6">
+                <div class="badge-vip"><i class="fas fa-crown"></i> VIP EXCLUSIVE</div>
+                <div class="card-header">
+                    <h2 class="card-title">Private 6GB</h2>
+                    <span class="dedicated-badge"><i class="fas fa-check-circle"></i> DEDICATED</span>
+                </div>
+                <div class="spec-grid">
+                    <div class="grid-item"><span class="grid-label">CPU</span><span class="grid-value">310%</span></div>
+                    <div class="grid-item"><span class="grid-label">RAM</span><span class="grid-value">6.165 MB</span></div>
+                    <div class="grid-item disk-full"><span class="grid-label">DISK</span><span class="grid-value">6.165 MB</span></div>
+                </div>
+                <div class="price-section">
+                    <span class="price-label">Harga Spesial</span>
+                    <div class="price-vip"><span class="currency">Rp</span><span class="amount">9.000</span></div>
+                </div>
+                <button class="btn-order"><i class="fas fa-crown"></i> Order Premium</button>
+            </div>
+            <div class="vip-card" data-panel="7">
+                <div class="badge-vip"><i class="fas fa-crown"></i> VIP EXCLUSIVE</div>
+                <div class="card-header">
+                    <h2 class="card-title">Private 7GB</h2>
+                    <span class="dedicated-badge"><i class="fas fa-check-circle"></i> DEDICATED</span>
+                </div>
+                <div class="spec-grid">
+                    <div class="grid-item"><span class="grid-label">CPU</span><span class="grid-value">360%</span></div>
+                    <div class="grid-item"><span class="grid-label">RAM</span><span class="grid-value">7.165 MB</span></div>
+                    <div class="grid-item disk-full"><span class="grid-label">DISK</span><span class="grid-value">7.165 MB</span></div>
+                </div>
+                <div class="price-section">
+                    <span class="price-label">Harga Spesial</span>
+                    <div class="price-vip"><span class="currency">Rp</span><span class="amount">12.000</span></div>
+                </div>
+                <button class="btn-order"><i class="fas fa-crown"></i> Order Premium</button>
+            </div>
+        </div>
+        <!-- UNLIMITED -->
+        <div id="cardsUnlimited" class="cards-container unlimited-container">
+
+            <!-- CARD 1: HOLOGRAPHIC — 10 Hari -->
+            <div class="unli-card unli-holo" data-durasi="10">
+                <div class="holo-top-bar"></div>
+                <div class="scan"></div>
+                <div class="unli-card-inner">
+                    <div class="holo-icon-wrap"><div class="holo-icon-inner">♾</div></div>
+                    <span class="holo-title">UNLIMITED</span>
+                    <span class="holo-sub">10 Hari · Semua resource tanpa batas</span>
+                    <div class="holo-specs">
+                        <div class="holo-spec"><span class="holo-spec-label">CPU</span><span class="holo-spec-val inf">∞</span></div>
+                        <div class="holo-spec"><span class="holo-spec-label">RAM</span><span class="holo-spec-val inf">∞</span></div>
+                        <div class="holo-spec"><span class="holo-spec-label">DISK</span><span class="holo-spec-val inf">∞</span></div>
+                        <div class="holo-spec" style="grid-column:span 3"><span class="holo-spec-label">SPEK VPS</span><span class="holo-spec-val">R18C6</span></div>
+                    </div>
+                    <span class="holo-price">Rp 15.000 <span>/10 hari</span></span>
+                    <button class="btn-holo" data-harga="15000"><i class="fas fa-infinity"></i> Ambil Sekarang</button>
+                </div>
+            </div>
+
+            <!-- CARD 2: FIRE STORM — 20 Hari -->
+            <div class="unli-card unli-fire" data-durasi="20">
+                <div class="fire-top"></div>
+                <div class="fire-embers">
+                    <div class="ember"></div><div class="ember"></div><div class="ember"></div>
+                    <div class="ember"></div><div class="ember"></div>
+                </div>
+                <div class="scan"></div>
+                <div class="unli-card-inner">
+                    <div class="fire-badge"><i class="fas fa-fire"></i> FIRE UNLIMITED</div>
+                    <span class="fire-title">UNLIMITED 🔥</span>
+                    <span class="fire-sub">20 Hari · Kekuatan penuh tanpa batas</span>
+                    <div class="fire-rows">
+                        <div class="fire-row"><span class="fire-row-label"><i class="fas fa-microchip"></i> CPU</span><span class="fire-row-val fire-inf">∞ UNLIMITED</span></div>
+                        <div class="fire-row"><span class="fire-row-label"><i class="fas fa-memory"></i> RAM</span><span class="fire-row-val fire-inf">∞ UNLIMITED</span></div>
+                        <div class="fire-row"><span class="fire-row-label"><i class="fas fa-hdd"></i> DISK</span><span class="fire-row-val fire-inf">∞ UNLIMITED</span></div>
+                        <div class="fire-row"><span class="fire-row-label"><i class="fas fa-server"></i> VPS</span><span class="fire-row-val">R18C6</span></div>
+                        <div class="fire-row"><span class="fire-row-label"><i class="fas fa-calendar"></i> DURASI</span><span class="fire-row-val">20 Hari Penuh</span></div>
+                    </div>
+                    <span class="fire-price">Rp 20.000 <span>/20 hari</span></span>
+                    <button class="btn-fire" data-harga="20000"><i class="fas fa-fire"></i> Bakar Ordernya!</button>
+                </div>
+            </div>
+
+            <!-- CARD 3: CYBER MATRIX — 30 Hari -->
+            <div class="unli-card unli-cyber" data-durasi="30">
+                <div class="cyber-matrix-bg"></div>
+                <div class="cyber-top"></div>
+                <div class="cyber-corner tl"></div>
+                <div class="cyber-corner tr"></div>
+                <div class="cyber-corner bl"></div>
+                <div class="cyber-corner br"></div>
+                <div class="scan"></div>
+                <div class="unli-card-inner">
+                    <div class="cyber-badge"><i class="fas fa-terminal"></i> SYS::UNLIMITED_ACCESS</div>
+                    <span class="cyber-title">UNLIMITED</span>
+                    <span class="cyber-sub">&gt;_ 30 HARI · FULL ACCESS · NO LIMIT</span>
+                    <div class="cyber-grid">
+                        <div class="cyber-grid-item"><span class="cyber-grid-label">CPU_CORE</span><span class="cyber-grid-val big-inf">∞</span></div>
+                        <div class="cyber-grid-item"><span class="cyber-grid-label">RAM_MEM</span><span class="cyber-grid-val big-inf">∞</span></div>
+                        <div class="cyber-grid-item"><span class="cyber-grid-label">DISK_STO</span><span class="cyber-grid-val big-inf">∞</span></div>
+                        <div class="cyber-grid-item"><span class="cyber-grid-label">VPS_SPEC</span><span class="cyber-grid-val">R18C6</span></div>
+                        <div class="cyber-grid-item wide"><span class="cyber-grid-label">DURATION</span><span class="cyber-grid-val">30 DAYS FULL</span></div>
+                    </div>
+                    <span class="cyber-price">Rp 30.000 <span>/30 hari</span></span>
+                    <button class="btn-cyber" data-harga="30000"><i class="fas fa-terminal"></i> EXECUTE ORDER</button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Panel Pterodactyl - DzzXNzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shineBar { 0%{background-position:0%} 100%{background-position:200%} }
+        @keyframes topRainbow { 0%{background-position:0% 0%} 100%{background-position:100% 0%} }
+        @keyframes sideRainbow { 0%{background-position:0% 0%} 100%{background-position:0% 100%} }
+
+        .main-content { padding: 100px 20px 50px; max-width: 960px; margin: 0 auto; }
+
+        .page-header { text-align: center; margin-bottom: 36px; animation: fadeInUp 0.6s ease; }
+        .rainbow-text {
+            font-family: 'Righteous', cursive; font-size: 44px;
+            background: linear-gradient(135deg, #00e5ff, #00ff88, #ff4de4, #ffe000);
+            background-size: 300% 300%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(0,229,255,0.5));
+            margin-bottom: 8px; animation: rainbowShift 5s ease infinite;
+        }
+        @keyframes rainbowShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+        .header-subtitle { font-size: 15px; color: rgba(255,255,255,0.5); font-weight: 600; }
+
+        /* Duration toggle */
+        .duration-wrapper {
+            display: flex; flex-direction: column;
+            align-items: center; gap: 10px;
+            margin-bottom: 28px; animation: fadeInUp 0.6s 0.1s ease both;
+        }
+        .duration-group {
+            display: flex; gap: 0; background: rgba(13,15,25,0.8);
+            border: 1px solid rgba(0,229,255,0.2); border-radius: 14px; overflow: hidden;
+            padding: 4px;
+        }
+        .duration-btn {
+            background: transparent; border: none; color: rgba(255,255,255,0.5);
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+            padding: 10px 24px; border-radius: 10px; cursor: pointer;
+            transition: 0.25s; letter-spacing: 0.5px;
+        }
+        .duration-btn:hover { color: #00e5ff; background: rgba(0,229,255,0.08); }
+        .duration-btn.active {
+            background: linear-gradient(135deg, #00e5ff, #00ff88);
+            color: #06070f; font-weight: 900;
+            box-shadow: 0 4px 18px rgba(0,229,255,0.35);
+        }
+        /* Unlimited tab sendiri di bawah */
+        .unlimited-tab-wrap {
+            width: 100%; display: flex; justify-content: center;
+        }
+        .unlimited-tab {
+            position: relative; overflow: hidden;
+            background: linear-gradient(135deg, #0a0015, #15002a) !important;
+            border: 1.5px solid rgba(180,0,255,0.5) !important;
+            color: #fff !important; font-weight: 900 !important;
+            font-size: 14px !important;
+            padding: 12px 40px !important; border-radius: 14px !important;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1) !important;
+            animation: unlimitedPulse 2s ease-in-out infinite !important;
+        }
+        .unlimited-tab::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, #7b00ff, #ff00cc, #00e5ff, #ff00cc, #7b00ff);
+            background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
+        }
+        .unlimited-tab.active {
+            background: linear-gradient(135deg, #7b00ff, #cc00ff, #ff00aa) !important;
+            border-color: #ff00cc !important;
+            box-shadow: 0 0 40px rgba(180,0,255,0.6), 0 8px 30px rgba(255,0,170,0.3) !important;
+            animation: none !important;
+        }
+        @keyframes unlimitedPulse {
+            0%,100% { box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1); }
+            50%      { box-shadow: 0 0 40px rgba(255,0,170,0.5), 0 0 70px rgba(180,0,255,0.2); }
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,229,255,0.4), transparent);
+            margin: 0 0 28px;
+        }
+
+        /* Cards grid */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+        .cards-container.vip-container { display: none; }
+
+        /* Standard panel card */
+        @keyframes cardGlow { 0%,100%{box-shadow:0 8px 30px rgba(0,0,0,0.5),0 0 20px rgba(0,229,255,0.08)} 50%{box-shadow:0 8px 30px rgba(0,0,0,0.5),0 0 35px rgba(0,229,255,0.18)} }
+        @keyframes floatBadge { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
+        .panel-card {
+            position: relative; background: rgba(10,12,22,0.92);
+            backdrop-filter: blur(16px); border-radius: 22px; padding: 24px;
+            border: 1px solid rgba(0,229,255,0.15);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0,229,255,0.08);
+            overflow: hidden; transition: 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            animation: fadeInUp 0.6s ease both, cardGlow 3s ease-in-out infinite;
+        }
+        .panel-card:nth-child(2){animation-delay:.08s}
+        .panel-card:nth-child(3){animation-delay:.16s}
+        .panel-card:nth-child(4){animation-delay:.24s}
+        /* Rainbow bar atas lebih tebal */
+        .panel-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #f368e0, #ff6b6b);
+            background-size: 200% 100%; animation: topRainbow 3s linear infinite;
+            border-radius: 22px 22px 0 0;
+        }
+        /* Efek cahaya pojok kiri bawah */
+        .panel-card::after {
+            content: ''; position: absolute; bottom: -40px; left: -40px;
+            width: 120px; height: 120px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .panel-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(0,229,255,0.4);
+            box-shadow: 0 20px 50px rgba(0,229,255,0.2), 0 0 40px rgba(0,229,255,0.1);
+        }
+
+        /* Badge populer / best seller */
+        .card-popular-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,255,136,0.1));
+            border: 1px solid rgba(0,229,255,0.3);
+            color: #00e5ff; font-size: 10px; font-weight: 900;
+            padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+            letter-spacing: 0.8px; text-transform: uppercase;
+            animation: floatBadge 2.5s ease-in-out infinite;
+        }
+        .card-popular-badge.best { background: linear-gradient(135deg,rgba(255,77,228,0.15),rgba(191,0,255,0.1)); border-color: rgba(255,77,228,0.3); color: #ff4de4; }
+        .card-popular-badge.hot  { background: linear-gradient(135deg,rgba(255,224,0,0.15),rgba(255,170,0,0.1)); border-color: rgba(255,224,0,0.3); color: #ffe000; }
+
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .card-badge {
+            font-family: 'Righteous', cursive; font-size: 30px; color: #fff;
+            filter: drop-shadow(0 0 12px rgba(0,229,255,0.6));
+        }
+        .card-tier {
+            font-size: 11px; color: #00e5ff; background: rgba(0,229,255,0.08);
+            padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(0,229,255,0.25);
+            font-weight: 800; letter-spacing: 0.5px;
+        }
+        .card-tier.tier-high { color: #ff4de4; border-color: rgba(255,77,228,0.3); background: rgba(255,77,228,0.08); }
+        .card-tier.tier-mid  { color: #ffe000; border-color: rgba(255,224,0,0.3); background: rgba(255,224,0,0.08); }
+
+        .spec-list {
+            margin: 12px 0; padding: 10px 0;
+            border-top: 1px solid rgba(0,229,255,0.08);
+            border-bottom: 1px solid rgba(0,229,255,0.08);
+        }
+        .spec-item {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 14px; padding: 7px 0;
+        }
+        .spec-label { color: rgba(255,255,255,0.4); font-weight: 700; display: flex; align-items: center; gap: 7px; }
+        .spec-label::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #00e5ff; display: inline-block; opacity: 0.5; }
+        .spec-value { color: #fff; font-weight: 900; }
+
+        /* Highlight RAM value */
+        .spec-item.ram-row .spec-value { color: #00e5ff; filter: drop-shadow(0 0 6px rgba(0,229,255,0.4)); }
+        .spec-item.tier-high .spec-value { color: #ff4de4; }
+        .spec-item.tier-mid  .spec-value { color: #ffe000; }
+
+        .price-wrap { text-align: center; margin: 14px 0 14px; }
+        .price-tag {
+            font-family: 'Righteous', cursive; font-size: 30px;
+            background: linear-gradient(135deg, #00e5ff, #00ff88);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(0,229,255,0.35));
+            display: block;
+        }
+        .price-tag.mid-price {
+            background: linear-gradient(135deg, #ffe000, #ff8800);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(255,224,0,0.35));
+        }
+        .price-tag.high-price {
+            background: linear-gradient(135deg, #ff4de4, #bf00ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 12px rgba(255,77,228,0.35));
+        }
+        .price-sub { font-size: 12px; color: rgba(255,255,255,0.35); font-family: 'Nunito', sans-serif; font-weight: 700; display: block; margin-top: 2px; }
+
+        .btn-pesan {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(0,255,136,0.08));
+            border: 1.5px solid rgba(0,229,255,0.5);
+            border-radius: 40px; color: #00e5ff;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 4px 18px rgba(0,229,255,0.15);
+        }
+        .btn-pesan.btn-mid  { border-color: rgba(255,224,0,0.5); color: #ffe000; background: linear-gradient(135deg,rgba(255,224,0,0.12),rgba(255,136,0,0.08)); box-shadow: 0 4px 18px rgba(255,224,0,0.15); }
+        .btn-pesan.btn-high { border-color: rgba(255,77,228,0.5); color: #ff4de4; background: linear-gradient(135deg,rgba(255,77,228,0.12),rgba(191,0,255,0.08)); box-shadow: 0 4px 18px rgba(255,77,228,0.15); }
+        .btn-pesan:hover { background: linear-gradient(135deg,#00e5ff,#00ff88); color: #06070f; border-color: #00e5ff; box-shadow: 0 6px 28px rgba(0,229,255,0.5); transform: translateY(-2px); }
+        .btn-pesan.btn-mid:hover  { background: linear-gradient(135deg,#ffe000,#ff8800); color: #06070f; border-color: #ffe000; box-shadow: 0 6px 28px rgba(255,224,0,0.5); }
+        .btn-pesan.btn-high:hover { background: linear-gradient(135deg,#ff4de4,#bf00ff); color: #fff; border-color: #ff4de4; box-shadow: 0 6px 28px rgba(255,77,228,0.5); }
+
+        /* ===== VIP CARDS ===== */
+        .vip-card {
+            background: #090b14;
+            border-radius: 20px; padding: 28px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s; animation: fadeInUp 0.6s ease both;
+        }
+        .vip-card:nth-child(2){animation-delay:.08s}
+        .vip-card:nth-child(3){animation-delay:.16s}
+        .vip-card:nth-child(4){animation-delay:.24s}
+        .vip-card::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 6px; height: 100%;
+            background: linear-gradient(180deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #f368e0, #ff6b6b);
+            background-size: 100% 300%; animation: sideRainbow 6s linear infinite;
+            border-radius: 20px 0 0 20px;
+        }
+        .vip-card:hover { transform: translateY(-5px); box-shadow: 0 25px 60px rgba(0,0,0,0.8); }
+
+        .badge-vip {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            color: #000; font-size: 13px; font-weight: 900;
+            padding: 8px 18px; border-radius: 40px; margin-bottom: 18px;
+            text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(255,215,0,0.4);
+            transform: rotate(-0.8deg);
+        }
+        .badge-vip i { color: #000; }
+
+        .vip-card .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+        .vip-card .card-title { font-family: 'Righteous', cursive; font-size: 26px; color: #fff; margin: 0; }
+        .dedicated-badge {
+            font-size: 11px; color: #aaccff;
+            background: rgba(170,204,255,0.08);
+            padding: 5px 12px; border-radius: 30px;
+            border: 1px solid rgba(170,204,255,0.2);
+            display: inline-flex; align-items: center; gap: 5px;
+            font-weight: 800;
+        }
+        .dedicated-badge i { font-size: 11px; color: #aaffaa; }
+
+        .spec-grid {
+            display: grid; grid-template-columns: repeat(2,1fr);
+            gap: 10px; margin: 18px 0; padding: 6px 0;
+        }
+        .grid-item {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(0,229,255,0.25);
+            border-radius: 12px; padding: 14px 8px; text-align: center;
+            transition: 0.2s;
+        }
+        .grid-item:hover { border-color: #00e5ff; box-shadow: 0 0 12px rgba(0,229,255,0.2); }
+        .grid-item.disk-full { grid-column: span 2; }
+        .grid-label { font-size: 10px; color: rgba(255,255,255,0.4); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 800; display: block; }
+        .grid-value { font-family: 'Righteous', cursive; font-size: 18px; color: #fff; }
+
+        .price-section { text-align: center; margin: 16px 0; }
+        .price-label { font-size: 11px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; display: block; font-weight: 800; }
+        .price-vip { font-family: 'Righteous', cursive; font-size: 32px; color: #fff; line-height: 1.2; }
+        .currency { font-size: 16px; color: #999; margin-right: 4px; font-family: 'Nunito', sans-serif; }
+
+        .btn-order {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,170,0,0.1));
+            border: 1.5px solid rgba(255,200,0,0.4);
+            border-radius: 40px; color: #ffd700;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(255,200,0,0.15);
+        }
+        .btn-order:hover {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #06070f; border-color: #ffd700;
+            box-shadow: 0 6px 28px rgba(255,200,0,0.4);
+            transform: translateY(-2px);
+        }
+
+
+        /* ===== 10 HARI LOW QUALITY CARDS ===== */
+        .cards-container.low-container { display: none; }
+
+        @keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        @keyframes stockBlink  { 0%,100%{border-color:rgba(255,85,0,0.5)} 50%{border-color:rgba(255,85,0,0.15)} }
+
+        .low-card {
+            position: relative;
+            background: rgba(10,8,6,0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 18px; padding: 22px;
+            border: 1px solid rgba(255,85,0,0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 15px rgba(255,85,0,0.05);
+            overflow: hidden; transition: 0.3s;
+            animation: fadeInUp 0.6s ease both, stockBlink 2.5s ease-in-out infinite;
+        }
+        .low-card:nth-child(2){animation-delay:.08s}
+        .low-card:nth-child(3){animation-delay:.16s}
+        .low-card:nth-child(4){animation-delay:.24s}
+        .low-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #ff5500, #ffaa00, #ff5500);
+            background-size: 200% 100%; animation: shineBar 2s linear infinite;
+            border-radius: 18px 18px 0 0;
+        }
+        /* Efek diagonal stripe pojok kanan atas */
+        .low-card::after {
+            content: 'TERBATAS'; position: absolute;
+            top: 14px; right: -22px;
+            background: linear-gradient(135deg, #ff5500, #ff8800);
+            color: #fff; font-size: 9px; font-weight: 900;
+            padding: 3px 28px; letter-spacing: 1px;
+            transform: rotate(35deg);
+            box-shadow: 0 2px 8px rgba(255,85,0,0.4);
+        }
+        .low-card:hover { transform: translateY(-4px); border-color: rgba(255,85,0,0.4); box-shadow: 0 10px 30px rgba(255,85,0,0.12); animation: fadeInUp 0s, stockBlink 0s; }
+
+        /* Badge stok */
+        .low-stock-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,85,0,0.1); border: 1px solid rgba(255,85,0,0.3);
+            color: #ff7733; font-size: 10px; font-weight: 900;
+            padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+            letter-spacing: 0.8px; text-transform: uppercase;
+        }
+        .low-stock-badge i { animation: urgentPulse 1s infinite; font-size: 8px; }
+
+        .low-card .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+        .low-card .card-badge { font-family: 'Righteous', cursive; font-size: 28px; color: #fff; }
+        .low-card .card-tier {
+            font-size: 10px; color: #ff7733;
+            background: rgba(255,85,0,0.08);
+            padding: 3px 10px; border-radius: 20px;
+            border: 1px solid rgba(255,85,0,0.25);
+            font-weight: 800; letter-spacing: 0.5px;
+        }
+
+        .low-card .spec-list {
+            margin: 10px 0; padding: 10px 0;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .low-card .spec-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 5px 0; }
+        .low-card .spec-label { color: rgba(255,255,255,0.35); font-weight: 700; }
+        .low-card .spec-value { color: rgba(255,255,255,0.75); font-weight: 900; }
+
+        /* Harga dengan coret harga lama */
+        .low-price-wrap { text-align: center; margin: 14px 0 12px; }
+        .low-price-old {
+            font-size: 13px; color: rgba(255,255,255,0.28);
+            text-decoration: line-through; font-family: 'Nunito', sans-serif;
+            font-weight: 700; display: block; margin-bottom: 2px;
+        }
+        .low-price-new {
+            font-family: 'Righteous', cursive; font-size: 26px;
+            color: #ff8833;
+            filter: drop-shadow(0 0 8px rgba(255,136,0,0.4));
+            display: block;
+        }
+        .low-price-new span { font-size: 12px; color: rgba(255,255,255,0.35); font-family: 'Nunito', sans-serif; font-weight: 700; }
+
+        /* Stock bar */
+        .low-stock-bar { margin: 10px 0; }
+        .low-stock-label { font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.3); display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .low-stock-label span:last-child { color: #ff7733; }
+        .low-stock-track { height: 4px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+        .low-stock-fill  { height: 100%; background: linear-gradient(90deg, #ff5500, #ffaa00); border-radius: 4px; transition: width 1s ease; }
+
+        .btn-pesan-low {
+            width: 100%; padding: 13px;
+            background: linear-gradient(135deg, rgba(255,85,0,0.15), rgba(255,136,0,0.1));
+            border: 1.5px solid rgba(255,85,0,0.35);
+            border-radius: 40px; color: #ff8833;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.3px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-pesan-low:hover {
+            background: linear-gradient(135deg, #ff5500, #ff8800);
+            color: #fff; border-color: #ff5500;
+            box-shadow: 0 0 25px rgba(255,85,0,0.4);
+            transform: translateY(-2px);
+        }
+
+
+        /* ===== UNLIMITED TAB STYLE ===== */
+        .unlimited-tab {
+            background: linear-gradient(135deg, #7b00ff, #ff00aa) !important;
+            color: #fff !important; font-weight: 900 !important;
+            box-shadow: 0 0 20px rgba(123,0,255,0.5) !important;
+            animation: unlimitedTabPulse 2s ease-in-out infinite !important;
+            border-radius: 10px !important;
+        }
+        @keyframes unlimitedTabPulse {
+            0%,100% { box-shadow: 0 0 20px rgba(123,0,255,0.5); }
+            50%      { box-shadow: 0 0 35px rgba(255,0,170,0.7); }
+        }
+
+        .cards-container.unlimited-container { display: none; flex-direction: column; gap: 24px; }
+
+        /* ===== UNLIMITED CARDS ===== */
+        @keyframes holoBg    { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        @keyframes borderRGB { 0%{border-color:rgba(255,0,128,0.7)} 25%{border-color:rgba(123,0,255,0.7)} 50%{border-color:rgba(0,229,255,0.7)} 75%{border-color:rgba(0,255,136,0.7)} 100%{border-color:rgba(255,0,128,0.7)} }
+        @keyframes scanDown  { 0%{top:-10%} 100%{top:110%} }
+        @keyframes iconSpin  { 0%{transform:rotate(0deg) scale(1)} 50%{transform:rotate(180deg) scale(1.2)} 100%{transform:rotate(360deg) scale(1)} }
+        @keyframes priceGlow { 0%,100%{filter:drop-shadow(0 0 10px currentColor)} 50%{filter:drop-shadow(0 0 30px currentColor) drop-shadow(0 0 60px currentColor)} }
+        @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+        /* Shared unlimited card base */
+        .unli-card {
+            position: relative; border-radius: 26px; padding: 30px 26px;
+            overflow: hidden; animation: fadeInUp 0.6s ease both;
+        }
+        .unli-card .scan { position:absolute; left:0; right:0; height:60px; pointer-events:none; z-index:1; background: linear-gradient(transparent, rgba(255,255,255,0.03), transparent); animation: scanDown 3s linear infinite; }
+        .unli-card-inner { position: relative; z-index: 2; }
+
+        /* ——— CARD 1: HOLOGRAPHIC (10 Hari) ——— */
+        .unli-holo {
+            background: linear-gradient(135deg, #0d001a, #001a0d, #00001a, #1a0010);
+            background-size: 400% 400%; animation: fadeInUp 0.6s ease both, holoBg 6s ease infinite, floatCard 4s ease-in-out infinite;
+            border: 2px solid rgba(255,0,128,0.6);
+            box-shadow: 0 0 60px rgba(255,0,128,0.25), 0 0 120px rgba(123,0,255,0.1), 0 25px 60px rgba(0,0,0,0.8);
+            animation: fadeInUp 0.6s ease both, borderRGB 4s linear infinite, floatCard 5s ease-in-out infinite;
+        }
+        .holo-top-bar { position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(90deg,#ff0080,#7b00ff,#00e5ff,#00ff88,#ffe000,#ff0080); background-size:200% 100%; animation:shineBar 1s linear infinite; border-radius:26px 26px 0 0; }
+        .holo-icon-wrap { width:72px; height:72px; border-radius:50%; margin:0 auto 16px; display:flex; align-items:center; justify-content:center; font-size:30px; background: conic-gradient(#ff0080,#7b00ff,#00e5ff,#00ff88,#ffe000,#ff0080); padding:2px; }
+        .holo-icon-inner { width:100%; height:100%; border-radius:50%; background:#0d001a; display:flex; align-items:center; justify-content:center; animation: iconSpin 4s linear infinite; }
+        .holo-title { font-family:'Righteous',cursive; font-size:28px; text-align:center; display:block; margin-bottom:4px; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff,#00ff88); background-size:300% 300%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:holoBg 3s ease infinite; }
+        .holo-sub { text-align:center; font-size:12px; color:rgba(255,255,255,0.4); font-weight:700; display:block; margin-bottom:20px; }
+        .holo-specs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:18px; }
+        .holo-spec { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:10px 6px; text-align:center; transition:0.2s; }
+        .holo-spec:hover { background:rgba(255,0,128,0.08); border-color:rgba(255,0,128,0.3); }
+        .holo-spec-label { font-size:9px; color:rgba(255,255,255,0.35); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; display:block; }
+        .holo-spec-val   { font-size:16px; font-family:'Righteous',cursive; color:#fff; }
+        .holo-spec-val.inf { background:linear-gradient(135deg,#ff0080,#7b00ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:20px; }
+        .holo-price { text-align:center; font-family:'Righteous',cursive; font-size:38px; margin:14px 0; display:block; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; animation:holoBg 3s ease infinite; }
+        .holo-price span { font-size:12px; color:rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; }
+        .btn-holo { width:100%; padding:15px; border:none; border-radius:40px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg,#ff0080,#7b00ff,#00e5ff,#00ff88); background-size:300% 300%; animation:holoBg 3s ease infinite; color:#fff; box-shadow:0 6px 30px rgba(255,0,128,0.5); letter-spacing:0.5px; }
+        .btn-holo:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 45px rgba(123,0,255,0.6); }
+
+        /* ——— CARD 2: FIRE STORM (20 Hari) ——— */
+        @keyframes firePulse { 0%,100%{box-shadow:0 0 40px rgba(255,80,0,0.3),0 0 80px rgba(255,150,0,0.1),0 25px 60px rgba(0,0,0,0.8)} 50%{box-shadow:0 0 70px rgba(255,80,0,0.5),0 0 120px rgba(255,150,0,0.2),0 25px 60px rgba(0,0,0,0.8)} }
+        @keyframes ember { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-60px) scale(0);opacity:0} }
+        .unli-fire {
+            background: radial-gradient(ellipse at 50% 100%, rgba(255,80,0,0.2) 0%, rgba(20,5,0,0.98) 60%);
+            border: 2px solid rgba(255,100,0,0.5);
+            animation: fadeInUp 0.6s 0.1s ease both, firePulse 2s ease-in-out infinite;
+        }
+        .fire-embers { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+        .ember { position:absolute; bottom:0; width:4px; height:4px; border-radius:50%; background:#ff6600; animation:ember 2s ease-out infinite; }
+        .ember:nth-child(1){left:15%;animation-delay:0s;background:#ff4400}
+        .ember:nth-child(2){left:30%;animation-delay:0.4s;background:#ff8800}
+        .ember:nth-child(3){left:50%;animation-delay:0.8s;background:#ffaa00}
+        .ember:nth-child(4){left:70%;animation-delay:1.2s;background:#ff6600}
+        .ember:nth-child(5){left:85%;animation-delay:1.6s;background:#ff4400}
+        .fire-top { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#ff4400,#ff8800,#ffcc00,#ff8800,#ff4400); background-size:200% 100%; animation:shineBar 1.5s linear infinite; border-radius:26px 26px 0 0; }
+        .fire-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(255,80,0,0.12); border:1px solid rgba(255,80,0,0.4); color:#ff8833; font-size:11px; font-weight:900; padding:5px 16px; border-radius:20px; margin-bottom:16px; letter-spacing:1px; text-transform:uppercase; }
+        .fire-title { font-family:'Righteous',cursive; font-size:30px; display:block; margin-bottom:4px; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 10px rgba(255,100,0,0.5)); }
+        .fire-sub { font-size:12px; color:rgba(255,150,0,0.5); font-weight:700; display:block; margin-bottom:18px; }
+        .fire-rows { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; padding:14px; background:rgba(255,80,0,0.05); border-radius:16px; border:1px solid rgba(255,80,0,0.12); }
+        .fire-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; }
+        .fire-row-label { color:rgba(255,255,255,0.4); font-weight:700; display:flex; align-items:center; gap:8px; }
+        .fire-row-label i { color:#ff8833; font-size:11px; }
+        .fire-row-val { font-weight:900; color:#ffaa55; }
+        .fire-row-val.fire-inf { color:#ff6600; font-size:15px; filter:drop-shadow(0 0 8px #ff6600); }
+        .fire-price { text-align:center; font-family:'Righteous',cursive; font-size:40px; display:block; margin:14px 0; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 0 20px rgba(255,100,0,0.5)); }
+        .fire-price span { font-size:12px; color:rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; }
+        .btn-fire { width:100%; padding:15px; border:none; border-radius:40px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:linear-gradient(135deg,#ff4400,#ff8800,#ffcc00); color:#06070f; box-shadow:0 6px 30px rgba(255,80,0,0.5); letter-spacing:0.5px; }
+        .btn-fire:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 45px rgba(255,100,0,0.7); }
+
+        /* ——— CARD 3: CYBER MATRIX (30 Hari) ——— */
+        @keyframes matrixRain { 0%{background-position:0 0} 100%{background-position:0 100px} }
+        @keyframes cyberBlink { 0%,90%,100%{opacity:1} 95%{opacity:0.3} }
+        @keyframes borderCyber { 0%,100%{border-color:rgba(0,255,136,0.6)} 50%{border-color:rgba(0,229,255,0.8)} }
+        .unli-cyber {
+            background: rgba(0,8,4,0.98);
+            border: 2px solid rgba(0,255,136,0.6);
+            animation: fadeInUp 0.6s 0.2s ease both, borderCyber 2s ease-in-out infinite;
+            box-shadow: 0 0 60px rgba(0,255,136,0.2), inset 0 0 60px rgba(0,255,136,0.03), 0 25px 60px rgba(0,0,0,0.9);
+        }
+        .cyber-matrix-bg { position:absolute; inset:0; opacity:0.04; background-image:repeating-linear-gradient(0deg,rgba(0,255,136,0.8) 0px,rgba(0,255,136,0.8) 1px,transparent 1px,transparent 12px); animation:matrixRain 1s linear infinite; pointer-events:none; }
+        .cyber-top { position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,#00ff88,#00e5ff,#00ff88); background-size:200% 100%; animation:shineBar 1s linear infinite; border-radius:26px 26px 0 0; }
+        .cyber-corner { position:absolute; width:20px; height:20px; border-color:rgba(0,255,136,0.6); border-style:solid; }
+        .cyber-corner.tl { top:12px; left:12px; border-width:2px 0 0 2px; }
+        .cyber-corner.tr { top:12px; right:12px; border-width:2px 2px 0 0; }
+        .cyber-corner.bl { bottom:12px; left:12px; border-width:0 0 2px 2px; }
+        .cyber-corner.br { bottom:12px; right:12px; border-width:0 2px 2px 0; }
+        .cyber-badge { display:inline-flex; align-items:center; gap:8px; background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.35); color:#00ff88; font-size:11px; font-weight:900; padding:5px 16px; border-radius:4px; margin-bottom:16px; letter-spacing:2px; text-transform:uppercase; font-family:'Nunito',sans-serif; animation:cyberBlink 3s ease-in-out infinite; }
+        .cyber-title { font-family:'Righteous',cursive; font-size:30px; display:block; margin-bottom:4px; color:#00ff88; text-shadow:0 0 20px #00ff88, 0 0 40px rgba(0,255,136,0.5); animation:cyberBlink 4s ease-in-out infinite; }
+        .cyber-sub { font-size:12px; color:rgba(0,255,136,0.4); font-weight:700; display:block; margin-bottom:18px; letter-spacing:1px; }
+        .cyber-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:18px; }
+        .cyber-grid-item { background:rgba(0,255,136,0.04); border:1px solid rgba(0,255,136,0.15); border-radius:8px; padding:12px 8px; text-align:center; transition:0.2s; }
+        .cyber-grid-item:hover { background:rgba(0,255,136,0.08); border-color:rgba(0,255,136,0.4); box-shadow:0 0 12px rgba(0,255,136,0.15); }
+        .cyber-grid-item.wide { grid-column:span 2; }
+        .cyber-grid-label { font-size:9px; color:rgba(0,255,136,0.5); font-weight:800; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:4px; }
+        .cyber-grid-val { font-family:'Righteous',cursive; font-size:16px; color:#00ff88; }
+        .cyber-grid-val.big-inf { font-size:24px; text-shadow:0 0 15px #00ff88; }
+        .cyber-price { text-align:center; font-family:'Righteous',cursive; font-size:42px; display:block; margin:14px 0; color:#00ff88; text-shadow:0 0 20px #00ff88, 0 0 50px rgba(0,255,136,0.4); animation:priceGlow 2s ease-in-out infinite; }
+        .cyber-price span { font-size:12px; color:rgba(0,255,136,0.4); font-family:'Nunito',sans-serif; letter-spacing:1px; }
+        .btn-cyber { width:100%; padding:15px; border:2px solid #00ff88; border-radius:6px; font-family:'Nunito',sans-serif; font-weight:900; font-size:15px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; background:rgba(0,255,136,0.1); color:#00ff88; box-shadow:0 0 25px rgba(0,255,136,0.3), inset 0 0 25px rgba(0,255,136,0.05); letter-spacing:1.5px; text-transform:uppercase; }
+        .btn-cyber:hover { background:rgba(0,255,136,0.2); box-shadow:0 0 40px rgba(0,255,136,0.5), inset 0 0 40px rgba(0,255,136,0.1); transform:translateY(-3px); color:#fff; }
+        @media (max-width: 500px) {
+            .rainbow-text { font-size: 30px; }
+            .cards-container { grid-template-columns: 1fr; }
+            .price-vip { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <button id="menu-toggle">☰</button>
+
+        </div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span class="nav-initial">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="../image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="../product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="../isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="../contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="rainbow-text">Panel Pterodactyl</h1>
+            <p class="header-subtitle">VPS legal siap pakai — performa tinggi, harga terjangkau 🚀</p>
+        </div>
+
+        <div class="duration-wrapper">
+            <div class="duration-group">
+                <button class="duration-btn" data-durasi="10">10 Hari</button>
+                <button class="duration-btn active" data-durasi="20">20 Hari</button>
+                <button class="duration-btn" data-durasi="30">30 Hari</button>
+            </div>
+            <div class="unlimited-tab-wrap">
+                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾&nbsp;&nbsp;UNLIMITED&nbsp;&nbsp;♾</button>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+
+        <!-- 10 Hari LOW -->
+        <div id="cards10" class="cards-container low-container">
+            <div class="low-card" data-panel="3">
+                <div class="low-stock-badge"><i class="fas fa-circle"></i> STOK TERBATAS</div>
+                <div class="card-header"><span class="card-badge">3 GB</span><span class="card-tier">PROMO</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">100%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="low-stock-bar">
+                    <div class="low-stock-label"><span>Ketersediaan</span><span>Sisa sedikit!</span></div>
+                    <div class="low-stock-track"><div class="low-stock-fill" style="width:18%"></div></div>
+                </div>
+                <div class="low-price-wrap">
+                    <span class="low-price-old">Rp 4.000</span>
+                    <span class="low-price-new">Rp 3.000 <span>/10 hari</span></span>
+                </div>
+                <button class="btn-pesan-low" data-harga="3000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="5">
+                <div class="low-stock-badge"><i class="fas fa-circle"></i> STOK TERBATAS</div>
+                <div class="card-header"><span class="card-badge">5 GB</span><span class="card-tier">PROMO</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">250%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="low-stock-bar">
+                    <div class="low-stock-label"><span>Ketersediaan</span><span>Sisa sedikit!</span></div>
+                    <div class="low-stock-track"><div class="low-stock-fill" style="width:22%"></div></div>
+                </div>
+                <div class="low-price-wrap">
+                    <span class="low-price-old">Rp 6.000</span>
+                    <span class="low-price-new">Rp 5.000 <span>/10 hari</span></span>
+                </div>
+                <button class="btn-pesan-low" data-harga="5000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="6">
+                <div class="low-stock-badge"><i class="fas fa-circle"></i> STOK TERBATAS</div>
+                <div class="card-header"><span class="card-badge">6 GB</span><span class="card-tier">PROMO</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">300%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="low-stock-bar">
+                    <div class="low-stock-label"><span>Ketersediaan</span><span>Sisa sedikit!</span></div>
+                    <div class="low-stock-track"><div class="low-stock-fill" style="width:15%"></div></div>
+                </div>
+                <div class="low-price-wrap">
+                    <span class="low-price-old">Rp 8.000</span>
+                    <span class="low-price-new">Rp 6.000 <span>/10 hari</span></span>
+                </div>
+                <button class="btn-pesan-low" data-harga="6000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="low-card" data-panel="7">
+                <div class="low-stock-badge"><i class="fas fa-circle"></i> STOK TERBATAS</div>
+                <div class="card-header"><span class="card-badge">7 GB</span><span class="card-tier">PROMO</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">350%</span></div>
+                    <div class="spec-item"><span class="spec-label">MEMORI</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="low-stock-bar">
+                    <div class="low-stock-label"><span>Ketersediaan</span><span>Sisa sedikit!</span></div>
+                    <div class="low-stock-track"><div class="low-stock-fill" style="width:10%"></div></div>
+                </div>
+                <div class="low-price-wrap">
+                    <span class="low-price-old">Rp 11.000</span>
+                    <span class="low-price-new">Rp 7.000 <span>/10 hari</span></span>
+                </div>
+                <button class="btn-pesan-low" data-harga="7000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+        </div>
+
+        <!-- 20 Hari -->
+        <div id="cards20" class="cards-container">
+            <div class="panel-card" data-panel="3">
+                <div class="card-popular-badge"><i class="fas fa-star"></i> PALING LARIS</div>
+                <div class="card-header"><span class="card-badge">3 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">100%</span></div>
+                    <div class="spec-item ram-row"><span class="spec-label">MEMORI</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">3.027 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price-wrap">
+                    <span class="price-tag">Rp 4.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan" data-harga="4000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="panel-card" data-panel="5">
+                <div class="card-popular-badge"><i class="fas fa-fire"></i> POPULER</div>
+                <div class="card-header"><span class="card-badge">5 GB</span><span class="card-tier">LOW</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">250%</span></div>
+                    <div class="spec-item ram-row"><span class="spec-label">MEMORI</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">5.021 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price-wrap">
+                    <span class="price-tag">Rp 6.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan" data-harga="6000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="panel-card" data-panel="6">
+                <div class="card-popular-badge hot"><i class="fas fa-crown"></i> TERBAIK</div>
+                <div class="card-header"><span class="card-badge">6 GB</span><span class="card-tier tier-mid">MID</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">300%</span></div>
+                    <div class="spec-item ram-row tier-mid"><span class="spec-label">MEMORI</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">6.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price-wrap">
+                    <span class="price-tag mid-price">Rp 8.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan btn-mid" data-harga="8000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+            <div class="panel-card" data-panel="7">
+                <div class="card-popular-badge best"><i class="fas fa-gem"></i> PREMIUM</div>
+                <div class="card-header"><span class="card-badge">7 GB</span><span class="card-tier tier-high">HIGH</span></div>
+                <div class="spec-list">
+                    <div class="spec-item"><span class="spec-label">CPU</span><span class="spec-value">350%</span></div>
+                    <div class="spec-item ram-row tier-high"><span class="spec-label">MEMORI</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">DISK</span><span class="spec-value">7.065 MB</span></div>
+                    <div class="spec-item"><span class="spec-label">SPEK VPS</span><span class="spec-value">R18C6</span></div>
+                </div>
+                <div class="price-wrap">
+                    <span class="price-tag high-price">Rp 11.000</span>
+                    <span class="price-sub">/20 hari · bayar sekali</span>
+                </div>
+                <button class="btn-pesan btn-high" data-harga="11000"><i class="fas fa-bolt"></i> Pesan Sekarang</button>
+            </div>
+        </div>
+
+        <!-- 30 Hari -->
         <div id="cards30" class="cards-container vip-container">
             <div class="vip-card" data-panel="3">
                 <div class="badge-vip"><i class="fas fa-crown"></i> VIP EXCLUSIVE</div>
@@ -1010,19 +1745,36 @@
             const cards20 = document.getElementById('cards20');
             const cards30 = document.getElementById('cards30');
 
+            // Tab biasa (10/20/30) — unlimited tidak dipengaruhi
+            let unlimitedActive = false;
+
             function setActiveDuration(durasi) {
+                // Update active class hanya untuk btn biasa
                 durasiButtons.forEach(btn => {
-                    btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi);
+                    if (btn.getAttribute('data-durasi') !== 'unlimited') {
+                        btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi);
+                    }
                 });
                 cards10.style.display = durasi === '10' ? 'grid' : 'none';
                 cards20.style.display = durasi === '20' ? 'grid' : 'none';
                 cards30.style.display = durasi === '30' ? 'grid' : 'none';
-                cardsUnlimited.style.display = durasi === 'unlimited' ? 'flex' : 'none';
+            }
+
+            function toggleUnlimited() {
+                unlimitedActive = !unlimitedActive;
+                const unliBtn = document.querySelector('.unlimited-tab');
+                unliBtn.classList.toggle('active', unlimitedActive);
+                cardsUnlimited.style.display = unlimitedActive ? 'flex' : 'none';
             }
 
             durasiButtons.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    setActiveDuration(this.getAttribute('data-durasi'));
+                    const d = this.getAttribute('data-durasi');
+                    if (d === 'unlimited') {
+                        toggleUnlimited();
+                    } else {
+                        setActiveDuration(d);
+                    }
                 });
             });
 
@@ -1049,7 +1801,7 @@
                 });
             });
 
-            // Pesan 30 Hari VIP
+            // Pesan 30 Hari
             document.querySelectorAll('#cards30 .btn-order').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const card  = this.closest('.vip-card');
