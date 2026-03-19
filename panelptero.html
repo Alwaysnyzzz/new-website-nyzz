@@ -363,6 +363,288 @@
             transform: translateY(-2px);
         }
 
+
+        /* ===== UNLIMITED TAB STYLE ===== */
+        .unlimited-tab {
+            background: linear-gradient(135deg, #7b00ff, #ff00aa) !important;
+            color: #fff !important; font-weight: 900 !important;
+            box-shadow: 0 0 20px rgba(123,0,255,0.5) !important;
+            animation: unlimitedTabPulse 2s ease-in-out infinite !important;
+            border-radius: 10px !important;
+        }
+        @keyframes unlimitedTabPulse {
+            0%,100% { box-shadow: 0 0 20px rgba(123,0,255,0.5); }
+            50%      { box-shadow: 0 0 35px rgba(255,0,170,0.7); }
+        }
+
+        .cards-container.unlimited-container { display: none; flex-direction: column; gap: 24px; }
+
+        /* ===== CARD 1 — GALAXY DARK (10 Hari) ===== */
+        @keyframes galaxySpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes starTwinkle { 0%,100%{opacity:0.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.5)} }
+        @keyframes neonFlicker { 0%,100%{filter:drop-shadow(0 0 15px #7b00ff) drop-shadow(0 0 30px #7b00ff)} 45%{filter:drop-shadow(0 0 5px #7b00ff)} 55%{filter:drop-shadow(0 0 20px #7b00ff)} }
+
+        .unli-card-galaxy {
+            position: relative; border-radius: 24px; padding: 28px;
+            background: radial-gradient(ellipse at 20% 20%, rgba(123,0,255,0.25) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 80%, rgba(255,0,170,0.15) 0%, transparent 60%),
+                        rgba(6,4,14,0.96);
+            border: 1px solid rgba(123,0,255,0.4);
+            box-shadow: 0 0 40px rgba(123,0,255,0.2), 0 20px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05);
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease both;
+        }
+        .unli-card-galaxy::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%; border-radius: 50%;
+            background: conic-gradient(transparent 270deg, rgba(123,0,255,0.15) 360deg);
+            animation: galaxySpin 8s linear infinite;
+        }
+        .unli-card-galaxy::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #7b00ff, #ff00aa, #00e5ff, #7b00ff);
+            background-size: 200% 100%; animation: shineBar 2s linear infinite;
+        }
+
+        .galaxy-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(123,0,255,0.2), rgba(255,0,170,0.15));
+            border: 1px solid rgba(123,0,255,0.5);
+            color: #bf7fff; font-size: 11px; font-weight: 900;
+            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .galaxy-stars {
+            position: absolute; top: 20px; right: 20px;
+            display: flex; gap: 4px;
+        }
+        .galaxy-stars i { font-size: 8px; color: #bf7fff; animation: starTwinkle 1.5s ease-in-out infinite; }
+        .galaxy-stars i:nth-child(2){animation-delay:.3s}
+        .galaxy-stars i:nth-child(3){animation-delay:.6s}
+
+        .galaxy-title {
+            font-family: 'Righteous', cursive; font-size: 32px;
+            background: linear-gradient(135deg, #bf7fff, #ff66cc, #7b00ff);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: neonFlicker 4s ease-in-out infinite;
+            margin-bottom: 6px; display: block;
+        }
+        .galaxy-subtitle { font-size: 12px; color: rgba(255,255,255,0.35); font-weight: 700; margin-bottom: 18px; display: block; }
+
+        .unli-spec-grid {
+            display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin: 16px 0;
+        }
+        .unli-spec-item {
+            background: rgba(0,0,0,0.3); border-radius: 12px; padding: 12px 10px; text-align: center;
+            border: 1px solid rgba(255,255,255,0.06); transition: 0.2s;
+        }
+        .unli-spec-item:hover { border-color: rgba(123,0,255,0.3); }
+        .unli-spec-item.full { grid-column: span 2; }
+        .unli-spec-label { font-size: 10px; color: rgba(255,255,255,0.35); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+        .unli-spec-value { font-family: 'Righteous', cursive; font-size: 17px; color: #fff; }
+        .unli-spec-value.infinity { font-size: 22px; color: #bf7fff; filter: drop-shadow(0 0 8px #7b00ff); }
+
+        .galaxy-price {
+            text-align: center; margin: 16px 0;
+            font-family: 'Righteous', cursive; font-size: 36px;
+            background: linear-gradient(135deg, #bf7fff, #ff66cc);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(123,0,255,0.5));
+        }
+        .galaxy-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
+
+        .btn-galaxy {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #7b00ff, #ff00aa);
+            border: none; border-radius: 40px; color: #fff;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 6px 25px rgba(123,0,255,0.5);
+        }
+        .btn-galaxy:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 35px rgba(123,0,255,0.7); }
+
+        /* ===== CARD 2 — CYBER GOLD (20 Hari) ===== */
+        @keyframes goldShimmer { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        @keyframes circuitMove { from{background-position:0 0} to{background-position:50px 50px} }
+
+        .unli-card-gold {
+            position: relative; border-radius: 24px; padding: 28px;
+            background: rgba(8,7,2,0.96);
+            border: 1px solid rgba(255,200,0,0.35);
+            box-shadow: 0 0 50px rgba(255,200,0,0.15), 0 20px 50px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,200,0,0.1);
+            overflow: hidden; animation: fadeInUp 0.6s 0.1s ease both;
+        }
+        .unli-card-gold::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,200,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,200,0,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: circuitMove 4s linear infinite;
+        }
+        .unli-card-gold::after {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #ffd700, #ff8c00, #ffd700, #ffec6e, #ffd700);
+            background-size: 300% 100%; animation: goldShimmer 2s linear infinite;
+        }
+
+        .gold-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,140,0,0.1));
+            border: 1px solid rgba(255,200,0,0.4);
+            color: #ffd700; font-size: 11px; font-weight: 900;
+            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+            letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,200,0,0.2);
+        }
+
+        .gold-crown-wrap {
+            position: absolute; top: 22px; right: 22px;
+            width: 48px; height: 48px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,200,0,0.15), rgba(255,140,0,0.1));
+            border: 1px solid rgba(255,200,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(255,200,0,0.3);
+        }
+
+        .gold-title {
+            font-family: 'Righteous', cursive; font-size: 32px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00, #ffec6e);
+            background-size: 200% 200%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: goldShimmer 3s ease infinite;
+            margin-bottom: 6px; display: block;
+        }
+        .gold-subtitle { font-size: 12px; color: rgba(255,200,0,0.4); font-weight: 700; margin-bottom: 18px; display: block; }
+
+        .gold-features {
+            display: flex; flex-direction: column; gap: 8px; margin: 16px 0;
+            padding: 14px; background: rgba(255,200,0,0.04); border-radius: 14px;
+            border: 1px solid rgba(255,200,0,0.1);
+        }
+        .gold-feature-item {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 13px; color: rgba(255,255,255,0.7); font-weight: 700;
+        }
+        .gold-feature-item i { color: #ffd700; font-size: 12px; width: 16px; text-align: center; filter: drop-shadow(0 0 4px #ffd700); }
+        .gold-feature-item .feat-val { color: #ffd700; font-weight: 900; margin-left: auto; }
+
+        .gold-price {
+            text-align: center; margin: 16px 0;
+            font-family: 'Righteous', cursive; font-size: 36px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(255,200,0,0.5));
+        }
+        .gold-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
+
+        .btn-gold {
+            width: 100%; padding: 14px;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            border: none; border-radius: 40px; color: #06070f;
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 6px 25px rgba(255,200,0,0.4);
+        }
+        .btn-gold:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 35px rgba(255,200,0,0.6); }
+
+        /* ===== CARD 3 — NEON ULTRA (30 Hari) ===== */
+        @keyframes rgbBorder { 0%{border-color:rgba(0,255,136,0.6)} 33%{border-color:rgba(0,229,255,0.6)} 66%{border-color:rgba(255,77,228,0.6)} 100%{border-color:rgba(0,255,136,0.6)} }
+        @keyframes neonScan { 0%{top:-100%} 100%{top:200%} }
+        @keyframes ultraGlow { 0%,100%{box-shadow:0 0 50px rgba(0,255,136,0.2),0 20px 50px rgba(0,0,0,0.7)} 33%{box-shadow:0 0 50px rgba(0,229,255,0.2),0 20px 50px rgba(0,0,0,0.7)} 66%{box-shadow:0 0 50px rgba(255,77,228,0.2),0 20px 50px rgba(0,0,0,0.7)} }
+
+        .unli-card-ultra {
+            position: relative; border-radius: 24px; padding: 28px;
+            background: rgba(4,10,8,0.97);
+            border: 2px solid rgba(0,255,136,0.6);
+            box-shadow: 0 0 50px rgba(0,255,136,0.2), 0 20px 50px rgba(0,0,0,0.7);
+            overflow: hidden; animation: fadeInUp 0.6s 0.2s ease both, rgbBorder 3s linear infinite, ultraGlow 3s linear infinite;
+        }
+        /* Scan line effect */
+        .unli-card-ultra .scan-line {
+            position: absolute; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.4), transparent);
+            animation: neonScan 3s linear infinite;
+            pointer-events: none; z-index: 1;
+        }
+        .unli-card-ultra::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, #00ff88, #00e5ff, #ff4de4, #ffe000, #00ff88);
+            background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
+        }
+
+        .ultra-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: linear-gradient(135deg, rgba(0,255,136,0.12), rgba(0,229,255,0.08));
+            border: 1px solid rgba(0,255,136,0.4);
+            color: #00ff88; font-size: 11px; font-weight: 900;
+            padding: 5px 14px; border-radius: 20px; margin-bottom: 16px;
+            letter-spacing: 1px; text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(0,255,136,0.2);
+        }
+
+        .ultra-title {
+            font-family: 'Righteous', cursive; font-size: 32px;
+            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
+            background-size: 200% 200%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: goldShimmer 2s ease infinite;
+            margin-bottom: 6px; display: block;
+        }
+        .ultra-subtitle { font-size: 12px; color: rgba(0,255,136,0.4); font-weight: 700; margin-bottom: 18px; display: block; }
+
+        .ultra-spec-list {
+            margin: 16px 0; padding: 14px;
+            background: rgba(0,255,136,0.03); border-radius: 14px;
+            border: 1px solid rgba(0,255,136,0.08);
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .ultra-spec-row {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px;
+        }
+        .ultra-spec-row .u-label { color: rgba(255,255,255,0.4); font-weight: 700; display: flex; align-items: center; gap: 7px; }
+        .ultra-spec-row .u-label i { color: #00ff88; font-size: 10px; }
+        .ultra-spec-row .u-val   { color: #fff; font-weight: 900; }
+        .ultra-spec-row .u-val.unli { color: #00ff88; font-size: 15px; filter: drop-shadow(0 0 6px #00ff88); }
+
+        .ultra-price {
+            text-align: center; margin: 16px 0;
+            font-family: 'Righteous', cursive; font-size: 40px;
+            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
+            background-size: 200% 200%;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: goldShimmer 2s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(0,255,136,0.4));
+        }
+        .ultra-price span { font-size: 13px; color: rgba(255,255,255,0.35); font-family:'Nunito',sans-serif; font-weight:700; }
+
+        .btn-ultra {
+            width: 100%; padding: 15px;
+            background: linear-gradient(135deg, #00ff88, #00e5ff, #ff4de4);
+            background-size: 200% 200%; animation: goldShimmer 2s ease infinite;
+            border: none; border-radius: 40px; color: #06070f;
+            font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 900;
+            cursor: pointer; transition: 0.25s; letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            box-shadow: 0 6px 30px rgba(0,255,136,0.4);
+            position: relative; z-index: 2;
+        }
+        .btn-ultra:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 40px rgba(0,229,255,0.5); }
+
+        /* Best value badge untuk card ultra */
+        .ultra-best-value {
+            position: absolute; top: 18px; right: -8px;
+            background: linear-gradient(135deg, #00ff88, #00e5ff);
+            color: #06070f; font-size: 9px; font-weight: 900;
+            padding: 4px 20px 4px 12px; letter-spacing: 1px;
+            clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+            text-transform: uppercase; z-index: 2;
+            box-shadow: -3px 0 10px rgba(0,255,136,0.3);
+        }
         @media (max-width: 500px) {
             .rainbow-text { font-size: 30px; }
             .cards-container { grid-template-columns: 1fr; }
@@ -415,6 +697,7 @@
                 <button class="duration-btn" data-durasi="10">10 Hari</button>
                 <button class="duration-btn active" data-durasi="20">20 Hari</button>
                 <button class="duration-btn" data-durasi="30">30 Hari VIP</button>
+                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾ UNLIMITED</button>
             </div>
         </div>
 
@@ -636,6 +919,66 @@
                 <button class="btn-order"><i class="fas fa-crown"></i> Order Premium</button>
             </div>
         </div>
+        <!-- UNLIMITED -->
+        <div id="cardsUnlimited" class="cards-container unlimited-container">
+
+            <!-- Card 1: Galaxy Dark — 10 Hari -->
+            <div class="unli-card-galaxy" data-panel="unlimited" data-durasi="10">
+                <div class="galaxy-stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <div class="galaxy-badge"><i class="fas fa-infinity"></i> UNLIMITED ACCESS</div>
+                <span class="galaxy-title">∞ UNLIMITED</span>
+                <span class="galaxy-subtitle">10 Hari · Akses tanpa batas</span>
+                <div class="unli-spec-grid">
+                    <div class="unli-spec-item"><span class="unli-spec-label">CPU</span><span class="unli-spec-value infinity">∞</span></div>
+                    <div class="unli-spec-item"><span class="unli-spec-label">RAM</span><span class="unli-spec-value infinity">∞</span></div>
+                    <div class="unli-spec-item"><span class="unli-spec-label">DISK</span><span class="unli-spec-value infinity">∞</span></div>
+                    <div class="unli-spec-item"><span class="unli-spec-label">SPEK VPS</span><span class="unli-spec-value">R18C6</span></div>
+                    <div class="unli-spec-item full"><span class="unli-spec-label">DURASI</span><span class="unli-spec-value">10 Hari Penuh</span></div>
+                </div>
+                <div class="galaxy-price">Rp 15.000 <span>/10 hari</span></div>
+                <button class="btn-galaxy" data-harga="15000"><i class="fas fa-rocket"></i> Mulai Sekarang</button>
+            </div>
+
+            <!-- Card 2: Cyber Gold — 20 Hari -->
+            <div class="unli-card-gold" data-panel="unlimited" data-durasi="20">
+                <div class="gold-crown-wrap">👑</div>
+                <div class="gold-badge"><i class="fas fa-crown"></i> GOLD UNLIMITED</div>
+                <span class="gold-title">∞ UNLIMITED</span>
+                <span class="gold-subtitle">20 Hari · Performa tanpa batas</span>
+                <div class="gold-features">
+                    <div class="gold-feature-item"><i class="fas fa-microchip"></i> CPU<span class="feat-val">UNLIMITED ∞</span></div>
+                    <div class="gold-feature-item"><i class="fas fa-memory"></i> RAM<span class="feat-val">UNLIMITED ∞</span></div>
+                    <div class="gold-feature-item"><i class="fas fa-hdd"></i> DISK<span class="feat-val">UNLIMITED ∞</span></div>
+                    <div class="gold-feature-item"><i class="fas fa-server"></i> SPEK VPS<span class="feat-val">R18C6</span></div>
+                    <div class="gold-feature-item"><i class="fas fa-calendar-check"></i> DURASI<span class="feat-val">20 Hari Penuh</span></div>
+                </div>
+                <div class="gold-price">Rp 20.000 <span>/20 hari</span></div>
+                <button class="btn-gold" data-harga="20000"><i class="fas fa-crown"></i> Order Gold</button>
+            </div>
+
+            <!-- Card 3: Neon Ultra — 30 Hari -->
+            <div class="unli-card-ultra" data-panel="unlimited" data-durasi="30">
+                <div class="scan-line"></div>
+                <div class="ultra-best-value">BEST VALUE</div>
+                <div class="ultra-badge"><i class="fas fa-gem"></i> ULTRA PREMIUM</div>
+                <span class="ultra-title">∞ UNLIMITED</span>
+                <span class="ultra-subtitle">30 Hari · Ultimate power</span>
+                <div class="ultra-spec-list">
+                    <div class="ultra-spec-row"><span class="u-label"><i class="fas fa-microchip"></i> CPU</span><span class="u-val unli">UNLIMITED ∞</span></div>
+                    <div class="ultra-spec-row"><span class="u-label"><i class="fas fa-memory"></i> RAM</span><span class="u-val unli">UNLIMITED ∞</span></div>
+                    <div class="ultra-spec-row"><span class="u-label"><i class="fas fa-hdd"></i> DISK</span><span class="u-val unli">UNLIMITED ∞</span></div>
+                    <div class="ultra-spec-row"><span class="u-label"><i class="fas fa-server"></i> SPEK VPS</span><span class="u-val">R18C6</span></div>
+                    <div class="ultra-spec-row"><span class="u-label"><i class="fas fa-calendar-check"></i> DURASI</span><span class="u-val">30 Hari Penuh</span></div>
+                </div>
+                <div class="ultra-price">Rp 30.000 <span>/30 hari</span></div>
+                <button class="btn-ultra" data-harga="30000"><i class="fas fa-gem"></i> Order Ultra Premium</button>
+            </div>
+
+        </div>
+
+
     </main>
 
     <footer class="footer">
@@ -663,6 +1006,7 @@
         (function() {
             const durasiButtons = document.querySelectorAll('.duration-btn');
             const cards10 = document.getElementById('cards10');
+            const cardsUnlimited = document.getElementById('cardsUnlimited');
             const cards20 = document.getElementById('cards20');
             const cards30 = document.getElementById('cards30');
 
@@ -673,6 +1017,7 @@
                 cards10.style.display = durasi === '10' ? 'grid' : 'none';
                 cards20.style.display = durasi === '20' ? 'grid' : 'none';
                 cards30.style.display = durasi === '30' ? 'grid' : 'none';
+                cardsUnlimited.style.display = durasi === 'unlimited' ? 'flex' : 'none';
             }
 
             durasiButtons.forEach(btn => {
@@ -711,6 +1056,16 @@
                     const panel = card.getAttribute('data-panel');
                     const amount = card.querySelector('.amount').textContent.replace(/\./g, '');
                     window.location.href = '/pay?panel=' + panel + '&durasi=30&amount=' + amount;
+                });
+            });
+
+            // Pesan UNLIMITED
+            document.querySelectorAll('#cardsUnlimited button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card   = this.closest('[data-durasi]');
+                    const durasi = card.getAttribute('data-durasi');
+                    const price  = this.getAttribute('data-harga');
+                    window.location.href = '/pay?panel=unlimited&durasi=' + durasi + '&amount=' + price;
                 });
             });
         })();
