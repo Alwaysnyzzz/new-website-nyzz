@@ -649,78 +649,100 @@
             <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
         </div>
     </footer>
-    <script src="../script.js"></script>
     <script>
-    (function () {
-        var tab10  = document.getElementById('tab10');
-        var tab20  = document.getElementById('tab20');
-        var tab30  = document.getElementById('tab30');
-        var tabUnl = document.getElementById('tabUnlimited');
-        var unliBtn = document.querySelector('.unlimited-tab');
+    document.addEventListener('DOMContentLoaded', function() {
 
-        function hideAll() {
-            tab10.style.display  = 'none';
-            tab20.style.display  = 'none';
-            tab30.style.display  = 'none';
-            tabUnl.style.display = 'none';
-        }
+        // ===== SEMBUNYIKAN SEMUA TAB DULU =====
+        document.getElementById('tab10').style.display  = 'none';
+        document.getElementById('tab20').style.display  = 'none';
+        document.getElementById('tab30').style.display  = 'none';
+        document.getElementById('tabUnlimited').style.display = 'none';
 
-        document.querySelectorAll('.duration-btn').forEach(function(btn) {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.duration-btn').forEach(function(b){ b.classList.remove('active'); });
-                btn.classList.add('active');
-                unliBtn.classList.remove('active');
-                hideAll();
-                var t = btn.getAttribute('data-tab');
-                if (t === '10') tab10.style.display = 'grid';
-                if (t === '20') tab20.style.display = 'grid';
-                if (t === '30') tab30.style.display = 'grid';
-            });
-        });
-
-        unliBtn.addEventListener('click', function () {
-            var isOpen = tabUnl.style.display === 'flex';
-            hideAll();
-            document.querySelectorAll('.duration-btn').forEach(function(b){ b.classList.remove('active'); });
-            if (!isOpen) {
-                tabUnl.style.display = 'flex';
-                unliBtn.classList.add('active');
-            } else {
-                unliBtn.classList.remove('active');
-                tab20.style.display = 'grid';
-                document.querySelector('[data-tab="20"]').classList.add('active');
-            }
-        });
-
-        hideAll();
-        tab20.style.display = 'grid';
+        // ===== TAMPIL 20 HARI DEFAULT =====
+        document.getElementById('tab20').style.display = 'grid';
         document.querySelector('[data-tab="20"]').classList.add('active');
 
+        // ===== TAB 10 HARI =====
+        document.querySelector('[data-tab="10"]').onclick = function() {
+            document.getElementById('tab10').style.display  = 'grid';
+            document.getElementById('tab20').style.display  = 'none';
+            document.getElementById('tab30').style.display  = 'none';
+            document.getElementById('tabUnlimited').style.display = 'none';
+            document.querySelector('[data-tab="10"]').classList.add('active');
+            document.querySelector('[data-tab="20"]').classList.remove('active');
+            document.querySelector('[data-tab="30"]').classList.remove('active');
+            document.querySelector('.unlimited-tab').classList.remove('active');
+        };
+
+        // ===== TAB 20 HARI =====
+        document.querySelector('[data-tab="20"]').onclick = function() {
+            document.getElementById('tab10').style.display  = 'none';
+            document.getElementById('tab20').style.display  = 'grid';
+            document.getElementById('tab30').style.display  = 'none';
+            document.getElementById('tabUnlimited').style.display = 'none';
+            document.querySelector('[data-tab="10"]').classList.remove('active');
+            document.querySelector('[data-tab="20"]').classList.add('active');
+            document.querySelector('[data-tab="30"]').classList.remove('active');
+            document.querySelector('.unlimited-tab').classList.remove('active');
+        };
+
+        // ===== TAB 30 HARI =====
+        document.querySelector('[data-tab="30"]').onclick = function() {
+            document.getElementById('tab10').style.display  = 'none';
+            document.getElementById('tab20').style.display  = 'none';
+            document.getElementById('tab30').style.display  = 'grid';
+            document.getElementById('tabUnlimited').style.display = 'none';
+            document.querySelector('[data-tab="10"]').classList.remove('active');
+            document.querySelector('[data-tab="20"]').classList.remove('active');
+            document.querySelector('[data-tab="30"]').classList.add('active');
+            document.querySelector('.unlimited-tab').classList.remove('active');
+        };
+
+        // ===== TAB UNLIMITED =====
+        document.querySelector('.unlimited-tab').onclick = function() {
+            document.getElementById('tab10').style.display  = 'none';
+            document.getElementById('tab20').style.display  = 'none';
+            document.getElementById('tab30').style.display  = 'none';
+            document.getElementById('tabUnlimited').style.display = 'flex';
+            document.querySelector('[data-tab="10"]').classList.remove('active');
+            document.querySelector('[data-tab="20"]').classList.remove('active');
+            document.querySelector('[data-tab="30"]').classList.remove('active');
+            document.querySelector('.unlimited-tab').classList.add('active');
+        };
+
+        // ===== TOMBOL PESAN 10 HARI =====
         document.querySelectorAll('#tab10 .btn-pesan-low').forEach(function(btn) {
-            btn.addEventListener('click', function () {
+            btn.onclick = function() {
                 var panel = btn.closest('[data-panel]').getAttribute('data-panel');
                 window.location.href = '/pay?panel=' + panel + '&durasi=10&amount=' + btn.getAttribute('data-harga');
-            });
+            };
         });
+
+        // ===== TOMBOL PESAN 20 HARI =====
         document.querySelectorAll('#tab20 .btn-pesan').forEach(function(btn) {
-            btn.addEventListener('click', function () {
+            btn.onclick = function() {
                 var panel = btn.closest('[data-panel]').getAttribute('data-panel');
                 window.location.href = '/pay?panel=' + panel + '&durasi=20&amount=' + btn.getAttribute('data-harga');
-            });
+            };
         });
+
+        // ===== TOMBOL PESAN 30 HARI =====
         document.querySelectorAll('#tab30 .btn-order').forEach(function(btn) {
-            btn.addEventListener('click', function () {
+            btn.onclick = function() {
                 var panel = btn.closest('[data-panel]').getAttribute('data-panel');
                 window.location.href = '/pay?panel=' + panel + '&durasi=30&amount=' + btn.getAttribute('data-harga');
-            });
+            };
         });
+
+        // ===== TOMBOL PESAN UNLIMITED =====
         document.querySelectorAll('#tabUnlimited button[data-harga]').forEach(function(btn) {
-            btn.addEventListener('click', function () {
+            btn.onclick = function() {
                 var durasi = btn.closest('[data-durasi]').getAttribute('data-durasi');
                 window.location.href = '/pay?panel=unlimited&durasi=' + durasi + '&amount=' + btn.getAttribute('data-harga');
-            });
+            };
         });
-    })();
+
+    });
     </script>
 </body>
 </html>
