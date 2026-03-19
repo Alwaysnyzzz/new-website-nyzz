@@ -637,7 +637,7 @@
                 <div class="social-icons">
                     <a href="https://wa.me/6287713472756" target="_blank" class="social-icon wa"><i class="fab fa-whatsapp"></i></a>
                     <a href="https://t.me/DzzXNzz" target="_blank" class="social-icon tg"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="mailto:support@dzzxnzz.my.id" class="social-icon email"><i class="fas fa-envelope"></i></a>
+                    <a href="/cdn-cgi/l/email-protection#d0a3a5a0a0bfa2a490b4aaaaa8beaaaafebda9feb9b4" class="social-icon email"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div><h4 class="footer-title">Layanan</h4><ul class="footer-links"><li><a href="#">Cloud Hosting</a></li><li><a href="#">VPS Servers</a></li><li><a href="#">Bot Jaga</a></li></ul></div>
@@ -649,80 +649,75 @@
             <span class="status-badge"><i class="fas fa-circle"></i> ALL SYSTEMS OPERATIONAL</span>
         </div>
     </footer>
-
     <script src="../script.js"></script>
     <script>
     (function () {
-        const tabs = {
-            '10':        document.getElementById('tab10'),
-            '20':        document.getElementById('tab20'),
-            '30':        document.getElementById('tab30'),
-            'unlimited': document.getElementById('tabUnlimited')
-        };
+        var tab10  = document.getElementById('tab10');
+        var tab20  = document.getElementById('tab20');
+        var tab30  = document.getElementById('tab30');
+        var tabUnl = document.getElementById('tabUnlimited');
+        var unliBtn = document.querySelector('.unlimited-tab');
 
-        let unlimitedOpen = false;
-
-        // Sembunyikan semua kecuali tab aktif
-        function showTab(key) {
-            Object.entries(tabs).forEach(([k, el]) => {
-                if (k === 'unlimited') return; // unlimited dihandle sendiri
-                el.style.display = (k === key) ? 'grid' : 'none';
-            });
+        function hideAll() {
+            tab10.style.display  = 'none';
+            tab20.style.display  = 'none';
+            tab30.style.display  = 'none';
+            tabUnl.style.display = 'none';
         }
 
-        // Toggle unlimited — tampil/tutup tanpa menutup tab lain
-        function toggleUnlimited() {
-            unlimitedOpen = !unlimitedOpen;
-            tabs['unlimited'].classList.toggle('show', unlimitedOpen);
-            document.querySelector('.unlimited-tab').classList.toggle('active', unlimitedOpen);
-        }
-
-        // Tab biasa (10/20/30)
-        document.querySelectorAll('.duration-btn').forEach(btn => {
+        document.querySelectorAll('.duration-btn').forEach(function(btn) {
             btn.addEventListener('click', function () {
-                document.querySelectorAll('.duration-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                showTab(this.getAttribute('data-tab'));
+                document.querySelectorAll('.duration-btn').forEach(function(b){ b.classList.remove('active'); });
+                btn.classList.add('active');
+                unliBtn.classList.remove('active');
+                hideAll();
+                var t = btn.getAttribute('data-tab');
+                if (t === '10') tab10.style.display = 'grid';
+                if (t === '20') tab20.style.display = 'grid';
+                if (t === '30') tab30.style.display = 'grid';
             });
         });
 
-        // Tab unlimited
-        document.querySelector('.unlimited-tab').addEventListener('click', toggleUnlimited);
+        unliBtn.addEventListener('click', function () {
+            var isOpen = tabUnl.style.display === 'flex';
+            hideAll();
+            document.querySelectorAll('.duration-btn').forEach(function(b){ b.classList.remove('active'); });
+            if (!isOpen) {
+                tabUnl.style.display = 'flex';
+                unliBtn.classList.add('active');
+            } else {
+                unliBtn.classList.remove('active');
+                tab20.style.display = 'grid';
+                document.querySelector('[data-tab="20"]').classList.add('active');
+            }
+        });
 
-        // Default: tampilkan 20 hari
-        showTab('20');
+        hideAll();
+        tab20.style.display = 'grid';
+        document.querySelector('[data-tab="20"]').classList.add('active');
 
-        // ===== EVENT PESAN =====
-        // 10 Hari
-        document.querySelectorAll('#tab10 .btn-pesan-low').forEach(btn => {
+        document.querySelectorAll('#tab10 .btn-pesan-low').forEach(function(btn) {
             btn.addEventListener('click', function () {
-                const panel = this.closest('[data-panel]').getAttribute('data-panel');
-                const price = this.getAttribute('data-harga');
-                window.location.href = '/pay?panel=' + panel + '&durasi=10&amount=' + price;
+                var panel = btn.closest('[data-panel]').getAttribute('data-panel');
+                window.location.href = '/pay?panel=' + panel + '&durasi=10&amount=' + btn.getAttribute('data-harga');
             });
         });
-        // 20 Hari
-        document.querySelectorAll('#tab20 .btn-pesan').forEach(btn => {
+        document.querySelectorAll('#tab20 .btn-pesan').forEach(function(btn) {
             btn.addEventListener('click', function () {
-                const panel = this.closest('[data-panel]').getAttribute('data-panel');
-                const price = this.getAttribute('data-harga');
-                window.location.href = '/pay?panel=' + panel + '&durasi=20&amount=' + price;
+                var panel = btn.closest('[data-panel]').getAttribute('data-panel');
+                window.location.href = '/pay?panel=' + panel + '&durasi=20&amount=' + btn.getAttribute('data-harga');
             });
         });
-        // 30 Hari
-        document.querySelectorAll('#tab30 .btn-order').forEach(btn => {
+        document.querySelectorAll('#tab30 .btn-order').forEach(function(btn) {
             btn.addEventListener('click', function () {
-                const panel = this.closest('[data-panel]').getAttribute('data-panel');
-                const price = this.getAttribute('data-harga');
-                window.location.href = '/pay?panel=' + panel + '&durasi=30&amount=' + price;
+                var panel = btn.closest('[data-panel]').getAttribute('data-panel');
+                window.location.href = '/pay?panel=' + panel + '&durasi=30&amount=' + btn.getAttribute('data-harga');
             });
         });
-        // Unlimited
-        document.querySelectorAll('#tabUnlimited button').forEach(btn => {
+        document.querySelectorAll('#tabUnlimited button[data-harga]').forEach(function(btn) {
             btn.addEventListener('click', function () {
-                const durasi = this.closest('[data-durasi]').getAttribute('data-durasi');
-                const price  = this.getAttribute('data-harga');
-                window.location.href = '/pay?panel=unlimited&durasi=' + durasi + '&amount=' + price;
+                var durasi = btn.closest('[data-durasi]').getAttribute('data-durasi');
+                window.location.href = '/pay?panel=unlimited&durasi=' + durasi + '&amount=' + btn.getAttribute('data-harga');
             });
         });
     })();
