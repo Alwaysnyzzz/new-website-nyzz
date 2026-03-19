@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Detail Panel - DzzXNzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        @keyframes fadeInUp  { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shineBar  { 0%{background-position:0%} 100%{background-position:200%} }
+        @keyframes spin      { to{transform:rotate(360deg)} }
+        @keyframes spinR     { to{transform:rotate(-360deg)} }
+        @keyframes pulse     { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+
+        .main-content { padding: 88px 20px 50px; max-width: 600px; margin: 0 auto; }
+
+        /* Header card */
+        .panel-header {
+            background: rgba(13,15,25,0.92); backdrop-filter: blur(16px);
+            border-radius: 22px; padding: 24px 22px 20px;
+            border: 1px solid rgba(0,229,255,0.2);
+            box-shadow: 0 0 30px rgba(0,229,255,0.07), 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 16px; position: relative; overflow: hidden;
+            animation: fadeInUp 0.5s ease;
+        }
+        .panel-header::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,#00e5ff,#00ff88,#bf00ff,#00e5ff);
+            background-size:200% 100%; animation:shineBar 3s linear infinite;
+        }
+        .panel-header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+        .panel-name   { font-family:'Righteous',cursive; font-size:22px; color:#fff; }
+        .panel-status-badge {
+            display:inline-flex; align-items:center; gap:6px;
+            padding:5px 14px; border-radius:20px; font-size:12px; font-weight:900;
+            text-transform:uppercase; letter-spacing:0.5px;
+        }
+        .status-active   { background:rgba(0,255,136,0.12); border:1px solid rgba(0,255,136,0.3); color:#00ff88; }
+        .status-suspended{ background:rgba(255,0,85,0.12); border:1px solid rgba(255,0,85,0.3); color:#ff0055; }
+        .status-pending  { background:rgba(255,224,0,0.1); border:1px solid rgba(255,224,0,0.3); color:#ffe000; }
+        .panel-meta { font-size:12px; color:rgba(255,255,255,0.4); font-weight:700; display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+        .panel-meta span { display:flex; align-items:center; gap:5px; }
+        .panel-meta i { font-size:11px; color:rgba(0,229,255,0.6); }
+
+        /* Tab bar */
+        .tab-bar {
+            display:flex; gap:0; background:rgba(13,15,25,0.8);
+            border:1px solid rgba(0,229,255,0.2); border-radius:14px;
+            overflow:hidden; padding:4px; margin-bottom:16px;
+            animation: fadeInUp 0.5s 0.05s ease both;
+        }
+        .tab-btn {
+            flex:1; background:transparent; border:none; color:rgba(255,255,255,0.4);
+            font-family:'Nunito',sans-serif; font-size:13px; font-weight:800;
+            padding:10px 0; border-radius:10px; cursor:pointer; transition:0.25s;
+        }
+        .tab-btn:hover { color:#00e5ff; background:rgba(0,229,255,0.08); }
+        .tab-btn.active { background:linear-gradient(135deg,#00e5ff,#00ff88); color:#06070f; font-weight:900; box-shadow:0 4px 15px rgba(0,229,255,0.3); }
+
+        /* Tab content */
+        .tab-content { display:none; animation: fadeInUp 0.4s ease; }
+        .tab-content.active { display:block; }
+
+        /* Info card shared */
+        .info-card {
+            background:rgba(13,15,25,0.82); backdrop-filter:blur(12px);
+            border-radius:18px; padding:20px 18px;
+            border:1px solid rgba(255,255,255,0.07);
+            margin-bottom:12px;
+        }
+        .info-card-title {
+            font-size:11px; font-weight:900; color:rgba(255,255,255,0.4);
+            text-transform:uppercase; letter-spacing:1px;
+            display:flex; align-items:center; gap:8px; margin-bottom:14px;
+        }
+        .info-card-title i { color:#00e5ff; }
+        .info-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .info-row:last-child { border-bottom:none; padding-bottom:0; }
+        .info-label { font-size:13px; color:rgba(255,255,255,0.4); font-weight:700; display:flex; align-items:center; gap:8px; }
+        .info-label i { width:16px; text-align:center; color:rgba(255,255,255,0.25); font-size:12px; }
+        .info-val   { font-size:13px; color:#fff; font-weight:900; }
+        .info-val.cyan   { color:#00e5ff; }
+        .info-val.green  { color:#00ff88; }
+        .info-val.yellow { color:#ffe000; }
+        .info-val.red    { color:#ff0055; }
+
+        /* Password field */
+        .pass-wrap { display:flex; align-items:center; gap:8px; }
+        .pass-text  { color:#fff; font-weight:900; font-size:13px; letter-spacing:2px; }
+        .pass-toggle { background:none; border:none; color:rgba(255,255,255,0.3); cursor:pointer; font-size:13px; padding:2px 4px; }
+        .pass-toggle:hover { color:#00e5ff; }
+        .copy-btn { background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); color:#00e5ff; border-radius:8px; padding:4px 10px; font-size:11px; font-weight:800; cursor:pointer; transition:0.2s; }
+        .copy-btn:hover { background:rgba(0,229,255,0.15); }
+
+        /* Status tab */
+        .status-main { text-align:center; padding:24px 0; }
+        .server-status-icon {
+            width:88px; height:88px; border-radius:50%; margin:0 auto 16px;
+            display:flex; align-items:center; justify-content:center; font-size:36px;
+            transition:0.3s;
+        }
+        .server-online  { background:rgba(0,255,136,0.1); border:3px solid #00ff88; color:#00ff88; box-shadow:0 0 30px rgba(0,255,136,0.3); }
+        .server-offline { background:rgba(255,0,85,0.1); border:3px solid #ff0055; color:#ff0055; box-shadow:0 0 30px rgba(255,0,85,0.2); }
+        .server-unknown { background:rgba(255,224,0,0.08); border:3px solid rgba(255,224,0,0.4); color:#ffe000; }
+        .status-label   { font-family:'Righteous',cursive; font-size:24px; margin-bottom:4px; }
+        .status-sublabel{ font-size:12px; color:rgba(255,255,255,0.4); font-weight:700; margin-bottom:24px; }
+
+        /* Usage bars */
+        .usage-grid { display:grid; grid-template-columns:1fr; gap:10px; }
+        .usage-item { background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:14px 16px; }
+        .usage-top  { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+        .usage-label{ font-size:12px; color:rgba(255,255,255,0.5); font-weight:800; text-transform:uppercase; letter-spacing:0.5px; display:flex; align-items:center; gap:6px; }
+        .usage-label i { font-size:11px; }
+        .usage-val  { font-size:13px; font-weight:900; color:#fff; }
+        .usage-bar-track { height:6px; background:rgba(255,255,255,0.07); border-radius:6px; overflow:hidden; }
+        .usage-bar-fill  { height:100%; border-radius:6px; transition:width 0.8s ease; }
+        .fill-ram  { background:linear-gradient(90deg,#00e5ff,#00ff88); }
+        .fill-cpu  { background:linear-gradient(90deg,#bf00ff,#ff4de4); }
+        .fill-disk { background:linear-gradient(90deg,#ffe000,#ff8800); }
+
+        /* Refresh btn */
+        .refresh-row { display:flex; justify-content:center; margin-top:14px; }
+        .btn-refresh { background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); color:#00e5ff; padding:9px 22px; border-radius:30px; font-size:13px; font-weight:800; cursor:pointer; transition:0.2s; display:flex; align-items:center; gap:8px; font-family:'Nunito',sans-serif; }
+        .btn-refresh:hover { background:rgba(0,229,255,0.15); }
+        .btn-refresh.loading i { animation:spin 0.7s linear infinite; }
+
+        /* Login panel button */
+        .btn-login-panel {
+            width:100%; padding:14px; margin-top:4px;
+            background:linear-gradient(135deg,rgba(0,229,255,0.15),rgba(0,255,136,0.08));
+            border:1.5px solid rgba(0,229,255,0.4); border-radius:40px; color:#00e5ff;
+            font-family:'Nunito',sans-serif; font-size:14px; font-weight:900;
+            cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px;
+            text-decoration:none;
+        }
+        .btn-login-panel:hover { background:linear-gradient(135deg,#00e5ff,#00ff88); color:#06070f; border-color:#00e5ff; transform:translateY(-2px); }
+
+        /* Page loader */
+        .page-loader { position:fixed; inset:0; background:rgba(6,7,15,0.95); backdrop-filter:blur(8px); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; transition:0.4s; }
+        .page-loader.hidden { opacity:0; visibility:hidden; }
+        .loader-rings { position:relative; width:58px; height:58px; margin-bottom:14px; }
+        .ring { position:absolute; border-radius:50%; border:3px solid transparent; }
+        .ring-outer { width:100%; height:100%; border-top-color:#00e5ff; border-bottom-color:#00e5ff; animation:spin 1.5s linear infinite; }
+        .ring-inner { width:36px; height:36px; top:11px; left:11px; border-left-color:#00ff88; border-right-color:#00ff88; animation:spinR 1.5s linear infinite; }
+        .loading-text { color:#00e5ff; font-size:12px; font-weight:800; letter-spacing:2px; text-shadow:0 0 8px #00e5ff; }
+
+        /* Toast */
+        .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:rgba(13,15,25,0.97); backdrop-filter:blur(12px); border:1px solid rgba(0,229,255,0.3); border-radius:40px; padding:11px 22px; font-size:13px; font-weight:800; color:#fff; z-index:9999; transition:0.4s cubic-bezier(.34,1.56,.64,1); display:flex; align-items:center; gap:8px; white-space:nowrap; }
+        .toast.show { transform:translateX(-50%) translateY(0); }
+        .toast.success i { color:#00ff88; }
+        .toast.error i { color:#ff6688; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-rings"><div class="ring ring-outer"></div><div class="ring ring-inner"></div></div>
+        <div class="loading-text">Memuat detail panel...</div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-left"><button id="menu-toggle">☰</button></div>
+        <div class="nav-right">
+            <a href="/isisaldo" class="coins-wrapper">🪙 <span id="coinCount">0</span> +</a>
+            <div class="user-menu">
+                <div class="user-avatar"><span class="nav-initial">?</span></div>
+                <div class="menu-trigger" id="menuTrigger"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" id="dropdownMenu"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="user-name-text">DzzXNzz</span>
+            <div class="sidebar-pfp"><img src="/image/image.jpg" alt="PFP" onerror="this.src='https://ui-avatars.com/api/?name=DzzXNzz&background=06070f&color=00e5ff&bold=true'"></div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="/home"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="/product"><i class="fas fa-shopping-cart"></i> Product</a></li>
+            <li><a href="/isisaldo"><i class="fas fa-wallet"></i> Isi Saldo</a></li>
+            <li><a href="/contact"><i class="fas fa-phone-alt"></i> Contact</a></li>
+        </ul>
+        <div class="sidebar-divider"></div>
+        <ul class="sidebar-menu sidebar-system" id="system-menu"></ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <div class="toast" id="toast"><i id="toastIcon" class="fas fa-check-circle"></i><span id="toastText"></span></div>
+
+    <main class="main-content" id="mainContent" style="display:none">
+
+        <!-- Header -->
+        <div class="panel-header">
+            <div class="panel-header-top">
+                <div class="panel-name" id="panelName">—</div>
+                <div class="panel-status-badge status-active" id="statusBadge"><i class="fas fa-circle" style="font-size:8px;animation:pulse 1.5s infinite"></i> <span id="statusText">AKTIF</span></div>
+            </div>
+            <div class="panel-meta">
+                <span><i class="fas fa-server"></i> <span id="metaTier">—</span></span>
+                <span><i class="fas fa-memory"></i> <span id="metaRam">—</span></span>
+                <span><i class="fas fa-calendar"></i> <span id="metaExpired">—</span></span>
+            </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab('spek')"><i class="fas fa-microchip"></i> Spek Panel</button>
+            <button class="tab-btn" onclick="switchTab('data')"><i class="fas fa-key"></i> Data Panel</button>
+            <button class="tab-btn" onclick="switchTab('status')"><i class="fas fa-signal"></i> Status</button>
+        </div>
+
+        <!-- TAB: SPEK PANEL -->
+        <div class="tab-content active" id="tab-spek">
+            <div class="info-card">
+                <div class="info-card-title"><i class="fas fa-microchip"></i> Spesifikasi Server</div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-memory"></i> RAM</div><div class="info-val cyan" id="spekRam">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-microchip"></i> CPU</div><div class="info-val" id="spekCpu">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-hdd"></i> Disk</div><div class="info-val" id="spekDisk">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-server"></i> Spek VPS</div><div class="info-val" id="spekVps">R18C6</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-layer-group"></i> Tier</div><div class="info-val yellow" id="spekTier">—</div></div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-title"><i class="fas fa-calendar-alt"></i> Informasi Waktu</div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-calendar-check"></i> Tanggal Aktif</div><div class="info-val green" id="spekAktif">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-calendar-times"></i> Expired</div><div class="info-val" id="spekExpired">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-clock"></i> Sisa Waktu</div><div class="info-val" id="spekSisa">—</div></div>
+                <div class="info-row"><div class="info-label"><i class="fas fa-coins"></i> Harga</div><div class="info-val cyan" id="spekHarga">—</div></div>
+            </div>
+        </div>
+
+        <!-- TAB: DATA PANEL -->
+        <div class="tab-content" id="tab-data">
+            <div class="info-card">
+                <div class="info-card-title"><i class="fas fa-key"></i> Data Login Panel</div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-globe"></i> URL Panel</div>
+                    <div class="info-val cyan" id="dataUrl" style="font-size:12px">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-envelope"></i> Email</div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <div class="info-val" id="dataEmail" style="font-size:12px">—</div>
+                        <button class="copy-btn" onclick="copyText('dataEmail','Email')">Copy</button>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-lock"></i> Password</div>
+                    <div class="pass-wrap">
+                        <span class="pass-text" id="dataPassDisplay">••••••••••</span>
+                        <button class="pass-toggle" onclick="togglePass()" id="passToggle"><i class="fas fa-eye" id="passIcon"></i></button>
+                        <button class="copy-btn" onclick="copyText('dataPassReal','Password')">Copy</button>
+                        <span id="dataPassReal" style="display:none"></span>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-tag"></i> Nama Panel</div>
+                    <div class="info-val" id="dataNama">—</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label"><i class="fas fa-align-left"></i> Deskripsi</div>
+                    <div class="info-val" id="dataDeskripsi" style="font-size:12px;color:rgba(255,255,255,0.5)">—</div>
+                </div>
+            </div>
+            <a class="btn-login-panel" id="btnLoginPanel" href="#" target="_blank">
+                <i class="fas fa-external-link-alt"></i> Buka Panel Pterodactyl
+            </a>
+        </div>
+
+        <!-- TAB: STATUS -->
+        <div class="tab-content" id="tab-status">
+            <div class="info-card">
+                <div class="status-main" id="statusMain">
+                    <div class="server-status-icon server-unknown" id="serverIcon"><i class="fas fa-spinner fa-spin"></i></div>
+                    <div class="status-label" id="statusLabel">Memuat...</div>
+                    <div class="status-sublabel" id="statusSublabel">Mengambil data dari server</div>
+                </div>
+                <div class="usage-grid" id="usageGrid" style="display:none">
+                    <div class="usage-item">
+                        <div class="usage-top">
+                            <div class="usage-label" style="color:#00e5ff"><i class="fas fa-memory" style="color:#00e5ff"></i> RAM</div>
+                            <div class="usage-val" id="ramVal">— MB</div>
+                        </div>
+                        <div class="usage-bar-track"><div class="usage-bar-fill fill-ram" id="ramBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="usage-item">
+                        <div class="usage-top">
+                            <div class="usage-label" style="color:#ff4de4"><i class="fas fa-microchip" style="color:#ff4de4"></i> CPU</div>
+                            <div class="usage-val" id="cpuVal">— %</div>
+                        </div>
+                        <div class="usage-bar-track"><div class="usage-bar-fill fill-cpu" id="cpuBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="usage-item">
+                        <div class="usage-top">
+                            <div class="usage-label" style="color:#ffe000"><i class="fas fa-hdd" style="color:#ffe000"></i> Disk</div>
+                            <div class="usage-val" id="diskVal">— MB</div>
+                        </div>
+                        <div class="usage-bar-track"><div class="usage-bar-fill fill-disk" id="diskBar" style="width:0%"></div></div>
+                    </div>
+                </div>
+                <div class="refresh-row">
+                    <button class="btn-refresh" id="refreshBtn" onclick="loadStatus()">
+                        <i class="fas fa-sync-alt"></i> Refresh Status
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="/script.js"></script>
+    <script>
+    var orderData = null;
+    var passVisible = false;
+    var toastTimer;
+
+    function showToast(msg, type) {
+        var t = document.getElementById('toast'), ico = document.getElementById('toastIcon'), txt = document.getElementById('toastText');
+        t.className = 'toast show ' + (type||'success');
+        ico.className = type === 'error' ? 'fas fa-times-circle' : 'fas fa-check-circle';
+        txt.textContent = msg;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+    }
+
+    function switchTab(name) {
+        document.querySelectorAll('.tab-btn').forEach(function(b,i){ b.classList.toggle('active', ['spek','data','status'][i] === name); });
+        document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
+        document.getElementById('tab-' + name).classList.add('active');
+        if (name === 'status' && orderData) loadStatus();
+    }
+
+    function togglePass() {
+        passVisible = !passVisible;
+        var pass = document.getElementById('dataPassReal').textContent;
+        document.getElementById('dataPassDisplay').textContent = passVisible ? pass : '••••••••••';
+        document.getElementById('passIcon').className = passVisible ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
+
+    function copyText(elId, label) {
+        var el  = document.getElementById(elId);
+        var txt = el.textContent || el.innerText;
+        navigator.clipboard.writeText(txt).then(function(){ showToast(label + ' disalin!'); }).catch(function(){ showToast('Gagal copy', 'error'); });
+    }
+
+    function fmtDate(str) {
+        if (!str) return '—';
+        return new Date(str).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+    }
+
+    function sisaHari(expiredAt) {
+        if (!expiredAt) return '—';
+        var diff = new Date(expiredAt) - new Date();
+        if (diff <= 0) return '<span style="color:#ff0055">Sudah expired</span>';
+        var days = Math.floor(diff / 86400000);
+        var hrs  = Math.floor((diff % 86400000) / 3600000);
+        return days + ' hari ' + hrs + ' jam lagi';
+    }
+
+    function fillData(order) {
+        orderData = order;
+        // Header
+        document.getElementById('panelName').textContent = order.nama_panel || '—';
+        var statusMap = { active:'AKTIF', suspended:'SUSPEND', pending:'MENUNGGU' };
+        var classMap  = { active:'status-active', suspended:'status-suspended', pending:'status-pending' };
+        document.getElementById('statusText').textContent = statusMap[order.status] || order.status;
+        var badge = document.getElementById('statusBadge');
+        badge.className = 'panel-status-badge ' + (classMap[order.status] || 'status-pending');
+
+        document.getElementById('metaTier').textContent   = (order.tier || '—').toUpperCase();
+        document.getElementById('metaRam').textContent    = order.ram_gb ? order.ram_gb + ' GB' : '—';
+        document.getElementById('metaExpired').textContent= fmtDate(order.expired_at);
+
+        // Tab Spek
+        document.getElementById('spekRam').textContent   = order.ram_gb ? order.ram_gb + ' GB' : (order.tier === 'unlimited' ? '∞ Unlimited' : '—');
+        document.getElementById('spekCpu').textContent   = order.cpu_pct ? order.cpu_pct + '%' : (order.tier === 'unlimited' ? '∞ Unlimited' : '—');
+        document.getElementById('spekDisk').textContent  = order.disk_mb ? Math.round(order.disk_mb/1024) + ' GB' : (order.tier === 'unlimited' ? '∞ Unlimited' : '—');
+        document.getElementById('spekTier').textContent  = (order.tier || '—').toUpperCase();
+        document.getElementById('spekAktif').textContent = fmtDate(order.activated_at);
+        document.getElementById('spekExpired').textContent = fmtDate(order.expired_at);
+        document.getElementById('spekSisa').innerHTML    = sisaHari(order.expired_at);
+        document.getElementById('spekHarga').textContent = order.harga ? 'Rp ' + Number(order.harga).toLocaleString('id-ID') : '—';
+
+        // Tab Data
+        var pteroUrl = (process.env && process.env.PTERO_URL) || window._pteroUrl || '#';
+        document.getElementById('dataUrl').textContent    = pteroUrl;
+        document.getElementById('btnLoginPanel').href     = pteroUrl;
+        document.getElementById('dataEmail').textContent  = order.ptero_email || '—';
+        document.getElementById('dataPassReal').textContent = order.panel_password || '—';
+        document.getElementById('dataNama').textContent   = order.nama_panel || '—';
+        document.getElementById('dataDeskripsi').textContent = order.deskripsi || '(tidak ada)';
+    }
+
+    async function loadStatus() {
+        if (!orderData || !orderData.server_uuid) {
+            document.getElementById('serverIcon').className  = 'server-status-icon server-unknown';
+            document.getElementById('serverIcon').innerHTML  = '<i class="fas fa-question"></i>';
+            document.getElementById('statusLabel').textContent   = 'Server UUID tidak tersedia';
+            document.getElementById('statusSublabel').textContent = 'Panel mungkin belum aktif';
+            return;
+        }
+
+        var btn = document.getElementById('refreshBtn');
+        btn.classList.add('loading');
+
+        try {
+            var r    = await fetch('/api/get-server-status?server_uuid=' + orderData.server_uuid, { headers: { Authorization: 'Bearer ' + Auth.getToken() } });
+            var data = await r.json();
+
+            if (!r.ok) throw new Error(data.error || 'Gagal');
+
+            var icon = document.getElementById('serverIcon');
+            if (data.is_online) {
+                icon.className = 'server-status-icon server-online';
+                icon.innerHTML = '<i class="fas fa-check"></i>';
+                document.getElementById('statusLabel').textContent    = 'ONLINE';
+                document.getElementById('statusSublabel').textContent  = 'Server sedang berjalan';
+            } else {
+                icon.className = 'server-status-icon server-offline';
+                icon.innerHTML = '<i class="fas fa-times"></i>';
+                document.getElementById('statusLabel').textContent    = 'OFFLINE';
+                document.getElementById('statusSublabel').textContent  = 'Server tidak aktif';
+            }
+
+            // Usage bars
+            document.getElementById('usageGrid').style.display = 'grid';
+            var ramPct  = data.ram_limit > 0 ? Math.min(100, (data.ram_used / data.ram_limit * 100)) : 0;
+            var cpuPct  = Math.min(100, data.cpu_used || 0);
+            var diskPct = orderData.disk_mb > 0 ? Math.min(100, (data.disk_used / orderData.disk_mb * 100)) : 0;
+
+            document.getElementById('ramVal').textContent  = data.ram_used + ' MB' + (data.ram_limit > 0 ? ' / ' + data.ram_limit + ' MB' : ' / ∞');
+            document.getElementById('cpuVal').textContent  = data.cpu_used + '%';
+            document.getElementById('diskVal').textContent = data.disk_used + ' MB';
+            document.getElementById('ramBar').style.width  = ramPct + '%';
+            document.getElementById('cpuBar').style.width  = cpuPct + '%';
+            document.getElementById('diskBar').style.width = diskPct + '%';
+
+        } catch(e) {
+            document.getElementById('serverIcon').className   = 'server-status-icon server-unknown';
+            document.getElementById('serverIcon').innerHTML   = '<i class="fas fa-exclamation-triangle"></i>';
+            document.getElementById('statusLabel').textContent    = 'Gagal Memuat';
+            document.getElementById('statusSublabel').textContent  = e.message;
+        } finally {
+            btn.classList.remove('loading');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', async function() {
+        if (!Auth.isLoggedIn()) { window.location.href = '/login'; return; }
+
+        var params  = new URLSearchParams(window.location.search);
+        var orderId = params.get('order_id');
+        if (!orderId) { window.location.href = '/profile'; return; }
+
+        try {
+            var r    = await fetch('/api/get-panel-order?order_id=' + orderId);
+            var data = await r.json();
+            if (!r.ok || !data.order_id) { window.location.href = '/profile'; return; }
+            fillData(data);
+        } catch(e) {
+            window.location.href = '/profile';
+            return;
+        }
+
+        document.getElementById('pageLoader').classList.add('hidden');
+        document.getElementById('mainContent').style.display = 'block';
+    });
+
+    window.switchTab  = switchTab;
+    window.togglePass = togglePass;
+    window.copyText   = copyText;
+    window.loadStatus = loadStatus;
+    </script>
+</body>
+</html>

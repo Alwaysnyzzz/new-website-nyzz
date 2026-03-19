@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Buat User Panel - DzzXNzz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Nunito', sans-serif; background: #06070f; color: #fff;
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(ellipse at 20% 20%, rgba(0,229,255,0.08) 0%, transparent 55%),
+                              radial-gradient(ellipse at 80% 80%, rgba(0,255,136,0.06) 0%, transparent 55%);
+        }
+        canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+
+        .card {
+            position: relative; z-index: 1;
+            background: rgba(13,15,25,0.92); backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 36px 28px;
+            width: 100%; max-width: 400px;
+            border: 1px solid rgba(0,229,255,0.2);
+            box-shadow: 0 0 40px rgba(0,229,255,0.08), 0 25px 60px rgba(0,0,0,0.7);
+            animation: slideUp 0.5s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        @keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+        .card::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background: linear-gradient(90deg,#00e5ff,#00ff88,#00e5ff);
+            background-size:200% 100%; animation: shine 3s linear infinite; border-radius:24px 24px 0 0;
+        }
+        @keyframes shine { 0%{background-position:0%} 100%{background-position:200%} }
+
+        .brand { font-family:'Righteous',cursive; font-size:22px; text-align:center; margin-bottom:4px;
+            background:linear-gradient(90deg,#00e5ff,#00ff88); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .subtitle { text-align:center; color:rgba(255,255,255,0.35); font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; }
+
+        /* Token invalid state */
+        .invalid-state { text-align:center; }
+        .invalid-icon  { font-size:48px; color:rgba(255,0,85,0.5); margin-bottom:16px; display:block; }
+        .invalid-title { font-size:18px; font-weight:900; color:#ff6688; margin-bottom:8px; }
+        .invalid-sub   { font-size:13px; color:rgba(255,255,255,0.4); font-weight:700; }
+
+        /* Form */
+        .info-box {
+            background: rgba(0,229,255,0.06); border: 1px solid rgba(0,229,255,0.2);
+            border-radius: 14px; padding: 14px 16px; margin-bottom: 22px;
+            font-size: 13px; color: rgba(255,255,255,0.55); font-weight: 700; line-height: 1.6;
+        }
+        .info-box i { color: #00e5ff; margin-right: 6px; }
+
+        .input-label { display:block; font-size:11px; font-weight:800; color:#00e5ff; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+        .input-wrap  { position:relative; margin-bottom:18px; }
+        .input-icon  { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:rgba(255,255,255,0.25); font-size:14px; pointer-events:none; }
+        input {
+            width:100%; padding:14px 16px 14px 44px;
+            background:rgba(0,0,0,0.35); border:1.5px solid rgba(255,255,255,0.1);
+            border-radius:12px; color:#fff; font-family:'Nunito',sans-serif;
+            font-size:15px; font-weight:700; outline:none; transition:0.25s;
+        }
+        input:focus { border-color:#00e5ff; box-shadow:0 0 18px rgba(0,229,255,0.15); background:rgba(0,0,0,0.5); }
+        input::placeholder { color:rgba(255,255,255,0.2); }
+        .hint { font-size:11px; color:rgba(255,255,255,0.3); font-weight:700; margin-top:5px; margin-left:2px; }
+
+        .alert-box { border-radius:10px; padding:10px 14px; margin-bottom:14px; font-size:13px; font-weight:700; display:none; align-items:center; gap:8px; }
+        .alert-box.show { display:flex; }
+        .alert-error   { background:rgba(255,0,0,0.08); border:1px solid rgba(255,0,0,0.25); color:#ff6666; }
+        .alert-success { background:rgba(0,255,136,0.08); border:1px solid rgba(0,255,136,0.3); color:#00ff88; }
+
+        .btn {
+            width:100%; padding:15px; background:linear-gradient(135deg,#00e5ff,#00ff88);
+            border:none; border-radius:12px; color:#06070f;
+            font-family:'Nunito',sans-serif; font-weight:900; font-size:15px;
+            cursor:pointer; transition:0.25s; letter-spacing:0.5px;
+            box-shadow:0 6px 25px rgba(0,229,255,0.3);
+            display:flex; align-items:center; justify-content:center; gap:10px;
+        }
+        .btn:hover { transform:translateY(-2px); box-shadow:0 10px 35px rgba(0,229,255,0.4); }
+        .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+        .loader { width:18px; height:18px; border:2.5px solid rgba(0,0,0,0.3); border-top-color:#06070f; border-radius:50%; animation:spin 0.7s linear infinite; display:none; }
+        @keyframes spin { to{transform:rotate(360deg)} }
+
+        /* Success state */
+        .success-state { text-align:center; display:none; }
+        .success-icon  { width:72px; height:72px; border-radius:50%; background:rgba(0,255,136,0.12); border:3px solid #00ff88; display:flex; align-items:center; justify-content:center; font-size:30px; color:#00ff88; box-shadow:0 0 30px rgba(0,255,136,0.3); margin:0 auto 16px; }
+        .success-title { font-family:'Righteous',cursive; font-size:22px; color:#00ff88; margin-bottom:8px; }
+        .success-sub   { font-size:13px; color:rgba(255,255,255,0.45); font-weight:700; line-height:1.6; margin-bottom:20px; }
+        .user-created-box { background:rgba(0,255,136,0.06); border:1px solid rgba(0,255,136,0.2); border-radius:14px; padding:16px; margin-bottom:20px; text-align:left; }
+        .ucb-row { display:flex; justify-content:space-between; font-size:13px; font-weight:700; padding:5px 0; }
+        .ucb-label { color:rgba(255,255,255,0.4); }
+        .ucb-val   { color:#00ff88; }
+        .btn-back { width:100%; padding:14px; background:transparent; border:1.5px solid rgba(0,229,255,0.4); border-radius:12px; color:#00e5ff; font-family:'Nunito',sans-serif; font-weight:900; font-size:14px; cursor:pointer; transition:0.25s; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .btn-back:hover { background:rgba(0,229,255,0.1); }
+    </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div class="card" id="mainCard">
+    <div class="brand">DzzXNzz</div>
+    <div class="subtitle">Buat User Email Panel</div>
+
+    <!-- Invalid token state -->
+    <div class="invalid-state" id="invalidState" style="display:none">
+        <i class="fas fa-exclamation-triangle invalid-icon"></i>
+        <div class="invalid-title">Link Tidak Valid</div>
+        <div class="invalid-sub">Link ini sudah dipakai atau tidak valid.<br>Kembali ke halaman panel untuk membuat link baru.</div>
+    </div>
+
+    <!-- Form state -->
+    <div id="formState">
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            User email panel dipakai untuk login ke Pterodactyl. Setiap akun bisa punya hingga <strong style="color:#00e5ff">50 user panel</strong>. Gunakan user yang sama untuk beberapa panel agar tidak perlu login ulang.
+        </div>
+
+        <div class="alert-box alert-error" id="errorBox"><i class="fas fa-exclamation-triangle"></i><span id="errorText"></span></div>
+        <div class="alert-box alert-success" id="successAlert"><i class="fas fa-check-circle"></i><span id="successText"></span></div>
+
+        <label class="input-label">Username User Panel</label>
+        <div class="input-wrap">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="usernameInput" placeholder="contoh: dzzxnzz" maxlength="20" autocapitalize="none">
+        </div>
+        <div class="hint">3-20 karakter · huruf kecil, angka, underscore</div>
+
+        <br>
+        <button class="btn" id="createBtn">
+            <span id="btnText"><i class="fas fa-plus"></i> Buat User Panel</span>
+            <div class="loader" id="loader"></div>
+        </button>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-state" id="successState">
+        <div class="success-icon"><i class="fas fa-check"></i></div>
+        <div class="success-title">User Berhasil Dibuat!</div>
+        <div class="success-sub">User panel kamu sudah siap digunakan. Kamu bisa menggunakan user ini untuk semua panel yang kamu beli.</div>
+        <div class="user-created-box">
+            <div class="ucb-row"><span class="ucb-label">Username</span><span class="ucb-val" id="createdUsername">-</span></div>
+            <div class="ucb-row"><span class="ucb-label">Email Panel</span><span class="ucb-val" id="createdEmail">-</span></div>
+        </div>
+        <button class="btn-back" onclick="goBack()"><i class="fas fa-arrow-left"></i> Kembali ke Panel</button>
+    </div>
+</div>
+
+<script src="/script.js"></script>
+<script>
+(function() {
+    // Verifikasi token crypto dari URL
+    const params  = new URLSearchParams(window.location.search);
+    const token   = params.get('t');
+    const STORAGE_KEY = 'userpanel_token_used_' + token;
+
+    // Cek login
+    if (typeof Auth === 'undefined' || !Auth.isLoggedIn()) {
+        window.location.href = '/login';
+        return;
+    }
+
+    // Cek token valid dan belum dipakai
+    if (!token) {
+        document.getElementById('formState').style.display = 'none';
+        document.getElementById('invalidState').style.display = 'block';
+        return;
+    }
+
+    // Cek apakah token sudah dipakai (simpan di localStorage)
+    if (localStorage.getItem(STORAGE_KEY)) {
+        document.getElementById('formState').style.display = 'none';
+        document.getElementById('invalidState').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('createBtn').addEventListener('click', async function() {
+        const username = document.getElementById('usernameInput').value.trim().toLowerCase();
+        const errBox   = document.getElementById('errorBox');
+        errBox.classList.remove('show');
+
+        if (!username) { document.getElementById('errorText').textContent = 'Username wajib diisi'; errBox.classList.add('show'); return; }
+        if (username.length < 3) { document.getElementById('errorText').textContent = 'Minimal 3 karakter'; errBox.classList.add('show'); return; }
+        if (!/^[a-z0-9_]+$/.test(username)) { document.getElementById('errorText').textContent = 'Hanya huruf kecil, angka, underscore'; errBox.classList.add('show'); return; }
+
+        this.disabled = true;
+        document.getElementById('btnText').style.display = 'none';
+        document.getElementById('loader').style.display  = 'block';
+
+        try {
+            const res  = await fetch('/api/create-panel-user', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + Auth.getToken() },
+                body:    JSON.stringify({ username })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                document.getElementById('errorText').textContent = data.error || 'Gagal buat user';
+                errBox.classList.add('show');
+                return;
+            }
+
+            // Tandai token sudah dipakai
+            localStorage.setItem(STORAGE_KEY, '1');
+
+            // Tampilkan success state
+            document.getElementById('formState').style.display   = 'none';
+            document.getElementById('successState').style.display = 'block';
+            document.getElementById('createdUsername').textContent = data.username;
+            document.getElementById('createdEmail').textContent    = data.ptero_email;
+
+            // Simpan user baru ke sessionStorage biar popup order tahu
+            sessionStorage.setItem('new_panel_user', JSON.stringify({ username: data.username, ptero_email: data.ptero_email }));
+
+        } catch(e) {
+            document.getElementById('errorText').textContent = 'Gagal terhubung ke server';
+            errBox.classList.add('show');
+        } finally {
+            this.disabled = false;
+            document.getElementById('btnText').style.display = 'flex';
+            document.getElementById('loader').style.display  = 'none';
+        }
+    });
+
+    function goBack() {
+        window.location.href = '/product/panelptero';
+    }
+    window.goBack = goBack;
+})();
+</script>
+</body>
+</html>
