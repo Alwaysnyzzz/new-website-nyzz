@@ -30,19 +30,20 @@
         /* Duration toggle */
         .duration-wrapper {
             display: flex; flex-direction: column;
-            align-items: center; gap: 10px;
+            align-items: center; gap: 8px;
             margin-bottom: 28px; animation: fadeInUp 0.6s 0.1s ease both;
         }
+        /* Baris 1: 10 / 20 / 30 Hari */
         .duration-group {
             display: flex; gap: 0; background: rgba(13,15,25,0.8);
             border: 1px solid rgba(0,229,255,0.2); border-radius: 14px; overflow: hidden;
-            padding: 4px;
+            padding: 4px; width: 100%;
         }
         .duration-btn {
-            background: transparent; border: none; color: rgba(255,255,255,0.5);
+            flex: 1; background: transparent; border: none; color: rgba(255,255,255,0.4);
             font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
-            padding: 10px 24px; border-radius: 10px; cursor: pointer;
-            transition: 0.25s; letter-spacing: 0.5px;
+            padding: 10px 0; border-radius: 10px; cursor: pointer;
+            transition: 0.25s; letter-spacing: 0.3px; text-align: center;
         }
         .duration-btn:hover { color: #00e5ff; background: rgba(0,229,255,0.08); }
         .duration-btn.active {
@@ -50,35 +51,34 @@
             color: #06070f; font-weight: 900;
             box-shadow: 0 4px 18px rgba(0,229,255,0.35);
         }
-        /* Unlimited tab sendiri di bawah */
-        .unlimited-tab-wrap {
-            width: 100%; display: flex; justify-content: center;
+        /* Baris 2: UNLIMITED — dalam kotak sendiri tapi style sama */
+        .unlimited-row {
+            width: 100%;
+            background: rgba(13,15,25,0.8);
+            border: 1px solid rgba(0,229,255,0.2); border-radius: 14px;
+            padding: 4px;
         }
         .unlimited-tab {
+            width: 100%; background: transparent; border: none;
+            color: rgba(255,255,255,0.4);
+            font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+            padding: 10px 0; border-radius: 10px; cursor: pointer;
+            transition: 0.25s; letter-spacing: 1px; text-align: center;
             position: relative; overflow: hidden;
-            background: linear-gradient(135deg, #0a0015, #15002a) !important;
-            border: 1.5px solid rgba(180,0,255,0.5) !important;
-            color: #fff !important; font-weight: 900 !important;
-            font-size: 14px !important;
-            padding: 12px 40px !important; border-radius: 14px !important;
-            letter-spacing: 1px;
-            box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1) !important;
-            animation: unlimitedPulse 2s ease-in-out infinite !important;
+            display: block;
         }
-        .unlimited-tab::before {
+        .unlimited-tab::before { display: none; } /* hapus animasi lama */
+        .unlimited-tab:hover { color: #bf7fff; background: rgba(123,0,255,0.08); }
+        .unlimited-tab.active {
+            background: linear-gradient(135deg, #7b00ff, #cc00ff, #ff00aa);
+            color: #fff; font-weight: 900;
+            box-shadow: 0 4px 22px rgba(180,0,255,0.5);
+        }
+        .unlimited-tab.active::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
             background: linear-gradient(90deg, #7b00ff, #ff00cc, #00e5ff, #ff00cc, #7b00ff);
             background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
-        }
-        .unlimited-tab.active {
-            background: linear-gradient(135deg, #7b00ff, #cc00ff, #ff00aa) !important;
-            border-color: #ff00cc !important;
-            box-shadow: 0 0 40px rgba(180,0,255,0.6), 0 8px 30px rgba(255,0,170,0.3) !important;
-            animation: none !important;
-        }
-        @keyframes unlimitedPulse {
-            0%,100% { box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1); }
-            50%      { box-shadow: 0 0 40px rgba(255,0,170,0.5), 0 0 70px rgba(180,0,255,0.2); }
+            border-radius: 10px 10px 0 0;
         }
 
         .divider {
@@ -567,8 +567,8 @@
                 <button class="duration-btn active" data-durasi="20">20 Hari</button>
                 <button class="duration-btn" data-durasi="30">30 Hari</button>
             </div>
-            <div class="unlimited-tab-wrap">
-                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾&nbsp;&nbsp;UNLIMITED&nbsp;&nbsp;♾</button>
+            <div class="unlimited-row">
+                <button class="unlimited-tab" data-durasi="unlimited">♾&nbsp; UNLIMITED &nbsp;♾</button>
             </div>
         </div>
 
@@ -915,35 +915,7 @@
             box-shadow: 0 4px 18px rgba(0,229,255,0.35);
         }
         /* Unlimited tab sendiri di bawah */
-        .unlimited-tab-wrap {
-            width: 100%; display: flex; justify-content: center;
-        }
-        .unlimited-tab {
-            position: relative; overflow: hidden;
-            background: linear-gradient(135deg, #0a0015, #15002a) !important;
-            border: 1.5px solid rgba(180,0,255,0.5) !important;
-            color: #fff !important; font-weight: 900 !important;
-            font-size: 14px !important;
-            padding: 12px 40px !important; border-radius: 14px !important;
-            letter-spacing: 1px;
-            box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1) !important;
-            animation: unlimitedPulse 2s ease-in-out infinite !important;
-        }
-        .unlimited-tab::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, #7b00ff, #ff00cc, #00e5ff, #ff00cc, #7b00ff);
-            background-size: 200% 100%; animation: shineBar 1.5s linear infinite;
-        }
-        .unlimited-tab.active {
-            background: linear-gradient(135deg, #7b00ff, #cc00ff, #ff00aa) !important;
-            border-color: #ff00cc !important;
-            box-shadow: 0 0 40px rgba(180,0,255,0.6), 0 8px 30px rgba(255,0,170,0.3) !important;
-            animation: none !important;
-        }
-        @keyframes unlimitedPulse {
-            0%,100% { box-shadow: 0 0 25px rgba(180,0,255,0.3), 0 0 50px rgba(180,0,255,0.1); }
-            50%      { box-shadow: 0 0 40px rgba(255,0,170,0.5), 0 0 70px rgba(180,0,255,0.2); }
-        }
+
 
         .divider {
             height: 1px;
@@ -1431,8 +1403,8 @@
                 <button class="duration-btn active" data-durasi="20">20 Hari</button>
                 <button class="duration-btn" data-durasi="30">30 Hari</button>
             </div>
-            <div class="unlimited-tab-wrap">
-                <button class="duration-btn unlimited-tab" data-durasi="unlimited">♾&nbsp;&nbsp;UNLIMITED&nbsp;&nbsp;♾</button>
+            <div class="unlimited-row">
+                <button class="unlimited-tab" data-durasi="unlimited">♾&nbsp; UNLIMITED &nbsp;♾</button>
             </div>
         </div>
 
@@ -1745,11 +1717,9 @@
             const cards20 = document.getElementById('cards20');
             const cards30 = document.getElementById('cards30');
 
-            // Tab biasa (10/20/30) — unlimited tidak dipengaruhi
             let unlimitedActive = false;
 
             function setActiveDuration(durasi) {
-                // Update active class hanya untuk btn biasa
                 durasiButtons.forEach(btn => {
                     if (btn.getAttribute('data-durasi') !== 'unlimited') {
                         btn.classList.toggle('active', btn.getAttribute('data-durasi') === durasi);
@@ -1762,19 +1732,26 @@
 
             function toggleUnlimited() {
                 unlimitedActive = !unlimitedActive;
-                const unliBtn = document.querySelector('.unlimited-tab');
-                unliBtn.classList.toggle('active', unlimitedActive);
+                // Target semua elemen dengan class unlimited-tab
+                document.querySelectorAll('.unlimited-tab').forEach(btn => {
+                    btn.classList.toggle('active', unlimitedActive);
+                });
                 cardsUnlimited.style.display = unlimitedActive ? 'flex' : 'none';
             }
 
+            // Event: tab biasa (10/20/30)
             durasiButtons.forEach(btn => {
+                if (btn.getAttribute('data-durasi') !== 'unlimited') {
+                    btn.addEventListener('click', function() {
+                        setActiveDuration(this.getAttribute('data-durasi'));
+                    });
+                }
+            });
+
+            // Event: unlimited tab (pakai class, bukan data-durasi di durasiButtons)
+            document.querySelectorAll('.unlimited-tab').forEach(btn => {
                 btn.addEventListener('click', function() {
-                    const d = this.getAttribute('data-durasi');
-                    if (d === 'unlimited') {
-                        toggleUnlimited();
-                    } else {
-                        setActiveDuration(d);
-                    }
+                    toggleUnlimited();
                 });
             });
 
