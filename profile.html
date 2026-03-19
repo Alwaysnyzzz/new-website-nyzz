@@ -825,7 +825,7 @@
             if (newPass!==cfmPass) { document.getElementById('passErrorText').textContent='Konfirmasi password tidak cocok'; errBox.classList.add('show'); return; }
             this.disabled=true; document.getElementById('savePassText').style.display='none'; document.getElementById('savePassLoader').style.display='block';
             try {
-                const res  = await fetch('/api/auth/change-password',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+Auth.getToken()},body:JSON.stringify({old_password:oldPass,new_password:newPass})});
+                const res  = await fetch('/api/auth?action=change-password',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+Auth.getToken()},body:JSON.stringify({old_password:oldPass,new_password:newPass})});
                 const data = await res.json();
                 if (!res.ok) { document.getElementById('passErrorText').textContent=data.error||'Gagal ganti password'; errBox.classList.add('show'); }
                 else { document.getElementById('passSuccessText').textContent='Password berhasil diganti!'; sucBox.classList.add('show'); document.getElementById('oldPass').value=''; document.getElementById('newPass').value=''; document.getElementById('confirmPass').value=''; }
