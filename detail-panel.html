@@ -407,7 +407,7 @@
         btn.classList.add('loading');
 
         try {
-            var r    = await fetch('/api/get-server-status?server_uuid=' + orderData.server_uuid, { headers: { Authorization: 'Bearer ' + Auth.getToken() } });
+            var r    = await fetch('/api/panel?action=get-server-status&server_uuid=' + orderData.server_uuid, { headers: { Authorization: 'Bearer ' + Auth.getToken() } });
             var data = await r.json();
 
             if (!r.ok) throw new Error(data.error || 'Gagal');
@@ -456,7 +456,7 @@
         if (!orderId) { window.location.href = '/profile'; return; }
 
         try {
-            var r    = await fetch('/api/get-panel-order?order_id=' + orderId);
+            var r    = await fetch('/api/panel?action=get-panel-order&order_id=' + orderId);
             var data = await r.json();
             if (!r.ok || !data.order_id) { window.location.href = '/profile'; return; }
             fillData(data);

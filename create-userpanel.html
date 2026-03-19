@@ -189,7 +189,7 @@
         document.getElementById('loader').style.display  = 'block';
 
         try {
-            const res  = await fetch('/api/create-panel-user', {
+            const res  = await fetch('/api/panel?action=create-panel-user', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + Auth.getToken() },
                 body:    JSON.stringify({ username })

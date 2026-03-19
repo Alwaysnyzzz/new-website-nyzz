@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     // Trigger create-panel (internal call)
     try {
       const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-      await fetch(`${baseUrl}/api/create-panel`, {
+      await fetch(`${baseUrl}/api/panel?action=create-panel`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ order_id })
